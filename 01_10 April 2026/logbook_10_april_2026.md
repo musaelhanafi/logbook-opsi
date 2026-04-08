@@ -194,7 +194,7 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 
 **Kendala & Tindak Lanjut:**
 - Terrain mesh WICC perlu fine-tuning (beberapa titik ketinggian tidak rata)
-- JATO burn time disesuaikan dari 2 detik → 4 detik
+- JATO burn time 1 detik
 - Minggu depan: setup koneksi pppd Pixhawk ↔ laptop untuk HITL mode
 
 ---
