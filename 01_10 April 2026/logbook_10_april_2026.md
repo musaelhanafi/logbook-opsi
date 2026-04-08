@@ -15,13 +15,61 @@
 Instalasi seluruh software dan toolchain yang diperlukan untuk pengembangan sistem HITL.
 
 **Software yang diinstal:**
-- **X-Plane 11** — simulator penerbangan utama untuk lingkungan HITL
-- **Visual Studio Code** — IDE untuk pengembangan firmware ArduPilot dan script Python
-- **QGroundControl** — ground control station untuk konfigurasi dan monitoring Pixhawk
-- **Toolchain ArduPilot:**
-  - Python 3.x + pip
-  - `arm-none-eabi-gcc` — compiler untuk firmware Pixhawk (fmuv3)
-  - Dependensi build ArduPilot (`MAVProxy`, `pymavlink`, `dronekit`)
+
+### A. X-Plane 11
+- **Download:** [https://www.x-plane.com/desktop/try-it/](https://www.x-plane.com/desktop/try-it/)
+- **Langkah instalasi (Windows):**
+  1. Unduh installer `X-Plane11InstallerWindows.exe` dari link di atas
+  2. Jalankan installer → ikuti wizard instalasi
+  3. Pilih paket scenery minimal (Global Airport + 1 region) agar tidak terlalu besar
+  4. Setelah selesai, jalankan `X-Plane.exe` dari folder instalasi untuk verifikasi
+
+### B. Visual Studio Code
+- **Download:** [https://code.visualstudio.com/download](https://code.visualstudio.com/download)
+- **Langkah instalasi (Windows):**
+  1. Unduh `VSCodeUserSetup-x64-*.exe`
+  2. Jalankan installer → centang **"Add to PATH"** dan **"Register Code as an editor"**
+  3. Setelah install, buka VS Code → install extension **Python** (Microsoft) dari marketplace
+
+### C. QGroundControl
+- **Download:** [https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html](https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html)
+- **Langkah instalasi (Windows):**
+  1. Unduh `QGroundControl-installer.exe`
+  2. Jalankan installer → ikuti wizard
+  3. Install driver USB Pixhawk jika diminta (biasanya otomatis via Windows Update)
+  4. Hubungkan Pixhawk via USB → verifikasi QGC mendeteksi perangkat
+
+### D. Python 3.x
+- **Download:** [https://www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)
+- **Langkah instalasi (Windows):**
+  1. Unduh **Python 3.10.x** (Windows installer 64-bit) — direkomendasikan untuk kompatibilitas pymavlink & dronekit
+  2. Jalankan installer → **wajib centang "Add Python to PATH"** sebelum klik Install Now
+  3. Verifikasi di Command Prompt:
+     ```
+     python --version
+     pip --version
+     ```
+
+### E. arm-none-eabi-gcc (ARM Toolchain)
+- **Download:** [https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
+- **Langkah instalasi (Windows):**
+  1. Unduh file `arm-gnu-toolchain-*-mingw-w64-x86_64-arm-none-eabi.exe`
+  2. Jalankan installer → pada halaman akhir, centang **"Add path to environment variable"**
+  3. Verifikasi di Command Prompt:
+     ```
+     arm-none-eabi-gcc --version
+     ```
+
+### F. Dependensi Python ArduPilot
+- Setelah Python terinstal, jalankan perintah berikut di Command Prompt:
+  ```
+  pip install MAVProxy pymavlink dronekit
+  ```
+- Verifikasi:
+  ```
+  python -c "import pymavlink; print('pymavlink OK')"
+  python -c "import dronekit; print('dronekit OK')"
+  ```
 
 **Hasil:** Semua tools berhasil terinstal dan berjalan. Environment build ArduPilot (`waf configure --board fmuv3`) berhasil diverifikasi.
 
@@ -52,6 +100,9 @@ Menghubungkan dua laptop dalam satu sesi X-Plane — satu sebagai player (pengen
 **Kegiatan:**
 Menambahkan model pesawat custom FX-61 Phantom ke dalam library X-Plane sebagai wahana utama pengujian HITL.
 
+**Sumber model:**
+Model FX-61 Phantom diambil dari forum X-Plane.org: [https://forums.x-plane.org/files/file/33623-fx-61-uav/](https://forums.x-plane.org/files/file/33623-fx-61-uav/)
+
 **Langkah:**
 1. Copy folder aircraft FX-61 Phantom ke direktori `X-Plane/Aircraft/Extra Aircraft/`
 2. Buka X-Plane → pilih aircraft FX-61 Phantom dari menu Aircraft
@@ -81,7 +132,7 @@ Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna men
    - Posisi: center-rear fuselage
 4. Simpan file `.acf` dan reload di X-Plane
 
-**Hasil:** JATO berhasil ditambahkan. FX-61 mampu melakukan accelerated takeoff dalam jarak < 30 m di X-Plane menggunakan dorongan JATO selama ±4 detik.
+**Hasil:** JATO berhasil ditambahkan. FX-61 mampu melakukan accelerated takeoff dalam jarak < 30 m di X-Plane menggunakan dorongan JATO selama ±1 detik.
 
 ---
 
