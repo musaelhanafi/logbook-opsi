@@ -1,9 +1,11 @@
 # Logbook Kegiatan — 10 April 2026
 
-**Penelitian:** Sistem Kendali Drone Kamikaze Berbasis Deteksi Objek Warna dalam Simulasi HITL
-**Tim:** Musa El Hanafi & Muhammad Ihsan Fahriansyah
-**Lokasi:** Lab Komputer SMA Swasta Alfa Centauri, Kota Bandung
-**Hari/Tanggal:** Jumat, 10 April 2026
+| | |
+|---|---|
+| **Penelitian** | Sistem Kendali Drone Kamikaze Berbasis Deteksi Objek Warna dalam Simulasi HITL |
+| **Tim** | Musa El Hanafi & Muhammad Ihsan Fahriansyah |
+| **Lokasi** | Lab Komputer SMA Swasta Alfa Centauri, Kota Bandung |
+| **Hari/Tanggal** | Jumat, 10 April 2026 |
 
 ---
 
@@ -25,7 +27,7 @@ Instalasi seluruh software dan toolchain yang diperlukan untuk pengembangan sist
 
 ---
 
-## 2. Verifikasi Koneksi X-Plane via UDP (2 Laptop)
+## 2. Verifikasi Koneksi X-Plane via LAN (2 Laptop)
 
 **Kegiatan:**
 Menghubungkan dua laptop dalam satu sesi X-Plane — satu sebagai player (pengendali) dan satu sebagai viewer only (pengamat).
@@ -138,7 +140,7 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 | No | Kegiatan | Status |
 |---|---|---|
 | 1 | Instalasi X-Plane, VS Code, QGroundControl, toolchain ArduPilot | ✅ Selesai |
-| 2 | Verifikasi koneksi X-Plane via UDP (2 laptop) | ✅ Selesai |
+| 2 | Verifikasi koneksi X-Plane via LAN (2 laptop) | ✅ Selesai |
 | 3 | Tambah custom aircraft FX-61 Phantom | ✅ Selesai |
 | 4 | Modifikasi FX-61 + JATO (Plane Maker) | ✅ Selesai |
 | 5 | Tambah custom airport WICC (Husein Sastranegara) | ✅ Selesai |
