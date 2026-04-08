@@ -214,4 +214,74 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 
 ---
 
+## Panduan Git — Logbook OPSI
+
+Repository logbook: [https://github.com/musaelhanafi/logbook-opsi](https://github.com/musaelhanafi/logbook-opsi)
+
+### Clone (pertama kali)
+
+```
+git clone git@github.com:musaelhanafi/logbook-opsi.git
+cd logbook-opsi
+```
+
+> Pastikan SSH key sudah terdaftar di GitHub. Jika belum:
+> ```
+> ssh-keygen -t ed25519 -C "email@gmail.com"
+> cat ~/.ssh/id_ed25519.pub
+> ```
+> Salin output → GitHub → Settings → SSH Keys → New SSH Key → Paste → Save.
+
+---
+
+### Workflow Harian (Add → Commit → Push)
+
+Setelah menambah atau mengedit file logbook:
+
+```
+cd logbook-opsi
+
+# 1. Cek status perubahan
+git status
+
+# 2. Tambahkan file yang berubah
+git add .
+
+# 3. Commit dengan pesan deskriptif
+git commit -m "logbook: tambah kegiatan 10 April 2026"
+
+# 4. Push ke GitHub
+git push
+```
+
+---
+
+### Pull (sinkronisasi dari GitHub)
+
+Jalankan sebelum mulai kerja, terutama jika dikerjakan di beberapa laptop:
+
+```
+cd logbook-opsi
+git pull
+```
+
+---
+
+### Struktur Folder
+
+```
+logbook-opsi/
+├── 01_10 April 2026/
+│   ├── logbook_10_april_2026.md
+│   ├── logbook_10_april_2026.pdf
+│   └── (foto/screenshot)
+├── 02_<tanggal>/
+│   └── ...
+└── README.md
+```
+
+Setiap sesi logbook dibuat dalam folder baru dengan format: `NN_DD Bulan YYYY/`.
+
+---
+
 *Logbook dibuat: 10 April 2026 | Penelitian OPSI 2026 — SMA Swasta Alfa Centauri*
