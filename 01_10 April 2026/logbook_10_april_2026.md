@@ -13,7 +13,7 @@
 Instalasi seluruh software dan toolchain yang diperlukan untuk pengembangan sistem HITL.
 
 **Software yang diinstal:**
-- **X-Plane 11/12** — simulator penerbangan utama untuk lingkungan HITL
+- **X-Plane 11** — simulator penerbangan utama untuk lingkungan HITL
 - **Visual Studio Code** — IDE untuk pengembangan firmware ArduPilot dan script Python
 - **QGroundControl** — ground control station untuk konfigurasi dan monitoring Pixhawk
 - **Toolchain ArduPilot:**
@@ -28,20 +28,20 @@ Instalasi seluruh software dan toolchain yang diperlukan untuk pengembangan sist
 ## 2. Verifikasi Koneksi X-Plane via UDP (2 Laptop)
 
 **Kegiatan:**
-Verifikasi koneksi bidirectional antara dua laptop menggunakan protokol UDP yang digunakan X-Plane untuk komunikasi data sensor dan kontrol.
+Menghubungkan dua laptop dalam satu sesi X-Plane — satu sebagai player (pengendali) dan satu sebagai viewer only (pengamat).
 
 **Konfigurasi:**
-- Laptop 1: menjalankan X-Plane (simulator)
-- Laptop 2: menjalankan QGroundControl + script MAVLink
-- Koneksi: UDP port 49000 (output X-Plane) dan port 49001 (input ke X-Plane) via jaringan lokal
+- Laptop 1 (Player): menjalankan X-Plane sebagai host, mengendalikan penerbangan
+- Laptop 2 (Viewer Only): menjalankan X-Plane sebagai client, hanya menampilkan tampilan simulasi tanpa kontrol
+- Koneksi: via jaringan lokal (LAN/Wi-Fi)
 
-**Langkah verifikasi:**
+**Langkah:**
 1. Set IP address kedua laptop dalam satu subnet lokal
-2. Konfigurasi X-Plane → Settings → Network → masukkan IP Laptop 2
-3. Jalankan `mavproxy.py --master udp:0.0.0.0:14550` di Laptop 2
-4. Verifikasi penerimaan paket `HIL_SENSOR` dan `HIL_GPS` dari X-Plane
+2. Di Laptop 1: buka X-Plane → Settings → Network → aktifkan **"Allow other computers to control this copy of X-Plane"**
+3. Di Laptop 2: buka X-Plane → Settings → Network → masukkan IP Laptop 1, set sebagai **Viewer Only**
+4. Mulai sesi penerbangan di Laptop 1 — Laptop 2 otomatis menampilkan tampilan yang sama secara real-time
 
-**Hasil:** Koneksi UDP berhasil terbentuk. Paket data sensor X-Plane diterima di Laptop 2 dengan latensi < 5 ms pada jaringan lokal.
+**Hasil:** Koneksi berhasil. Laptop 2 menampilkan tampilan simulasi X-Plane secara sinkron dengan Laptop 1 sebagai viewer only.
 
 ---
 
@@ -75,7 +75,7 @@ Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna men
 2. Tambahkan engine tambahan bertipe "Rocket/JATO" pada tab `Engines`
 3. Set parameter JATO:
    - Thrust: ~50–80 N (disesuaikan berat FX-61)
-   - Burn time: ±4 detik
+   - Burn time: ±1 detik
    - Posisi: center-rear fuselage
 4. Simpan file `.acf` dan reload di X-Plane
 
@@ -88,18 +88,15 @@ Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna men
 **Kegiatan:**
 Menambahkan custom airport Bandara Husein Sastranegara (ICAO: WICC) ke dalam lingkungan X-Plane sebagai lokasi pengujian.
 
-**Tools yang digunakan:** WorldEditor (WED) — editor airport bawaan X-Plane
-
 **Langkah:**
-1. Buka WED, buat data airport WICC:
-   - Koordinat: −6.89737° LU, 107.56656° BT, elevasi 744 m dpl
-   - Runway 11/29: panjang ±2.220 m, lebar 45 m, heading 111°
-2. Tambahkan taxiway, apron, dan marking runway sesuai layout WICC
-3. Tempatkan objek target hot-pink (5×5×4 m) di threshold runway 11
-4. Export dan compile ke format X-Plane (`apt.dat`, `dsf`)
-5. Copy ke direktori `X-Plane/Custom Scenery/WICC_Husein_Sastranegara/`
+1. Unduh file `Custom Scenery.zip` yang berisi data airport WICC beserta objek target hot-pink
+2. Ekstrak (unzip) `Custom Scenery.zip` ke direktori `X-Plane/Custom Scenery/`
+3. Verifikasi folder `WICC/` telah muncul di dalam `Custom Scenery/`
+4. Restart X-Plane agar scenery baru terdeteksi dan dimuat
 
 **Hasil:** Airport WICC berhasil dimuat di X-Plane. Runway 11 dan objek target hot-pink tampil sesuai posisi yang direncanakan.
+
+![Target hot-pink di threshold runway 11 WICC](target.png)
 
 ---
 
