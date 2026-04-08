@@ -17,12 +17,14 @@ Instalasi seluruh software dan toolchain yang diperlukan untuk pengembangan sist
 **Software yang diinstal:**
 
 ### A. X-Plane 11
-- **Download:** [https://www.x-plane.com/desktop/try-it/](https://www.x-plane.com/desktop/try-it/)
+- **Platform:** Steam
+- **Link:** [https://store.steampowered.com/app/269950/XPlane_11/](https://store.steampowered.com/app/269950/XPlane_11/)
 - **Langkah instalasi (Windows):**
-  1. Unduh installer `X-Plane11InstallerWindows.exe` dari link di atas
-  2. Jalankan installer → ikuti wizard instalasi
-  3. Pilih paket scenery minimal (Global Airport + 1 region) agar tidak terlalu besar
-  4. Setelah selesai, jalankan `X-Plane.exe` dari folder instalasi untuk verifikasi
+  1. Install **Steam** terlebih dahulu jika belum ada: [https://store.steampowered.com/about/](https://store.steampowered.com/about/)
+  2. Login ke Steam → buka halaman X-Plane 11 → klik **"Play Game"** / **"Install"**
+  3. Pilih direktori instalasi → Steam mengunduh dan menginstal otomatis
+  4. Setelah selesai, jalankan X-Plane 11 dari Steam Library untuk verifikasi
+  5. Lokasi folder instalasi default: `C:\Program Files (x86)\Steam\steamapps\common\X-Plane 11\`
 
 ### B. Visual Studio Code
 - **Download:** [https://code.visualstudio.com/download](https://code.visualstudio.com/download)
@@ -60,7 +62,18 @@ Instalasi seluruh software dan toolchain yang diperlukan untuk pengembangan sist
      arm-none-eabi-gcc --version
      ```
 
-### F. Dependensi Python ArduPilot
+### F. Git
+- **Download:** [https://git-scm.com/download/win](https://git-scm.com/download/win)
+- **Langkah instalasi (Windows):**
+  1. Unduh `Git-*-64-bit.exe` dari link di atas
+  2. Jalankan installer → pada bagian **"Adjusting your PATH environment"**, pilih **"Git from the command line and also from 3rd-party software"**
+  3. Pilihan lain biarkan default → klik Next hingga selesai
+  4. Verifikasi di Command Prompt atau PowerShell:
+     ```
+     git --version
+     ```
+
+### G. Dependensi Python ArduPilot
 - Setelah Python terinstal, jalankan perintah berikut di Command Prompt:
   ```
   pip install MAVProxy pymavlink dronekit
@@ -190,7 +203,7 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 
 | No | Kegiatan | Status |
 |---|---|---|
-| 1 | Instalasi X-Plane, VS Code, QGroundControl, toolchain ArduPilot | ✅ Selesai |
+| 1 | Instalasi X-Plane, VS Code, QGroundControl, Git, toolchain ArduPilot | ✅ Selesai |
 | 2 | Verifikasi koneksi X-Plane via LAN (2 laptop) | ✅ Selesai |
 | 3 | Tambah custom aircraft FX-61 Phantom | ✅ Selesai |
 | 4 | Modifikasi FX-61 + JATO (Plane Maker) | ✅ Selesai |
