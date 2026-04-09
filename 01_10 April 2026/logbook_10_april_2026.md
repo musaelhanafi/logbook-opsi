@@ -149,6 +149,100 @@ Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna men
 
 **Hasil:** JATO berhasil ditambahkan. FX-61 mampu melakukan accelerated takeoff dalam jarak < 30 m di X-Plane menggunakan dorongan JATO selama ±1 detik.
 
+![Plane Maker — JATO FX-61 Phantom](jato_planmaker.png)
+
+---
+
+## 4b. Konfigurasi Wing FX-61 — Plane Maker
+
+**Kegiatan:**
+Verifikasi dan pencatatan parameter sayap (Wing 1) FX-61 Phantom di Plane Maker sebagai referensi modifikasi geometri.
+
+### Foil Specs — Wing 1
+
+| Parameter | Nilai | Satuan | Keterangan |
+|---|---|---|---|
+| Semi-length | 1.65 | ft | Panjang semi-span dari root ke tip, sepanjang 25% chord |
+| Root chord | 1.06 | ft | Chord di pangkal sayap |
+| Tip chord | 0.80 | ft | Chord di ujung sayap |
+| Sweep | 20.2 | deg | Sudut sweep sayap |
+| Dihedral | 0.0 | deg | Sudut dihedral |
+| Long arm | 0.57 | ft | Lengan longitudinal sayap |
+| Lat arm | 0.24 | ft | Lengan lateral sayap |
+| Vert arm | −0.02 | ft | Lengan vertikal sayap |
+
+### Element Specs — Wing 1
+
+- Jumlah elemen: **6** (root di kiri, tip di kanan)
+- Incidence seluruh elemen: **3.0°**
+
+| Kontrol | Elemen Aktif | Keterangan |
+|---|---|---|
+| Aileron 1 | 2, 3, 4, 5, 6 | Aktif dari elemen 2 hingga tip |
+| Elevator 1 | 2, 3, 4, 5, 6 | Elevon — aktif dari elemen 2 hingga tip |
+| Incidence with Elevtr 1 | 1 | Hanya root (elemen 1) |
+
+> **Catatan:** FX-61 adalah flying wing — aileron dan elevator digabung sebagai **elevon**. Tidak ada rudder, flap, atau slat yang aktif.
+
+![Plane Maker — Wing 1 FX-61 Phantom](wing_planmaker.png)
+
+---
+
+## 4c. Konfigurasi Landing Gear FX-61 — Plane Maker
+
+**Kegiatan:**
+Verifikasi dan pencatatan parameter landing gear FX-61 Phantom di Plane Maker (tab Gear Loc).
+
+### Tipe Gear
+
+| Gear | Tipe |
+|---|---|
+| Gear 1 (Nose) | Single |
+| Gear 2 (Main Kiri) | Single |
+| Gear 3 (Main Kanan) | Single |
+| Gear 4–10 | None |
+
+### Posisi & Geometri (Gear Loc)
+
+| Parameter | Gear 1 (Nose) | Gear 2 (Main Kiri) | Gear 3 (Main Kanan) | Satuan |
+|---|---|---|---|---|
+| Long arm | 0.10 | 1.09 | 1.09 | ft |
+| Lat arm | 0.00 | 1.20 | −1.20 | ft |
+| Vert arm | 0.00 | 0.00 | 0.00 | ft |
+| Lon angle extended | 20 | −20 | −20 | deg |
+| Lat angle extended | 0 | 40 | −40 | deg |
+| Lon angle retracted | −90 | 90 | 90 | deg |
+| Lat angle retracted | 0 | 0 | 0 | deg |
+| Eagle-claw | 0 | 0 | 0 | deg |
+| Leg length | 0.5 | 0.5 | 0.5 | ft |
+| Tire radius | 0.01 | 0.01 | 0.01 | ft |
+| Tire semi-width | 0.01 | 0.01 | 0.01 | ft |
+| N-W steering slow | 0.0 | 0.0 | 0.0 | deg |
+| N-W steering fast | 0.0 | 0.0 | 0.0 | deg |
+| Cycle time | 0.1 | 0.1 | 0.1 | sec |
+
+### Flags
+
+| Flag | Gear 1 | Gear 2 | Gear 3 |
+|---|---|---|---|
+| Brakes | ✅ | ✅ | ✅ |
+| Retracts | ✅ | ✅ | ✅ |
+| Castors | — | — | - |
+| Faired | — | — | — |
+
+> **Catatan:** Ketiga gear bersifat retractable. Gear 3 (main kanan) memiliki castor aktif.
+
+![Plane Maker — Landing Gear FX-61 Phantom](landing_gear_planmaker.png)
+
+---
+
+## 4d. Konfigurasi Control Geometry FX-61 — Plane Maker
+
+**Kegiatan:**
+Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) FX-61 Phantom di Plane Maker.
+
+![Plane Maker — Control Geometry FX-61 Phantom](control_geometry_planmaker.png)
+
 ---
 
 ## 5. Penambahan Custom Airport WICC (Husein Sastranegara)
@@ -209,6 +303,9 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 | 2 | Verifikasi koneksi X-Plane via LAN (2 laptop) | ✅ Selesai |
 | 3 | Tambah custom aircraft FX-61 Phantom | ✅ Selesai |
 | 4 | Modifikasi FX-61 + JATO (Plane Maker) | ✅ Selesai |
+| 4b | Konfigurasi Wing FX-61 — Plane Maker (Foil & Element Specs) | ✅ Selesai |
+| 4c | Konfigurasi Landing Gear FX-61 — Plane Maker (Gear Loc) | ✅ Selesai |
+| 4d | Konfigurasi Control Geometry FX-61 — Plane Maker | ✅ Selesai |
 | 5 | Tambah custom airport WICC (Husein Sastranegara) | ✅ Selesai |
 | 6 | Uji coba terbang FX-61 di WICC — X-Plane | ✅ Selesai |
 
