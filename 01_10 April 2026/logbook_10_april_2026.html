@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { margin: 2cm; }
+  body { font-family: Arial, sans-serif; font-size: 11pt; color: #111; line-height: 1.6; }
+  h1 { font-size: 18pt; border-bottom: 2px solid #333; padding-bottom: 6px; }
+  h2 { font-size: 14pt; border-bottom: 1px solid #aaa; padding-bottom: 4px; margin-top: 24px; }
+  h3 { font-size: 12pt; margin-top: 16px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; }
+  th { background: #f0f0f0; font-weight: bold; }
+  code { background: #f4f4f4; padding: 1px 4px; font-family: monospace; font-size: 10pt; border-radius: 3px; }
+  pre { background: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
+  pre code { background: none; padding: 0; }
+  img { max-width: 100%; height: auto; margin: 8px 0; }
+  hr { border: none; border-top: 1px solid #ccc; margin: 20px 0; }
+  blockquote { border-left: 3px solid #ccc; margin: 0; padding-left: 12px; color: #555; }
+</style>
+</head>
+<body>
+<h1>Logbook Kegiatan — 10 April 2026</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Penelitian</strong></td>
+<td>Sistem Kendali Drone Kamikaze Berbasis Deteksi Objek Warna dalam Simulasi HITL</td>
+</tr>
+<tr>
+<td><strong>Tim</strong></td>
+<td>Musa El Hanafi &amp; Muhammad Ihsan Fahriansyah</td>
+</tr>
+<tr>
+<td><strong>Lokasi</strong></td>
+<td>Lab Komputer SMA Swasta Alfa Centauri, Kota Bandung</td>
+</tr>
+<tr>
+<td><strong>Hari/Tanggal</strong></td>
+<td>Jumat, 10 April 2026</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. Instalasi Tools &amp; Environment Setup</h2>
+<p><strong>Kegiatan:</strong>
+Instalasi seluruh software dan toolchain yang diperlukan untuk pengembangan sistem HITL.</p>
+<p><strong>Software yang diinstal:</strong></p>
+<h3>A. X-Plane 11</h3>
+<ul>
+<li><strong>Platform:</strong> Steam</li>
+<li><strong>Link:</strong> <a href="https://store.steampowered.com/app/269950/XPlane_11/">https://store.steampowered.com/app/269950/XPlane_11/</a></li>
+<li><strong>Langkah instalasi (Windows):</strong></li>
+<li>Install <strong>Steam</strong> terlebih dahulu jika belum ada: <a href="https://store.steampowered.com/about/">https://store.steampowered.com/about/</a></li>
+<li>Login ke Steam → buka halaman X-Plane 11 → klik <strong>"Play Game"</strong> / <strong>"Install"</strong></li>
+<li>Pilih direktori instalasi → Steam mengunduh dan menginstal otomatis</li>
+<li>Setelah selesai, jalankan X-Plane 11 dari Steam Library untuk verifikasi</li>
+<li>Lokasi folder instalasi default: <code>C:\Program Files (x86)\Steam\steamapps\common\X-Plane 11\</code></li>
+</ul>
+<h3>B. Visual Studio Code</h3>
+<ul>
+<li><strong>Download:</strong> <a href="https://code.visualstudio.com/download">https://code.visualstudio.com/download</a></li>
+<li><strong>Langkah instalasi (Windows):</strong></li>
+<li>Unduh <code>VSCodeUserSetup-x64-*.exe</code></li>
+<li>Jalankan installer → centang <strong>"Add to PATH"</strong> dan <strong>"Register Code as an editor"</strong></li>
+<li>Setelah install, buka VS Code → install extension <strong>Python</strong> (Microsoft) dari marketplace</li>
+</ul>
+<h3>C. QGroundControl</h3>
+<ul>
+<li><strong>Download:</strong> <a href="https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html">https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html</a></li>
+<li><strong>Langkah instalasi (Windows):</strong></li>
+<li>Unduh <code>QGroundControl-installer.exe</code></li>
+<li>Jalankan installer → ikuti wizard</li>
+<li>Install driver USB Pixhawk jika diminta (biasanya otomatis via Windows Update)</li>
+<li>Hubungkan Pixhawk via USB → verifikasi QGC mendeteksi perangkat</li>
+</ul>
+<h3>D. Python 3.x</h3>
+<ul>
+<li><strong>Download:</strong> <a href="https://www.python.org/downloads/windows/">https://www.python.org/downloads/windows/</a></li>
+<li><strong>Langkah instalasi (Windows):</strong></li>
+<li>Unduh <strong>Python 3.10.x</strong> (Windows installer 64-bit) — direkomendasikan untuk kompatibilitas pymavlink &amp; dronekit</li>
+<li>Jalankan installer → <strong>wajib centang "Add Python to PATH"</strong> sebelum klik Install Now</li>
+<li>Verifikasi di Command Prompt:
+     <code>python --version
+     pip --version</code></li>
+</ul>
+<h3>E. arm-none-eabi-gcc (ARM Toolchain)</h3>
+<ul>
+<li><strong>Download:</strong> <a href="https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads">https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads</a></li>
+<li><strong>Langkah instalasi (Windows):</strong></li>
+<li>Unduh file <code>arm-gnu-toolchain-*-mingw-w64-x86_64-arm-none-eabi.exe</code></li>
+<li>Jalankan installer → pada halaman akhir, centang <strong>"Add path to environment variable"</strong></li>
+<li>Verifikasi di Command Prompt:
+     <code>arm-none-eabi-gcc --version</code></li>
+</ul>
+<h3>F. Git</h3>
+<ul>
+<li><strong>Download:</strong> <a href="https://git-scm.com/download/win">https://git-scm.com/download/win</a></li>
+<li><strong>Langkah instalasi (Windows):</strong></li>
+<li>Unduh <code>Git-*-64-bit.exe</code> dari link di atas</li>
+<li>Jalankan installer → pada bagian <strong>"Adjusting your PATH environment"</strong>, pilih <strong>"Git from the command line and also from 3rd-party software"</strong></li>
+<li>Pilihan lain biarkan default → klik Next hingga selesai</li>
+<li>Verifikasi di Command Prompt atau PowerShell:
+     <code>git --version</code></li>
+</ul>
+<h3>G. Dependensi Python ArduPilot</h3>
+<ul>
+<li>Setelah Python terinstal, jalankan perintah berikut di Command Prompt:
+  <code>pip install MAVProxy pymavlink dronekit</code></li>
+<li>Verifikasi:
+  <code>python -c "import pymavlink; print('pymavlink OK')"
+  python -c "import dronekit; print('dronekit OK')"</code></li>
+</ul>
+<p><strong>Hasil:</strong> Semua tools berhasil terinstal dan berjalan. Environment build ArduPilot (<code>waf configure --board fmuv3</code>) berhasil diverifikasi.</p>
+<p><strong>Dokumentasi:</strong></p>
+<p><img alt="Display Setup Environment" src="Display_set_up_environment.jpeg" /></p>
+<hr />
+<h2>2. Verifikasi Koneksi X-Plane via LAN (2 Laptop)</h2>
+<p><strong>Kegiatan:</strong>
+Menghubungkan dua laptop dalam satu sesi X-Plane — satu sebagai player (pengendali) dan satu sebagai viewer only (pengamat).</p>
+<p><strong>Konfigurasi:</strong>
+- Laptop 1 (Player): menjalankan X-Plane sebagai host, mengendalikan penerbangan
+- Laptop 2 (Viewer Only): menjalankan X-Plane sebagai client, hanya menampilkan tampilan simulasi tanpa kontrol
+- Koneksi: via jaringan lokal (LAN/Wi-Fi)</p>
+<p><strong>Langkah:</strong>
+1. Set IP address kedua laptop dalam satu subnet lokal
+2. Di Laptop 1: buka X-Plane → Settings → Network → aktifkan <strong>"Allow other computers to control this copy of X-Plane"</strong>
+3. Di Laptop 2: buka X-Plane → Settings → Network → masukkan IP Laptop 1, set sebagai <strong>Viewer Only</strong>
+4. Mulai sesi penerbangan di Laptop 1 — Laptop 2 otomatis menampilkan tampilan yang sama secara real-time</p>
+<p><strong>Hasil:</strong> Koneksi berhasil. Laptop 2 menampilkan tampilan simulasi X-Plane secara sinkron dengan Laptop 1 sebagai viewer only.</p>
+<p><strong>Dokumentasi:</strong></p>
+<p><img alt="Kegiatan Simulasi LAN" src="Kegiatan_simulasi.jpeg" /></p>
+<hr />
+<h2>3. Penambahan Custom Aircraft FX-61 Phantom</h2>
+<p><strong>Kegiatan:</strong>
+Menambahkan model pesawat custom FX-61 Phantom ke dalam library X-Plane sebagai wahana utama pengujian HITL.</p>
+<p><strong>Sumber model:</strong>
+Model FX-61 Phantom diambil dari forum X-Plane.org: <a href="https://forums.x-plane.org/files/file/33623-fx-61-uav/">https://forums.x-plane.org/files/file/33623-fx-61-uav/</a></p>
+<p><strong>Langkah:</strong>
+1. Unduh file <code>FX-61.zip</code> dari forum X-Plane.org (link di atas)
+2. Ekstrak (unzip) <code>FX-61.zip</code> ke direktori <code>X-Plane/Aircraft/Extra Aircraft/</code>
+   - Pastikan hasil ekstrak membentuk folder <code>FX-61/</code> berisi file <code>.acf</code>, <code>.param</code>, dan tekstur
+3. Buka X-Plane → pilih aircraft FX-61 Phantom dari menu Aircraft
+3. Verifikasi model aerodinamika: karakteristik fixed-wing delta wing tampil sesuai
+4. Uji kontrol dasar (aileron, elevator, throttle) dalam mode manual di X-Plane</p>
+<p><strong>Spesifikasi FX-61 Phantom:</strong>
+- Bentang sayap: ±1.5 m (delta flying wing)
+- Kecepatan cruise: ±65–80 km/h
+- Payload: mendukung kamera/seeker mount</p>
+<p><strong>Hasil:</strong> FX-61 Phantom berhasil dimuat di X-Plane, model fisika dan kontrol permukaan berfungsi normal.</p>
+<hr />
+<h2>4. Modifikasi FX-61 — Penambahan JATO (Jet Assisted Take Off)</h2>
+<p><strong>Kegiatan:</strong>
+Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna mendukung takeoff tanpa runway panjang.</p>
+<p><strong>Metode modifikasi (Plane Maker):</strong>
+1. Buka file <code>.acf</code> FX-61 di <strong>Plane Maker</strong> (tools bawaan X-Plane)
+2. Tambahkan engine tambahan bertipe "Rocket/JATO" pada tab <code>Engines</code>
+3. Set parameter JATO:
+   - Thrust: ~50–80 N (disesuaikan berat FX-61)
+   - Burn time: ±1 detik
+   - Posisi: center-rear fuselage
+4. Simpan file <code>.acf</code> dan reload di X-Plane</p>
+<p><strong>Hasil:</strong> JATO berhasil ditambahkan. FX-61 mampu melakukan accelerated takeoff dalam jarak &lt; 30 m di X-Plane menggunakan dorongan JATO selama ±1 detik.</p>
+<hr />
+<h2>5. Penambahan Custom Airport WICC (Husein Sastranegara)</h2>
+<p><strong>Kegiatan:</strong>
+Menambahkan custom airport Bandara Husein Sastranegara (ICAO: WICC) ke dalam lingkungan X-Plane sebagai lokasi pengujian.</p>
+<p><strong>Langkah:</strong>
+1. Unduh file <code>Custom Scenery.zip</code> yang berisi data airport WICC beserta objek target hot-pink
+2. Ekstrak (unzip) <code>Custom Scenery.zip</code> ke direktori <code>X-Plane/Custom Scenery/</code>
+3. Verifikasi folder <code>WICC/</code> telah muncul di dalam <code>Custom Scenery/</code>
+4. Restart X-Plane agar scenery baru terdeteksi dan dimuat</p>
+<p><strong>Hasil:</strong> Airport WICC berhasil dimuat di X-Plane. Runway 11 dan objek target hot-pink tampil sesuai posisi yang direncanakan.</p>
+<p><img alt="Target hot-pink di threshold runway 11 WICC" src="target.png" /></p>
+<hr />
+<h2>6. Uji Coba Terbang FX-61 di Lokasi WICC — X-Plane</h2>
+<p><strong>Kegiatan:</strong>
+Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein Sastranegara (WICC).</p>
+<p><strong>Skenario pengujian:</strong>
+1. Spawn FX-61 di threshold runway 11 WICC
+2. Takeoff menggunakan JATO → transisi ke glide normal
+3. Terbang manual di sekitar area WICC
+4. Observasi respons aerodinamika: roll, pitch, yaw, kecepatan
+5. Landing kembali di runway 11</p>
+<p><strong>Parameter yang diamati:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Nilai</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kecepatan takeoff</td>
+<td>±55 km/h</td>
+</tr>
+<tr>
+<td>Kecepatan cruise</td>
+<td>±70 km/h</td>
+</tr>
+<tr>
+<td>Altitude jelajah</td>
+<td>75–100 m AGL</td>
+</tr>
+<tr>
+<td>Respons aileron</td>
+<td>Normal</td>
+</tr>
+<tr>
+<td>Respons elevator</td>
+<td>Normal</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Dokumentasi:</strong></p>
+<p><img alt="FX-61 Phantom di X-Plane — WICC" src="FX-61.png" /></p>
+<p><strong>Kendala &amp; Tindak Lanjut:</strong>
+- Terrain mesh WICC perlu fine-tuning (beberapa titik ketinggian tidak rata)
+- JATO burn time 1 detik
+- Minggu depan: setup koneksi pppd Pixhawk ↔ laptop untuk HITL mode</p>
+<hr />
+<h2>Ringkasan Kegiatan</h2>
+<table>
+<thead>
+<tr>
+<th>No</th>
+<th>Kegiatan</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Instalasi X-Plane, VS Code, QGroundControl, Git, toolchain ArduPilot</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Verifikasi koneksi X-Plane via LAN (2 laptop)</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Tambah custom aircraft FX-61 Phantom</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Modifikasi FX-61 + JATO (Plane Maker)</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Tambah custom airport WICC (Husein Sastranegara)</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Uji coba terbang FX-61 di WICC — X-Plane</td>
+<td>✅ Selesai</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Panduan Git — Logbook OPSI</h2>
+<p>Repository logbook: <a href="https://github.com/musaelhanafi/logbook-opsi">https://github.com/musaelhanafi/logbook-opsi</a></p>
+<h3>Clone (pertama kali)</h3>
+<pre><code>git clone git@github.com:musaelhanafi/logbook-opsi.git
+cd logbook-opsi
+</code></pre>
+<blockquote>
+<p>Pastikan SSH key sudah terdaftar di GitHub. Jika belum:
+<code>ssh-keygen -t ed25519 -C "email@gmail.com"
+cat ~/.ssh/id_ed25519.pub</code>
+Salin output → GitHub → Settings → SSH Keys → New SSH Key → Paste → Save.</p>
+</blockquote>
+<hr />
+<h3>Workflow Harian (Add → Commit → Push)</h3>
+<p>Setelah menambah atau mengedit file logbook:</p>
+<pre><code>cd logbook-opsi
+
+# 1. Cek status perubahan
+git status
+
+# 2. Tambahkan file yang berubah
+git add .
+
+# 3. Commit dengan pesan deskriptif
+git commit -m &quot;logbook: tambah kegiatan 10 April 2026&quot;
+
+# 4. Push ke GitHub
+git push
+</code></pre>
+<hr />
+<h3>Pull (sinkronisasi dari GitHub)</h3>
+<p>Jalankan sebelum mulai kerja, terutama jika dikerjakan di beberapa laptop:</p>
+<pre><code>cd logbook-opsi
+git pull
+</code></pre>
+<hr />
+<h3>Struktur Folder</h3>
+<pre><code>logbook-opsi/
+├── 01_10 April 2026/
+│   ├── logbook_10_april_2026.md
+│   ├── logbook_10_april_2026.pdf
+│   └── (foto/screenshot)
+├── 02_&lt;tanggal&gt;/
+│   └── ...
+└── README.md
+</code></pre>
+<p>Setiap sesi logbook dibuat dalam folder baru dengan format: <code>NN_DD Bulan YYYY/</code>.</p>
+<hr />
+<p><em>Logbook dibuat: 10 April 2026 | Penelitian OPSI 2026 — SMA Swasta Alfa Centauri</em></p>
+</body>
+</html>

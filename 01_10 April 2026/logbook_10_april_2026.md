@@ -86,6 +86,10 @@ Instalasi seluruh software dan toolchain yang diperlukan untuk pengembangan sist
 
 **Hasil:** Semua tools berhasil terinstal dan berjalan. Environment build ArduPilot (`waf configure --board fmuv3`) berhasil diverifikasi.
 
+**Dokumentasi:**
+
+![Display Setup Environment](Display_set_up_environment.jpeg)
+
 ---
 
 ## 2. Verifikasi Koneksi X-Plane via LAN (2 Laptop)
@@ -105,6 +109,10 @@ Menghubungkan dua laptop dalam satu sesi X-Plane — satu sebagai player (pengen
 4. Mulai sesi penerbangan di Laptop 1 — Laptop 2 otomatis menampilkan tampilan yang sama secara real-time
 
 **Hasil:** Koneksi berhasil. Laptop 2 menampilkan tampilan simulasi X-Plane secara sinkron dengan Laptop 1 sebagai viewer only.
+
+**Dokumentasi:**
+
+![Kegiatan Simulasi LAN](Kegiatan_simulasi.jpeg)
 
 ---
 
