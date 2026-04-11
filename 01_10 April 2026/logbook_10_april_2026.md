@@ -164,9 +164,19 @@ Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna men
 ## 4b. Konfigurasi Wing FX-61 — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan pencatatan parameter sayap (Wing 1) FX-61 Phantom di Plane Maker sebagai referensi modifikasi geometri.
+Verifikasi dan modifikasi parameter sayap (Wing 1 & Wing 2) FX-61 Phantom di Plane Maker.
 
-### Foil Specs — Wing 1
+### Tampilan 3D FX-61 di Plane Maker
+
+Visualisasi 3D model FX-61 Phantom di Plane Maker (menu Standard → Wings). File aircraft: `Aircraft/Extra Aircraft/FX61/FX-61.acf`.
+
+![Plane Maker — 3D View FX-61 Phantom](X_PlaneMaker.png)
+
+### Wing 1 — Kondisi Original (Sebelum Modifikasi)
+
+![Plane Maker — Wing 1 Original](Original_wing_planemaker.png)
+
+### Wing 1 — Foil Specs (Setelah Modifikasi)
 
 | Parameter | Nilai | Satuan | Keterangan |
 |---|---|---|---|
@@ -179,7 +189,7 @@ Verifikasi dan pencatatan parameter sayap (Wing 1) FX-61 Phantom di Plane Maker 
 | Lat arm | 0.24 | ft | Lengan lateral sayap |
 | Vert arm | −0.02 | ft | Lengan vertikal sayap |
 
-### Element Specs — Wing 1
+### Wing 1 — Element Specs
 
 - Jumlah elemen: **6** (root di kiri, tip di kanan)
 - Incidence seluruh elemen: **3.0°**
@@ -192,7 +202,117 @@ Verifikasi dan pencatatan parameter sayap (Wing 1) FX-61 Phantom di Plane Maker 
 
 > **Catatan:** FX-61 adalah flying wing — aileron dan elevator digabung sebagai **elevon**. Tidak ada rudder, flap, atau slat yang aktif.
 
-![Plane Maker — Wing 1 FX-61 Phantom](wing_planmaker.png)
+![Plane Maker — Wing 1 FX-61 Phantom](Wing_PlaneMaker.png)
+
+### Wing 2 — Foil Specs
+
+| Parameter | Nilai | Satuan | Keterangan |
+|---|---|---|---|
+| Semi-length | 0.2 | ft | Panjang semi-span |
+| Root chord | 1.0 | ft | Chord di pangkal |
+| Tip chord | 0.8 | ft | Chord di ujung |
+| Sweep | 5.5 | deg | Sudut sweep |
+| Dihedral | 0.0 | deg | Sudut dihedral |
+| Long arm | 0.0 | ft | Lengan longitudinal |
+| Lat arm | 0.0 | ft | Lengan lateral |
+| Vert arm | 0.0 | ft | Lengan vertikal |
+
+### Wing 2 — Element Specs
+
+- Jumlah elemen: **8** (root di kiri, tip di kanan)
+- Incidence seluruh elemen: **0.0°**
+
+| Kontrol | Elemen Aktif | Keterangan |
+|---|---|---|
+| Aileron 1 | — | Tidak aktif |
+| Elevator 1 | — | Tidak aktif |
+
+> **Catatan:** Wing 2 berfungsi sebagai permukaan sekunder / strake. Tidak ada kontrol aktif.
+
+![Plane Maker — Wing 2 FX-61 Phantom](Wing2_Planemaker.png)
+
+---
+
+## 4e. Konfigurasi Stabilizer FX-61 — Plane Maker
+
+**Kegiatan:**
+Verifikasi dan modifikasi parameter stabilizer (Stab 1 & Stab 2) FX-61 Phantom di Plane Maker.
+
+### Vert Stab 1 — Foil Specs
+
+Konfigurasi: **RIGHT wing** aktif.
+
+| Parameter | Nilai | Satuan | Keterangan |
+|---|---|---|---|
+| Semi-length | 0.4 | ft | Panjang semi-span stabilizer |
+| Root chord | 1.0 | ft | Chord di pangkal |
+| Tip chord | 0.8 | ft | Chord di ujung |
+| Sweep | 5.5 | deg | Sudut sweep |
+| Dihedral | 0.0 | deg | Sudut dihedral |
+| Long arm | 0.0 | ft | Lengan longitudinal |
+| Lat arm | 0.0 | ft | Lengan lateral |
+| Vert arm | 0.0 | ft | Lengan vertikal |
+
+### Vert Stab 1 — Element Specs
+
+| Kontrol | Elemen Aktif | Keterangan |
+|---|---|---|
+| Elevator 1 | 1, 2, 3, 4, 5, 6 | Aktif seluruh elemen |
+| Incidence with Elevtr 1 | — | Tidak aktif |
+
+![Plane Maker — Vert Stab 1 FX-61 Phantom](Stab1_Planemaker.png)
+
+### Vert Stab 2 — Foil Specs
+
+Konfigurasi: **RIGHT wing** aktif.
+
+| Parameter | Nilai | Satuan | Keterangan |
+|---|---|---|---|
+| Semi-length | 0.4 | ft | Panjang semi-span stabilizer |
+| Root chord | 1.0 | ft | Chord di pangkal |
+| Tip chord | 0.8 | ft | Chord di ujung |
+| Sweep | 5.5 | deg | Sudut sweep |
+| Dihedral | 0.0 | deg | Sudut dihedral |
+| Long arm | 0.0 | ft | Lengan longitudinal |
+| Lat arm | 0.0 | ft | Lengan lateral |
+| Vert arm | 0.0 | ft | Lengan vertikal |
+
+### Vert Stab 2 — Element Specs
+
+| Kontrol | Elemen Aktif | Keterangan |
+|---|---|---|
+| Elevator 1 | 1, 2, 3, 4, 5, 6 | Aktif seluruh elemen |
+| Incidence with Elevtr 1 | — | Tidak aktif |
+
+![Plane Maker — Vert Stab 2 FX-61 Phantom](Stab2_planemaker.png)
+
+---
+
+## 4f. Weight & Balance FX-61 — Plane Maker
+
+**Kegiatan:**
+Verifikasi konfigurasi weight & balance FX-61 Phantom di Plane Maker.
+
+### Center of Gravity
+
+| Parameter | Nilai | Satuan | Keterangan |
+|---|---|---|---|
+| Long CG | 0.77 | ft | Posisi CG longitudinal (forward limit) |
+| Vert CG | 0.0 | ft | Posisi CG vertikal |
+
+### Weights
+
+| Parameter | Nilai | Satuan | Keterangan |
+|---|---|---|---|
+| Empty weight | 5.0 | lbs | Berat kosong pesawat |
+| Fuel load | 0.0 | lbs | Berat bahan bakar |
+| JATO weight | 0.0 | lbs | Dari Special Cannon screen |
+| Jettisionable load | 0.0 | lbs | Beban yang dapat dilepas |
+| Maximum weight | 5.0 | lbs | Berat maksimum takeoff |
+| Weight shift weight | 0.0 | lbs | Beban penggeser CG |
+| Displaced weight | 0.0 | lbs | Untuk dirigibles/blimps |
+
+![Plane Maker — Weight & Balance FX-61 Phantom](WeightandBalance_Planemaker.png)
 
 ---
 
@@ -240,7 +360,7 @@ Verifikasi dan pencatatan parameter landing gear FX-61 Phantom di Plane Maker (t
 
 > **Catatan:** Ketiga gear bersifat retractable. Gear 3 (main kanan) memiliki castor aktif.
 
-![Plane Maker — Landing Gear FX-61 Phantom](landing_gear_planmaker.png)
+![Plane Maker — Landing Gear FX-61 Phantom](LandingGear_Planemaker.png)
 
 ---
 
@@ -311,9 +431,11 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 | 2 | Verifikasi koneksi X-Plane via LAN (2 laptop) | ✅ Selesai |
 | 3 | Tambah custom aircraft FX-61 Phantom | ✅ Selesai |
 | 4 | Modifikasi FX-61 + JATO (Plane Maker) | ✅ Selesai |
-| 4b | Konfigurasi Wing FX-61 — Plane Maker (Foil & Element Specs) | ✅ Selesai |
+| 4b | Konfigurasi Wing FX-61 — Plane Maker (Wing 1 & Wing 2) | ✅ Selesai |
 | 4c | Konfigurasi Landing Gear FX-61 — Plane Maker (Gear Loc) | ✅ Selesai |
 | 4d | Konfigurasi Control Geometry FX-61 — Plane Maker | ✅ Selesai |
+| 4e | Konfigurasi Stabilizer FX-61 — Plane Maker (Stab 1 & Stab 2) | ✅ Selesai |
+| 4f | Weight & Balance FX-61 — Plane Maker | ✅ Selesai |
 | 5 | Tambah custom airport WICC (Husein Sastranegara) | ✅ Selesai |
 | 6 | Uji coba terbang FX-61 di WICC — X-Plane | ✅ Selesai |
 

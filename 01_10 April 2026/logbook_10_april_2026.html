@@ -167,6 +167,651 @@ Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna men
    - Posisi: center-rear fuselage
 4. Simpan file <code>.acf</code> dan reload di X-Plane</p>
 <p><strong>Hasil:</strong> JATO berhasil ditambahkan. FX-61 mampu melakukan accelerated takeoff dalam jarak &lt; 30 m di X-Plane menggunakan dorongan JATO selama ±1 detik.</p>
+<p><img alt="Plane Maker — JATO FX-61 Phantom" src="jato_planmaker.png" /></p>
+<hr />
+<h2>4b. Konfigurasi Wing FX-61 — Plane Maker</h2>
+<p><strong>Kegiatan:</strong>
+Verifikasi dan modifikasi parameter sayap (Wing 1 &amp; Wing 2) FX-61 Phantom di Plane Maker.</p>
+<h3>Tampilan 3D FX-61 di Plane Maker</h3>
+<p>Visualisasi 3D model FX-61 Phantom di Plane Maker (menu Standard → Wings). File aircraft: <code>Aircraft/Extra Aircraft/FX61/FX-61.acf</code>.</p>
+<p><img alt="Plane Maker — 3D View FX-61 Phantom" src="X_PlaneMaker.png" /></p>
+<h3>Wing 1 — Kondisi Original (Sebelum Modifikasi)</h3>
+<p><img alt="Plane Maker — Wing 1 Original" src="Original_wing_planemaker.png" /></p>
+<h3>Wing 1 — Foil Specs (Setelah Modifikasi)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Nilai</th>
+<th>Satuan</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semi-length</td>
+<td>1.65</td>
+<td>ft</td>
+<td>Panjang semi-span dari root ke tip, sepanjang 25% chord</td>
+</tr>
+<tr>
+<td>Root chord</td>
+<td>1.06</td>
+<td>ft</td>
+<td>Chord di pangkal sayap</td>
+</tr>
+<tr>
+<td>Tip chord</td>
+<td>0.80</td>
+<td>ft</td>
+<td>Chord di ujung sayap</td>
+</tr>
+<tr>
+<td>Sweep</td>
+<td>20.2</td>
+<td>deg</td>
+<td>Sudut sweep sayap</td>
+</tr>
+<tr>
+<td>Dihedral</td>
+<td>0.0</td>
+<td>deg</td>
+<td>Sudut dihedral</td>
+</tr>
+<tr>
+<td>Long arm</td>
+<td>0.57</td>
+<td>ft</td>
+<td>Lengan longitudinal sayap</td>
+</tr>
+<tr>
+<td>Lat arm</td>
+<td>0.24</td>
+<td>ft</td>
+<td>Lengan lateral sayap</td>
+</tr>
+<tr>
+<td>Vert arm</td>
+<td>−0.02</td>
+<td>ft</td>
+<td>Lengan vertikal sayap</td>
+</tr>
+</tbody>
+</table>
+<h3>Wing 1 — Element Specs</h3>
+<ul>
+<li>Jumlah elemen: <strong>6</strong> (root di kiri, tip di kanan)</li>
+<li>Incidence seluruh elemen: <strong>3.0°</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Kontrol</th>
+<th>Elemen Aktif</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aileron 1</td>
+<td>2, 3, 4, 5, 6</td>
+<td>Aktif dari elemen 2 hingga tip</td>
+</tr>
+<tr>
+<td>Elevator 1</td>
+<td>2, 3, 4, 5, 6</td>
+<td>Elevon — aktif dari elemen 2 hingga tip</td>
+</tr>
+<tr>
+<td>Incidence with Elevtr 1</td>
+<td>1</td>
+<td>Hanya root (elemen 1)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Catatan:</strong> FX-61 adalah flying wing — aileron dan elevator digabung sebagai <strong>elevon</strong>. Tidak ada rudder, flap, atau slat yang aktif.</p>
+</blockquote>
+<p><img alt="Plane Maker — Wing 1 FX-61 Phantom" src="Wing_PlaneMaker.png" /></p>
+<h3>Wing 2 — Foil Specs</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Nilai</th>
+<th>Satuan</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semi-length</td>
+<td>0.2</td>
+<td>ft</td>
+<td>Panjang semi-span</td>
+</tr>
+<tr>
+<td>Root chord</td>
+<td>1.0</td>
+<td>ft</td>
+<td>Chord di pangkal</td>
+</tr>
+<tr>
+<td>Tip chord</td>
+<td>0.8</td>
+<td>ft</td>
+<td>Chord di ujung</td>
+</tr>
+<tr>
+<td>Sweep</td>
+<td>5.5</td>
+<td>deg</td>
+<td>Sudut sweep</td>
+</tr>
+<tr>
+<td>Dihedral</td>
+<td>0.0</td>
+<td>deg</td>
+<td>Sudut dihedral</td>
+</tr>
+<tr>
+<td>Long arm</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Lengan longitudinal</td>
+</tr>
+<tr>
+<td>Lat arm</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Lengan lateral</td>
+</tr>
+<tr>
+<td>Vert arm</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Lengan vertikal</td>
+</tr>
+</tbody>
+</table>
+<h3>Wing 2 — Element Specs</h3>
+<ul>
+<li>Jumlah elemen: <strong>8</strong> (root di kiri, tip di kanan)</li>
+<li>Incidence seluruh elemen: <strong>0.0°</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Kontrol</th>
+<th>Elemen Aktif</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aileron 1</td>
+<td>—</td>
+<td>Tidak aktif</td>
+</tr>
+<tr>
+<td>Elevator 1</td>
+<td>—</td>
+<td>Tidak aktif</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Catatan:</strong> Wing 2 berfungsi sebagai permukaan sekunder / strake. Tidak ada kontrol aktif.</p>
+</blockquote>
+<p><img alt="Plane Maker — Wing 2 FX-61 Phantom" src="Wing2_Planemaker.png" /></p>
+<hr />
+<h2>4e. Konfigurasi Stabilizer FX-61 — Plane Maker</h2>
+<p><strong>Kegiatan:</strong>
+Verifikasi dan modifikasi parameter stabilizer (Stab 1 &amp; Stab 2) FX-61 Phantom di Plane Maker.</p>
+<h3>Vert Stab 1 — Foil Specs</h3>
+<p>Konfigurasi: <strong>RIGHT wing</strong> aktif.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Nilai</th>
+<th>Satuan</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semi-length</td>
+<td>0.4</td>
+<td>ft</td>
+<td>Panjang semi-span stabilizer</td>
+</tr>
+<tr>
+<td>Root chord</td>
+<td>1.0</td>
+<td>ft</td>
+<td>Chord di pangkal</td>
+</tr>
+<tr>
+<td>Tip chord</td>
+<td>0.8</td>
+<td>ft</td>
+<td>Chord di ujung</td>
+</tr>
+<tr>
+<td>Sweep</td>
+<td>5.5</td>
+<td>deg</td>
+<td>Sudut sweep</td>
+</tr>
+<tr>
+<td>Dihedral</td>
+<td>0.0</td>
+<td>deg</td>
+<td>Sudut dihedral</td>
+</tr>
+<tr>
+<td>Long arm</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Lengan longitudinal</td>
+</tr>
+<tr>
+<td>Lat arm</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Lengan lateral</td>
+</tr>
+<tr>
+<td>Vert arm</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Lengan vertikal</td>
+</tr>
+</tbody>
+</table>
+<h3>Vert Stab 1 — Element Specs</h3>
+<table>
+<thead>
+<tr>
+<th>Kontrol</th>
+<th>Elemen Aktif</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elevator 1</td>
+<td>1, 2, 3, 4, 5, 6</td>
+<td>Aktif seluruh elemen</td>
+</tr>
+<tr>
+<td>Incidence with Elevtr 1</td>
+<td>—</td>
+<td>Tidak aktif</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Plane Maker — Vert Stab 1 FX-61 Phantom" src="Stab1_Planemaker.png" /></p>
+<h3>Vert Stab 2 — Foil Specs</h3>
+<p>Konfigurasi: <strong>RIGHT wing</strong> aktif.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Nilai</th>
+<th>Satuan</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semi-length</td>
+<td>0.4</td>
+<td>ft</td>
+<td>Panjang semi-span stabilizer</td>
+</tr>
+<tr>
+<td>Root chord</td>
+<td>1.0</td>
+<td>ft</td>
+<td>Chord di pangkal</td>
+</tr>
+<tr>
+<td>Tip chord</td>
+<td>0.8</td>
+<td>ft</td>
+<td>Chord di ujung</td>
+</tr>
+<tr>
+<td>Sweep</td>
+<td>5.5</td>
+<td>deg</td>
+<td>Sudut sweep</td>
+</tr>
+<tr>
+<td>Dihedral</td>
+<td>0.0</td>
+<td>deg</td>
+<td>Sudut dihedral</td>
+</tr>
+<tr>
+<td>Long arm</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Lengan longitudinal</td>
+</tr>
+<tr>
+<td>Lat arm</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Lengan lateral</td>
+</tr>
+<tr>
+<td>Vert arm</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Lengan vertikal</td>
+</tr>
+</tbody>
+</table>
+<h3>Vert Stab 2 — Element Specs</h3>
+<table>
+<thead>
+<tr>
+<th>Kontrol</th>
+<th>Elemen Aktif</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elevator 1</td>
+<td>1, 2, 3, 4, 5, 6</td>
+<td>Aktif seluruh elemen</td>
+</tr>
+<tr>
+<td>Incidence with Elevtr 1</td>
+<td>—</td>
+<td>Tidak aktif</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Plane Maker — Vert Stab 2 FX-61 Phantom" src="Stab2_planemaker.png" /></p>
+<hr />
+<h2>4f. Weight &amp; Balance FX-61 — Plane Maker</h2>
+<p><strong>Kegiatan:</strong>
+Verifikasi konfigurasi weight &amp; balance FX-61 Phantom di Plane Maker.</p>
+<h3>Center of Gravity</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Nilai</th>
+<th>Satuan</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Long CG</td>
+<td>0.77</td>
+<td>ft</td>
+<td>Posisi CG longitudinal (forward limit)</td>
+</tr>
+<tr>
+<td>Vert CG</td>
+<td>0.0</td>
+<td>ft</td>
+<td>Posisi CG vertikal</td>
+</tr>
+</tbody>
+</table>
+<h3>Weights</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Nilai</th>
+<th>Satuan</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Empty weight</td>
+<td>5.0</td>
+<td>lbs</td>
+<td>Berat kosong pesawat</td>
+</tr>
+<tr>
+<td>Fuel load</td>
+<td>0.0</td>
+<td>lbs</td>
+<td>Berat bahan bakar</td>
+</tr>
+<tr>
+<td>JATO weight</td>
+<td>0.0</td>
+<td>lbs</td>
+<td>Dari Special Cannon screen</td>
+</tr>
+<tr>
+<td>Jettisionable load</td>
+<td>0.0</td>
+<td>lbs</td>
+<td>Beban yang dapat dilepas</td>
+</tr>
+<tr>
+<td>Maximum weight</td>
+<td>5.0</td>
+<td>lbs</td>
+<td>Berat maksimum takeoff</td>
+</tr>
+<tr>
+<td>Weight shift weight</td>
+<td>0.0</td>
+<td>lbs</td>
+<td>Beban penggeser CG</td>
+</tr>
+<tr>
+<td>Displaced weight</td>
+<td>0.0</td>
+<td>lbs</td>
+<td>Untuk dirigibles/blimps</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Plane Maker — Weight &amp; Balance FX-61 Phantom" src="WeightandBalance_Planemaker.png" /></p>
+<hr />
+<h2>4c. Konfigurasi Landing Gear FX-61 — Plane Maker</h2>
+<p><strong>Kegiatan:</strong>
+Verifikasi dan pencatatan parameter landing gear FX-61 Phantom di Plane Maker (tab Gear Loc).</p>
+<h3>Tipe Gear</h3>
+<table>
+<thead>
+<tr>
+<th>Gear</th>
+<th>Tipe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gear 1 (Nose)</td>
+<td>Single</td>
+</tr>
+<tr>
+<td>Gear 2 (Main Kiri)</td>
+<td>Single</td>
+</tr>
+<tr>
+<td>Gear 3 (Main Kanan)</td>
+<td>Single</td>
+</tr>
+<tr>
+<td>Gear 4–10</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3>Posisi &amp; Geometri (Gear Loc)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Gear 1 (Nose)</th>
+<th>Gear 2 (Main Kiri)</th>
+<th>Gear 3 (Main Kanan)</th>
+<th>Satuan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Long arm</td>
+<td>0.10</td>
+<td>1.09</td>
+<td>1.09</td>
+<td>ft</td>
+</tr>
+<tr>
+<td>Lat arm</td>
+<td>0.00</td>
+<td>1.20</td>
+<td>−1.20</td>
+<td>ft</td>
+</tr>
+<tr>
+<td>Vert arm</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>ft</td>
+</tr>
+<tr>
+<td>Lon angle extended</td>
+<td>20</td>
+<td>−20</td>
+<td>−20</td>
+<td>deg</td>
+</tr>
+<tr>
+<td>Lat angle extended</td>
+<td>0</td>
+<td>40</td>
+<td>−40</td>
+<td>deg</td>
+</tr>
+<tr>
+<td>Lon angle retracted</td>
+<td>−90</td>
+<td>90</td>
+<td>90</td>
+<td>deg</td>
+</tr>
+<tr>
+<td>Lat angle retracted</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>deg</td>
+</tr>
+<tr>
+<td>Eagle-claw</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>deg</td>
+</tr>
+<tr>
+<td>Leg length</td>
+<td>0.5</td>
+<td>0.5</td>
+<td>0.5</td>
+<td>ft</td>
+</tr>
+<tr>
+<td>Tire radius</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>ft</td>
+</tr>
+<tr>
+<td>Tire semi-width</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>ft</td>
+</tr>
+<tr>
+<td>N-W steering slow</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>deg</td>
+</tr>
+<tr>
+<td>N-W steering fast</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>deg</td>
+</tr>
+<tr>
+<td>Cycle time</td>
+<td>0.1</td>
+<td>0.1</td>
+<td>0.1</td>
+<td>sec</td>
+</tr>
+</tbody>
+</table>
+<h3>Flags</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Gear 1</th>
+<th>Gear 2</th>
+<th>Gear 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Brakes</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Retracts</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Castors</td>
+<td>—</td>
+<td>—</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Faired</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Catatan:</strong> Ketiga gear bersifat retractable. Gear 3 (main kanan) memiliki castor aktif.</p>
+</blockquote>
+<p><img alt="Plane Maker — Landing Gear FX-61 Phantom" src="LandingGear_Planemaker.png" /></p>
+<hr />
+<h2>4d. Konfigurasi Control Geometry FX-61 — Plane Maker</h2>
+<p><strong>Kegiatan:</strong>
+Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) FX-61 Phantom di Plane Maker.</p>
+<p><img alt="Plane Maker — Control Geometry FX-61 Phantom" src="control_geometry_planmaker.png" /></p>
 <hr />
 <h2>5. Penambahan Custom Airport WICC (Husein Sastranegara)</h2>
 <p><strong>Kegiatan:</strong>
@@ -254,6 +899,31 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 <tr>
 <td>4</td>
 <td>Modifikasi FX-61 + JATO (Plane Maker)</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>4b</td>
+<td>Konfigurasi Wing FX-61 — Plane Maker (Wing 1 &amp; Wing 2)</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>4c</td>
+<td>Konfigurasi Landing Gear FX-61 — Plane Maker (Gear Loc)</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>4d</td>
+<td>Konfigurasi Control Geometry FX-61 — Plane Maker</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>4e</td>
+<td>Konfigurasi Stabilizer FX-61 — Plane Maker (Stab 1 &amp; Stab 2)</td>
+<td>✅ Selesai</td>
+</tr>
+<tr>
+<td>4f</td>
+<td>Weight &amp; Balance FX-61 — Plane Maker</td>
 <td>✅ Selesai</td>
 </tr>
 <tr>
