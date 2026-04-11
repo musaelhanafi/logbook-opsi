@@ -148,16 +148,38 @@ Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna men
 
 **Metode modifikasi (Plane Maker):**
 1. Buka file `.acf` FX-61 di **Plane Maker** (tools bawaan X-Plane)
-2. Tambahkan engine tambahan bertipe "Rocket/JATO" pada tab `Engines`
-3. Set parameter JATO:
-   - Thrust: ~50–80 N (disesuaikan berat FX-61)
-   - Burn time: ±1 detik
-   - Posisi: center-rear fuselage
+2. Buka tab `Standard → Special` → bagian **Jet Assisted Take-Off**
+3. Set parameter JATO (dari screenshot Special Contents):
+
+### Parameter JATO (Special Contents — Plane Maker)
+
+| Parameter | Keterangan |
+|---|---|
+| JATO long arm | Posisi longitudinal JATO dari referensi pesawat (ft) |
+| JATO lat arm | Posisi lateral (ft), 0 = centre |
+| JATO vert arm | Posisi vertikal (ft), arah up/down |
+| JATO weight | Berat JATO (lbs) — ditentukan dari Special Contents screen |
+| JATO thrust | Gaya dorong JATO (lbs) |
+| JATO duration | Durasi pembakaran JATO (sec) |
+| JATO specific impulse | Impuls spesifik (sec) |
+
+### Equipment Options (dari screenshot)
+
+| Opsi | Status |
+|---|---|
+| auto fly gear on landing/retract | ✅ aktif |
+| TCAS warning system | ✅ aktif |
+| engine fire self-equipped | ✅ aktif |
+| auto speedbrake display | — tidak aktif |
+| auto flaps | — tidak aktif |
+| inverted fuel and oil systems | — tidak aktif |
+| transonic warning system | — tidak aktif |
+
 4. Simpan file `.acf` dan reload di X-Plane
 
-**Hasil:** JATO berhasil ditambahkan. FX-61 mampu melakukan accelerated takeoff dalam jarak < 30 m di X-Plane menggunakan dorongan JATO selama ±1 detik.
+**Hasil:** JATO berhasil ditambahkan. FX-61 mampu melakukan accelerated takeoff dalam jarak < 30 m di X-Plane menggunakan dorongan JATO.
 
-![Plane Maker — JATO FX-61 Phantom](jato_planmaker.png)
+![Plane Maker — JATO & Special Contents FX-61 Phantom](jato_planmaker.png)
 
 ---
 
@@ -236,53 +258,59 @@ Visualisasi 3D model FX-61 Phantom di Plane Maker (menu Standard → Wings). Fil
 ## 4e. Konfigurasi Stabilizer FX-61 — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan modifikasi parameter stabilizer (Stab 1 & Stab 2) FX-61 Phantom di Plane Maker.
+Verifikasi parameter vertical stabilizer (winglet kiri & kanan) FX-61 Phantom di Plane Maker.
+
+FX-61 adalah flying wing — tidak memiliki fin vertikal konvensional. Vert Stab 1 dan Vert Stab 2 memodelkan **dua winglet** di ujung sayap kiri dan kanan sebagai permukaan stabilisasi yaw pasif.
 
 ### Vert Stab 1 — Foil Specs
 
-Konfigurasi: **RIGHT wing** aktif.
+Konfigurasi: **RIGHT wing** aktif (winglet kanan).
 
-| Parameter | Nilai | Satuan | Keterangan |
-|---|---|---|---|
-| Semi-length | 0.4 | ft | Panjang semi-span stabilizer |
-| Root chord | 1.0 | ft | Chord di pangkal |
-| Tip chord | 0.8 | ft | Chord di ujung |
-| Sweep | 5.5 | deg | Sudut sweep |
-| Dihedral | 0.0 | deg | Sudut dihedral |
-| Long arm | 0.0 | ft | Lengan longitudinal |
-| Lat arm | 0.0 | ft | Lengan lateral |
-| Vert arm | 0.0 | ft | Lengan vertikal |
+| Parameter | Keterangan |
+|---|---|
+| Foil Specs | Nilai dimensi winglet kanan (semi-length, chord, sweep, arm) |
+| Right wing | Aktif (radio button RIGHT wing dipilih) |
 
 ### Vert Stab 1 — Element Specs
 
+**Semua kontrol permukaan: TIDAK AKTIF** (seluruh checkbox kosong).
+
 | Kontrol | Elemen Aktif | Keterangan |
 |---|---|---|
-| Elevator 1 | 1, 2, 3, 4, 5, 6 | Aktif seluruh elemen |
-| Incidence with Elevtr 1 | — | Tidak aktif |
+| Aileron 1–2 | — | Tidak aktif |
+| Elevator 1–2 | — | Tidak aktif |
+| Rudder 1–2 | — | Tidak aktif |
+| Flap 1–2 | — | Tidak aktif |
+| Speed brake 1–2 | — | Tidak aktif |
+| Incidence (semua) | — | Tidak aktif |
+
+> **Catatan:** Vert Stab 1 adalah permukaan **pasif** — berfungsi sebagai winglet kanan murni tanpa defleksi aktif. Yaw control pada FX-61 dilakukan melalui diferensial throttle atau differential elevon, bukan rudder.
 
 ![Plane Maker — Vert Stab 1 FX-61 Phantom](Stab1_Planemaker.png)
 
 ### Vert Stab 2 — Foil Specs
 
-Konfigurasi: **RIGHT wing** aktif.
+Konfigurasi: **LEFT wing** aktif (winglet kiri).
 
-| Parameter | Nilai | Satuan | Keterangan |
-|---|---|---|---|
-| Semi-length | 0.4 | ft | Panjang semi-span stabilizer |
-| Root chord | 1.0 | ft | Chord di pangkal |
-| Tip chord | 0.8 | ft | Chord di ujung |
-| Sweep | 5.5 | deg | Sudut sweep |
-| Dihedral | 0.0 | deg | Sudut dihedral |
-| Long arm | 0.0 | ft | Lengan longitudinal |
-| Lat arm | 0.0 | ft | Lengan lateral |
-| Vert arm | 0.0 | ft | Lengan vertikal |
+| Parameter | Keterangan |
+|---|---|
+| Foil Specs | Nilai dimensi winglet kiri (semi-length, chord, sweep, arm) |
+| Left wing | Aktif (radio button LEFT wing dipilih) |
 
 ### Vert Stab 2 — Element Specs
 
+**Semua kontrol permukaan: TIDAK AKTIF** (seluruh checkbox kosong).
+
 | Kontrol | Elemen Aktif | Keterangan |
 |---|---|---|
-| Elevator 1 | 1, 2, 3, 4, 5, 6 | Aktif seluruh elemen |
-| Incidence with Elevtr 1 | — | Tidak aktif |
+| Aileron 1–2 | — | Tidak aktif |
+| Elevator 1–2 | — | Tidak aktif |
+| Rudder 1–2 | — | Tidak aktif |
+| Flap 1–2 | — | Tidak aktif |
+| Speed brake 1–2 | — | Tidak aktif |
+| Incidence (semua) | — | Tidak aktif |
+
+> **Catatan:** Vert Stab 2 adalah permukaan **pasif** simetris dengan Vert Stab 1 — berfungsi sebagai winglet kiri murni.
 
 ![Plane Maker — Vert Stab 2 FX-61 Phantom](Stab2_planemaker.png)
 
@@ -367,7 +395,42 @@ Verifikasi dan pencatatan parameter landing gear FX-61 Phantom di Plane Maker (t
 ## 4d. Konfigurasi Control Geometry FX-61 — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) FX-61 Phantom di Plane Maker.
+Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) FX-61 Phantom di Plane Maker (tab Controls → Control Sizes).
+
+### Control Sizes — Ukuran Permukaan Kontrol
+
+| Kontrol | Chord Ratio Root | Chord Ratio Tip | Tipe Permukaan | Keterangan |
+|---|---|---|---|---|
+| Aileron 1 | 0.20 | 0.20 | smooth with no gaps | Aktif (elevon roll) |
+| Aileron 2 | 0.00 | 0.00 | — | Tidak aktif |
+| Elevator 1 | 0.20 | 0.20 | smooth with no gaps | Aktif (elevon pitch) |
+| Elevator 2 | 0.00 | 0.00 | — | Tidak aktif |
+| Rudder 1 | 0.00 | 0.00 | — | Tidak aktif |
+| Rudder 2 | 0.00 | 0.00 | — | Tidak aktif |
+| Roll Spoiler 1 | 0.00 | — | — | Tidak aktif |
+| Roll Spoiler 2 | 0.00 | — | — | Tidak aktif |
+| Drag Rudder | 0.00 | — | — | Tidak aktif |
+| Speedbrake 1 | 0.00 | — | — | Tidak aktif |
+| Speedbrake 2 | 0.00 | — | — | Tidak aktif |
+
+> **Catatan:** Hanya Aileron 1 dan Elevator 1 yang aktif — keduanya bekerja sebagai **elevon** (gabungan aileron+elevator untuk flying wing). Tipe permukaan "smooth with no gaps" berarti permukaan kontrol menyatu dengan sayap tanpa celah.
+
+### Flap & Slat Coefficients
+
+| Komponen | Tipe | Chord Ratio Root | Chord Ratio Tip | Keterangan |
+|---|---|---|---|---|
+| Slat 1 | Krueger flap | 0.00 | 0.00 | Tidak terpasang |
+| Slat 2 | Krueger flap | 0.00 | 0.00 | Tidak terpasang |
+| Flap 1 | Plain flap | 0.00 | 0.00 | Tidak terpasang |
+| Flap 2 | Plain flap | 0.00 | 0.00 | Tidak terpasang |
+
+### Flap & Slat Deflections
+
+| Parameter | Nilai | Satuan |
+|---|---|---|
+| Flap extend/retract time | 0.5 / 0.5 | sec |
+| Flap speed ratio at deploy-start | 1.0 | — |
+| Flap detents | 0.1 | — |
 
 ![Plane Maker — Control Geometry FX-61 Phantom](control_geometry_planmaker.png)
 
@@ -430,11 +493,11 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 | 1 | Instalasi X-Plane, VS Code, QGroundControl, Git, toolchain ArduPilot | ✅ Selesai |
 | 2 | Verifikasi koneksi X-Plane via LAN (2 laptop) | ✅ Selesai |
 | 3 | Tambah custom aircraft FX-61 Phantom | ✅ Selesai |
-| 4 | Modifikasi FX-61 + JATO (Plane Maker) | ✅ Selesai |
-| 4b | Konfigurasi Wing FX-61 — Plane Maker (Wing 1 & Wing 2) | ✅ Selesai |
+| 4 | Modifikasi FX-61 + JATO & Equipment Options (Special Contents) | ✅ Selesai |
+| 4b | Konfigurasi Wing 1 & Wing 2 FX-61 — Plane Maker (Foil & Element Specs) | ✅ Selesai |
 | 4c | Konfigurasi Landing Gear FX-61 — Plane Maker (Gear Loc) | ✅ Selesai |
-| 4d | Konfigurasi Control Geometry FX-61 — Plane Maker | ✅ Selesai |
-| 4e | Konfigurasi Stabilizer FX-61 — Plane Maker (Stab 1 & Stab 2) | ✅ Selesai |
+| 4d | Konfigurasi Control Geometry FX-61 — Plane Maker (Control Sizes, Flap/Slat) | ✅ Selesai |
+| 4e | Konfigurasi Vert Stab 1 & 2 (winglet pasif) FX-61 — Plane Maker | ✅ Selesai |
 | 4f | Weight & Balance FX-61 — Plane Maker | ✅ Selesai |
 | 5 | Tambah custom airport WICC (Husein Sastranegara) | ✅ Selesai |
 | 6 | Uji coba terbang FX-61 di WICC — X-Plane | ✅ Selesai |
