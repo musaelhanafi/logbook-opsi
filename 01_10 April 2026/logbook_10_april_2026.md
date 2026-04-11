@@ -224,7 +224,7 @@ Visualisasi 3D model FX-61 Phantom di Plane Maker (menu Standard → Wings). Fil
 
 > **Catatan:** FX-61 adalah flying wing — aileron dan elevator digabung sebagai **elevon**. Tidak ada rudder, flap, atau slat yang aktif.
 
-![Plane Maker — Wing 1 FX-61 Phantom](Wing_PlaneMaker.png)
+![Plane Maker — Wing 1 FX-61 Phantom](Wing1_Planemaker.png)
 
 ### Wing 2 — Foil Specs
 
@@ -252,95 +252,6 @@ Visualisasi 3D model FX-61 Phantom di Plane Maker (menu Standard → Wings). Fil
 > **Catatan:** Wing 2 berfungsi sebagai permukaan sekunder / strake. Tidak ada kontrol aktif.
 
 ![Plane Maker — Wing 2 FX-61 Phantom](Wing2_Planemaker.png)
-
----
-
-## 4e. Konfigurasi Stabilizer FX-61 — Plane Maker
-
-**Kegiatan:**
-Verifikasi parameter vertical stabilizer (winglet kiri & kanan) FX-61 Phantom di Plane Maker.
-
-FX-61 adalah flying wing — tidak memiliki fin vertikal konvensional. Vert Stab 1 dan Vert Stab 2 memodelkan **dua winglet** di ujung sayap kiri dan kanan sebagai permukaan stabilisasi yaw pasif.
-
-### Vert Stab 1 — Foil Specs
-
-Konfigurasi: **RIGHT wing** aktif (winglet kanan).
-
-| Parameter | Keterangan |
-|---|---|
-| Foil Specs | Nilai dimensi winglet kanan (semi-length, chord, sweep, arm) |
-| Right wing | Aktif (radio button RIGHT wing dipilih) |
-
-### Vert Stab 1 — Element Specs
-
-**Semua kontrol permukaan: TIDAK AKTIF** (seluruh checkbox kosong).
-
-| Kontrol | Elemen Aktif | Keterangan |
-|---|---|---|
-| Aileron 1–2 | — | Tidak aktif |
-| Elevator 1–2 | — | Tidak aktif |
-| Rudder 1–2 | — | Tidak aktif |
-| Flap 1–2 | — | Tidak aktif |
-| Speed brake 1–2 | — | Tidak aktif |
-| Incidence (semua) | — | Tidak aktif |
-
-> **Catatan:** Vert Stab 1 adalah permukaan **pasif** — berfungsi sebagai winglet kanan murni tanpa defleksi aktif. Yaw control pada FX-61 dilakukan melalui diferensial throttle atau differential elevon, bukan rudder.
-
-![Plane Maker — Vert Stab 1 FX-61 Phantom](Stab1_Planemaker.png)
-
-### Vert Stab 2 — Foil Specs
-
-Konfigurasi: **LEFT wing** aktif (winglet kiri).
-
-| Parameter | Keterangan |
-|---|---|
-| Foil Specs | Nilai dimensi winglet kiri (semi-length, chord, sweep, arm) |
-| Left wing | Aktif (radio button LEFT wing dipilih) |
-
-### Vert Stab 2 — Element Specs
-
-**Semua kontrol permukaan: TIDAK AKTIF** (seluruh checkbox kosong).
-
-| Kontrol | Elemen Aktif | Keterangan |
-|---|---|---|
-| Aileron 1–2 | — | Tidak aktif |
-| Elevator 1–2 | — | Tidak aktif |
-| Rudder 1–2 | — | Tidak aktif |
-| Flap 1–2 | — | Tidak aktif |
-| Speed brake 1–2 | — | Tidak aktif |
-| Incidence (semua) | — | Tidak aktif |
-
-> **Catatan:** Vert Stab 2 adalah permukaan **pasif** simetris dengan Vert Stab 1 — berfungsi sebagai winglet kiri murni.
-
-![Plane Maker — Vert Stab 2 FX-61 Phantom](Stab2_planemaker.png)
-
----
-
-## 4f. Weight & Balance FX-61 — Plane Maker
-
-**Kegiatan:**
-Verifikasi konfigurasi weight & balance FX-61 Phantom di Plane Maker.
-
-### Center of Gravity
-
-| Parameter | Nilai | Satuan | Keterangan |
-|---|---|---|---|
-| Long CG | 0.77 | ft | Posisi CG longitudinal (forward limit) |
-| Vert CG | 0.0 | ft | Posisi CG vertikal |
-
-### Weights
-
-| Parameter | Nilai | Satuan | Keterangan |
-|---|---|---|---|
-| Empty weight | 5.0 | lbs | Berat kosong pesawat |
-| Fuel load | 0.0 | lbs | Berat bahan bakar |
-| JATO weight | 0.0 | lbs | Dari Special Cannon screen |
-| Jettisionable load | 0.0 | lbs | Beban yang dapat dilepas |
-| Maximum weight | 5.0 | lbs | Berat maksimum takeoff |
-| Weight shift weight | 0.0 | lbs | Beban penggeser CG |
-| Displaced weight | 0.0 | lbs | Untuk dirigibles/blimps |
-
-![Plane Maker — Weight & Balance FX-61 Phantom](WeightandBalance_Planemaker.png)
 
 ---
 
@@ -383,10 +294,10 @@ Verifikasi dan pencatatan parameter landing gear FX-61 Phantom di Plane Maker (t
 |---|---|---|---|
 | Brakes | ✅ | ✅ | ✅ |
 | Retracts | ✅ | ✅ | ✅ |
-| Castors | — | — | - |
+| Castors | — | — | — |
 | Faired | — | — | — |
 
-> **Catatan:** Ketiga gear bersifat retractable. Gear 3 (main kanan) memiliki castor aktif.
+> **Catatan:** Ketiga gear bersifat retractable. Tidak ada gear yang menggunakan castor.
 
 ![Plane Maker — Landing Gear FX-61 Phantom](LandingGear_Planemaker.png)
 
@@ -433,6 +344,101 @@ Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) FX-61 Ph
 | Flap detents | 0.1 | — |
 
 ![Plane Maker — Control Geometry FX-61 Phantom](control_geometry_planmaker.png)
+
+### Trim & Speed Settings
+
+Pengaturan trim dan kecepatan kontrol permukaan FX-61 di Plane Maker (sub-tab Trim & Speed pada Control Geometry).
+
+![Plane Maker — Control Geometry Trim & Speed FX-61 Phantom](Trim_Planemaker.png)
+
+---
+
+## 4e. Konfigurasi Stabilizer FX-61 — Plane Maker
+
+**Kegiatan:**
+Verifikasi parameter vertical stabilizer (winglet kiri & kanan) FX-61 Phantom di Plane Maker.
+
+FX-61 adalah flying wing — tidak memiliki fin vertikal konvensional. Vert Stab 1 dan Vert Stab 2 memodelkan **dua winglet** di ujung sayap kiri dan kanan sebagai permukaan stabilisasi yaw pasif.
+
+### Vert Stab 1 — Foil Specs
+
+Konfigurasi: **RIGHT wing** aktif (winglet kanan).
+
+| Parameter | Keterangan |
+|---|---|
+| Foil Specs | Nilai dimensi winglet kanan (semi-length, chord, sweep, arm) |
+| Right wing | Aktif (radio button RIGHT wing dipilih) |
+
+### Vert Stab 1 — Element Specs
+
+**Semua kontrol permukaan: TIDAK AKTIF** (seluruh checkbox kosong).
+
+| Kontrol | Elemen Aktif | Keterangan |
+|---|---|---|
+| Aileron 1–2 | — | Tidak aktif |
+| Elevator 1–2 | — | Tidak aktif |
+| Rudder 1–2 | — | Tidak aktif |
+| Flap 1–2 | — | Tidak aktif |
+| Speed brake 1–2 | — | Tidak aktif |
+| Incidence (semua) | — | Tidak aktif |
+
+> **Catatan:** Vert Stab 1 adalah permukaan **pasif** — berfungsi sebagai winglet kanan murni tanpa defleksi aktif. Yaw control pada FX-61 dilakukan melalui diferensial throttle atau differential elevon, bukan rudder.
+
+![Plane Maker — Vert Stab 1 FX-61 Phantom](Stab1_Planemaker.png)
+
+### Vert Stab 2 — Foil Specs
+
+Konfigurasi: **BOTH wings** aktif (kedua sisi — radio button RIGHT wing dan LEFT wing keduanya dipilih).
+
+| Parameter | Keterangan |
+|---|---|
+| Foil Specs | Nilai dimensi winglet (semi-length, chord, sweep, arm) — simetris kiri/kanan |
+| Both wings | Aktif (radio button RIGHT wing dan LEFT wing keduanya dipilih di screenshot) |
+
+### Vert Stab 2 — Element Specs
+
+**Semua kontrol permukaan: TIDAK AKTIF** (seluruh checkbox kosong).
+
+| Kontrol | Elemen Aktif | Keterangan |
+|---|---|---|
+| Aileron 1–2 | — | Tidak aktif |
+| Elevator 1–2 | — | Tidak aktif |
+| Rudder 1–2 | — | Tidak aktif |
+| Flap 1–2 | — | Tidak aktif |
+| Speed brake 1–2 | — | Tidak aktif |
+| Incidence (semua) | — | Tidak aktif |
+
+> **Catatan:** Vert Stab 2 dikonfigurasi dengan **BOTH wings** (kedua sisi), sehingga Plane Maker menampilkan model winglet simetris di kiri dan kanan. Semua kontrol permukaan tetap tidak aktif (pasif).
+
+![Plane Maker — Vert Stab 2 FX-61 Phantom](Stab2_planemaker.png)
+
+---
+
+## 4f. Weight & Balance FX-61 — Plane Maker
+
+**Kegiatan:**
+Verifikasi konfigurasi weight & balance FX-61 Phantom di Plane Maker.
+
+### Center of Gravity
+
+| Parameter | Nilai | Satuan | Keterangan |
+|---|---|---|---|
+| Long CG | 0.77 | ft | Posisi CG longitudinal (forward limit) |
+| Vert CG | 0.0 | ft | Posisi CG vertikal |
+
+### Weights
+
+| Parameter | Nilai | Satuan | Keterangan |
+|---|---|---|---|
+| Empty weight | 5.0 | lbs | Berat kosong pesawat |
+| Fuel load | 0.0 | lbs | Berat bahan bakar |
+| JATO weight | 0.0 | lbs | Dari Special Cannon screen |
+| Jettisionable load | 0.0 | lbs | Beban yang dapat dilepas |
+| Maximum weight | 5.0 | lbs | Berat maksimum takeoff |
+| Weight shift weight | 0.0 | lbs | Beban penggeser CG |
+| Displaced weight | 0.0 | lbs | Untuk dirigibles/blimps |
+
+![Plane Maker — Weight & Balance FX-61 Phantom](WeightandBalance_Planemaker.png)
 
 ---
 
