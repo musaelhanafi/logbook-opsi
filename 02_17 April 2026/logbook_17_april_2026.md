@@ -77,7 +77,7 @@ X-Plane harus mengirim data sensor DATA@ langsung ke alamat PPP Pixhawk dan mene
 | Field | Nilai |
 |---|---|
 | Send data to IP | `10.0.0.2` |
-| Send data port | `49001` |
+| Send data port | `49005` |
 | Receive commands port | `49000` |
 
 Aktifkan DATA@ rows berikut (**Settings → Data Output**, centang "Send data over the net"):
@@ -228,13 +228,14 @@ Nyalakan RC transmitter, konfirmasi RC receiver menampilkan link. Arm via QGC at
 | `TKOFF_THR_MINACC` | 0 | Tidak ada cek akselerasi sebelum throttle-up |
 | `TKOFF_THR_MINSPD` | 0 | Tidak ada cek kecepatan GPS sebelum throttle-up |
 | `GROUND_STEER_ALT` | 5 | Ground steering aktif di bawah 5 m AGL |
+| `SIM_XP_BIND_PORT` | 49005 | Port UDP yang didengarkan ArduPilot untuk data X-Plane (harus sama dengan "Send data port" di X-Plane Net Connections) |
 
 ### Troubleshooting
 
 | Gejala | Kemungkinan Penyebab | Solusi |
 |---|---|---|
 | pppd "Peer not responding" | LCP echo tidak dinonaktifkan | Tambahkan `lcp-echo-interval 0` ke perintah pppd |
-| pppd terhubung tapi X-Plane tidak dapat data | IP salah di konfigurasi jaringan X-Plane | Set send IP ke `10.0.0.2`, port `49001` |
+| pppd terhubung tapi X-Plane tidak dapat data | IP salah di konfigurasi jaringan X-Plane | Set send IP ke `10.0.0.2`, port `49005` |
 | QGC tidak menampilkan GPS | EKF belum konvergen | Cek parameter `SIM_OPOS_*` sesuai lokasi X-Plane; pastikan X-Plane di-unpause |
 | Kontrol tidak bergerak di X-Plane | Override DREFs timeout | Firmware mengirim ulang overrides otomatis setiap ~1 detik |
 | Throttle tetap 0 saat arm | RANGE DREFs dinolkan saat disarm | Ini by design — arm dulu baru throttle |
