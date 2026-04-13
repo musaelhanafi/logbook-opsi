@@ -324,6 +324,262 @@ TKOFF_ROTATE_SPD 12
 
 ---
 
+## 6. Manual Fix & Autotune FX-61 — Minimasi Pitch Jitter
+
+**Kegiatan:**
+Melakukan perbaikan parameter manual untuk mengurangi pitch jitter pada FX-61 Phantom sebelum menjalankan Autotune ArduPlane. Urutan ini penting — Autotune tidak dapat bekerja optimal jika pitch jitter belum diminimasi secara manual terlebih dahulu.
+
+---
+
+### 6.1 Root Cause Pitch Jitter pada FX-61
+
+Pitch jitter pada flying wing seperti FX-61 umumnya disebabkan oleh kombinasi faktor berikut:
+
+| Penyebab | Parameter ArduPlane | Dampak |
+|---|---|---|
+| Gain PID pitch terlalu tinggi | `PTCH_RATE_P`, `PTCH_RATE_D` | Osilasi cepat di axis pitch |
+| TECS terlalu agresif | `TECS_PTCH_DAMP`, `TECS_TIME_CONST` | Hunting panjang saat altitude hold |
+| Vibrasi motor masuk ke gyro | `INS_HNTCH_ENABLE` | Noise frekuensi tinggi di sensor |
+| Filter gyro kurang kuat | `INS_GYRO_FILTER` | Noise tidak tersaring |
+| Respon elevon terlalu sensitif | `MIXING_GAIN` | Over-correction tiap frame |
+
+---
+
+### 6.2 Manual Fix (Lakukan Sebelum Autotune)
+
+Set parameter berikut via QGroundControl **sebelum** terbang Autotune. Masuk ke **Vehicle Setup → Parameters**, cari nama parameter, ubah nilainya.
+
+#### Step A — TECS (Paling Berpengaruh untuk Pitch Hunting)
+
+| Parameter | Nilai Lama | **Nilai Baru** | Alasan |
+|---|---|---|---|
+| `TECS_PTCH_DAMP` | 0.0 | **0.30** | Tambah damping pitch di TECS |
+| `TECS_TIME_CONST` | 5.0 | **7.0** | Perlambat respon TECS untuk flying wing |
+| `TECS_THR_DAMP` | 0.1 | **0.50** | Damping throttle agar tidak fight pitch |
+| `TECS_VERT_ACC` | 7.0 | **6.0** | Kurangi akselerasi vertikal maksimum |
+
+#### Step B — Pitch Rate PID (Turunkan Gain Awal)
+
+| Parameter | Nilai Lama | **Nilai Baru** | Alasan |
+|---|---|---|---|
+| `PTCH_RATE_P` | 0.10 | **0.07** | Turunkan P untuk kurangi osilasi |
+| `PTCH_RATE_I` | 0.10 | **0.08** | Turunkan I agar tidak windup |
+| `PTCH_RATE_D` | 0.001 | **0.002** | Naikkan D sedikit untuk damping |
+| `PTCH_RATE_FF` | 0.0 | **0.18** | Tambah feedforward untuk respon halus |
+| `PTCH_RATE_FLTE` | 0.0 | **2.0** | Filter error pitch — kunci anti-jitter |
+| `PTCH_RATE_FLTD` | 0.0 | **10.0** | Filter derivative pitch |
+
+#### Step C — Pitch Attitude Controller
+
+| Parameter | Nilai Lama | **Nilai Baru** | Alasan |
+|---|---|---|---|
+| `PTCH2SRV_TCONST` | 0.5 | **0.60** | Perlambat respon attitude pitch |
+| `PTCH2SRV_P` | 1.0 | **0.90** | Turunkan P attitude |
+| `PTCH2SRV_D` | 0.0 | **0.06** | Tambah D untuk damping |
+
+#### Step D — Notch Filter (Vibrasi Motor)
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `INS_HNTCH_ENABLE` | **1** | Aktifkan harmonic notch filter |
+| `INS_HNTCH_FREQ` | **100** | Estimasi frekuensi motor FX-61 (8–9 in prop) |
+| `INS_HNTCH_BW` | **50** | Bandwidth filter = setengah frekuensi |
+| `INS_HNTCH_ATT` | **40** | Atenuasi 40 dB |
+| `INS_HNTCH_MODE` | **1** | Mode throttle-based (tanpa ESC telemetry) |
+| `INS_HNTCH_HMNCS` | **3** | Filter harmonik 1 dan 2 |
+
+#### Step E — Filter Gyro
+
+| Parameter | Nilai Lama | **Nilai Baru** | Alasan |
+|---|---|---|---|
+| `INS_GYRO_FILTER` | 20 | **15** | Filter lebih kuat untuk FX-61 yang ringan |
+| `INS_ACCEL_FILTER` | 20 | **15** | Filter akselerometer |
+
+#### Step F — Elevon & Airspeed
+
+| Parameter | Nilai Lama | **Nilai Baru** | Alasan |
+|---|---|---|---|
+| `MIXING_GAIN` | 0.5 | **0.45** | Kurangi sensitivitas elevon |
+| `ARSPD_FBW_MIN` | 9 | **11** | Batas airspeed minimum (m/s) |
+| `ARSPD_FBW_MAX` | 22 | **22** | Batas airspeed maksimum (m/s) |
+| `TRIM_ARSPD_CM` | 1500 | **1500** | Kecepatan cruise target (cm/s) |
+| `STALL_PREVENTION` | 0 | **1** | Aktifkan stall prevention |
+
+---
+
+### 6.3 Verifikasi Manual Fix (Test Flight Pertama)
+
+Setelah semua parameter di-set, lakukan test flight singkat dalam mode FBWA **sebelum** Autotune:
+
+**Langkah:**
+
+1. Terbangkan FX-61 dalam mode **FBWA** di ketinggian aman (>100 m AGL)
+2. Lepas stick — biarkan pesawat terbang level tanpa input
+3. Observasi selama 30 detik:
+
+| Yang Diobservasi | Kondisi Buruk (jitter) | Kondisi Baik (siap autotune) |
+|---|---|---|
+| Gerak pitch | Osilasi terus-menerus | Stabil atau osilasi sangat kecil |
+| Gerak roll | Hunting kiri-kanan | Level stabil |
+| Throttle | Naik-turun konstan | Relatif konstan |
+| Altitude | Berfluktuasi >5 m | Stabil dalam ±3 m |
+
+4. Jika masih jitter berat: turunkan `PTCH_RATE_P` sebesar 0.01 per iterasi hingga stabil
+5. Jika sudah stabil: lanjut ke langkah Autotune (6.4)
+
+> **Catatan:** Jangan jalankan Autotune jika jitter masih parah — Autotune akan menghasilkan gain yang salah karena mengidentifikasi osilasi buatan sebagai respon sistem yang valid.
+
+---
+
+### Pra-langkah: Konfigurasi Channel 5 RC — MANUAL / STABILIZE / AUTOTUNE
+
+Sebelum menjalankan Autotune, pastikan RC channel 5 sudah dikonfigurasi sebagai 3-position flight mode switch. Ini memungkinkan pilot switch antar mode secara fisik dari transmitter tanpa menyentuh QGC.
+
+#### A. Set Flight Mode Channel
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `FLTMODE_CH` | **5** | Channel RC yang digunakan untuk flight mode switch |
+
+#### B. Mapping 3-Position Switch ke Flight Mode
+
+ArduPlane memetakan 6 slot mode (`FLTMODE1`–`FLTMODE6`) ke rentang PWM channel 5. Untuk switch 3-posisi (PWM ≈ 1000 / 1500 / 2000), set pasangan slot berikut:
+
+| Slot | Parameter | Nilai | Mode | Rentang PWM |
+|---|---|---|---|---|
+| Posisi 1 (bawah) | `FLTMODE1` | **0** | MANUAL | 1000 – 1230 |
+| | `FLTMODE2` | **0** | MANUAL | 1231 – 1360 |
+| Posisi 2 (tengah) | `FLTMODE3` | **2** | STABILIZE | 1361 – 1490 |
+| | `FLTMODE4` | **2** | STABILIZE | 1491 – 1620 |
+| Posisi 3 (atas) | `FLTMODE5` | **8** | AUTOTUNE | 1621 – 1749 |
+| | `FLTMODE6` | **8** | AUTOTUNE | 1750 – 2000 |
+
+> **Kode mode ArduPlane:** MANUAL = 0, STABILIZE = 2, AUTOTUNE = 8.
+
+#### C. Langkah Set di QGroundControl
+
+1. Buka **Vehicle Setup → Parameters**
+2. Cari dan set `FLTMODE_CH = 5`
+3. Set `FLTMODE1` s.d. `FLTMODE6` sesuai tabel di atas
+4. Reboot Pixhawk
+5. Verifikasi di **QGC Fly View → Flight Mode indicator**: gerakkan switch transmitter, pastikan mode berganti sesuai posisi
+
+#### D. Verifikasi di Lapangan (Sebelum Arm)
+
+| Posisi Switch | Mode yang Harus Muncul di QGC |
+|---|---|
+| Bawah | MANUAL |
+| Tengah | STABILIZE |
+| Atas | AUTOTUNE |
+
+> **Penting:** Pastikan switch berada di posisi **MANUAL** atau **STABILIZE** saat arm. Jangan arm dalam kondisi AUTOTUNE — ArduPlane akan menolak arm jika `ARMING_REQUIRE = 1` dan mode tidak mendukung takeoff manual.
+
+---
+
+### 6.4 Menjalankan Autotune
+
+Setelah manual fix berhasil menstabilkan pitch, jalankan Autotune untuk mendapatkan gain optimal secara otomatis.
+
+**Parameter Autotune:**
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `AUTOTUNE_LEVEL` | **6** | Agresivitas tuning 1–10, nilai 6 sesuai untuk flying wing |
+| `AUTOTUNE_OPTIONS` | **0** | Tune semua axis (roll + pitch) |
+
+**Langkah Autotune:**
+
+1. Set `AUTOTUNE_LEVEL = 6` di QGroundControl Parameters
+2. Terbangkan FX-61 dalam mode **FBWA** — naik ke ketinggian aman minimal **150 m AGL**
+3. Pastikan area terbang cukup luas (radius >200 m) karena Autotune akan melakukan manuver otomatis
+4. Switch mode ke **AUTOTUNE** via QGroundControl:
+   - QGC Fly View → dropdown flight mode → pilih **AUTOTUNE**
+5. ArduPlane mulai melakukan manuver identifikasi secara otomatis:
+
+   | Fase | Yang Terjadi |
+   |---|---|
+   | Roll sweep | Pesawat melakukan roll kiri-kanan berulang untuk identifikasi gain roll |
+   | Pitch sweep | Pesawat melakukan pitch up-down berulang untuk identifikasi gain pitch |
+   | Konvergensi | Gain diperhalus — manuver semakin kecil amplitudonya |
+
+6. Monitor di QGC — Autotune selesai ditandai dengan:
+   - Alert di QGC: **"Autotune complete"**
+   - Manuver otomatis berhenti
+   - Pesawat kembali ke attitude normal FBWA
+7. **Jangan langsung land** — setelah alert muncul, biarkan pesawat terbang dalam AUTOTUNE mode selama 30 detik lagi untuk stabilisasi
+8. Switch kembali ke **FBWA** — lakukan test flight singkat untuk verifikasi respon
+9. Jika respon terasa baik: land dan simpan parameter
+
+**Menyimpan hasil Autotune:**
+
+```
+QGroundControl → Vehicle Setup → Parameters
+→ Tools (ikon titik tiga) → Save to file
+→ Simpan sebagai: FX61_autotune_result.params
+```
+
+Atau simpan ke Pixhawk permanen:
+
+```
+Parameters → Tools → Save to Vehicle (permanent)
+```
+
+---
+
+### 6.5 Verifikasi Post-Autotune
+
+Setelah Autotune selesai, cek nilai gain hasil tuning:
+
+| Parameter | Range Normal FX-61 | Jika Diluar Range |
+|---|---|---|
+| `PTCH_RATE_P` | 0.05 – 0.12 | Ulangi Autotune dengan level lebih rendah |
+| `PTCH_RATE_D` | 0.001 – 0.005 | Periksa vibrasi motor |
+| `RLL_RATE_P` | 0.05 – 0.15 | Normal untuk flying wing |
+| `RLL_RATE_D` | 0.001 – 0.004 | Periksa vibrasi motor |
+
+**Test flight post-autotune:**
+
+1. Terbang dalam mode FBWA — lepas stick, observasi attitude
+2. Berikan input pitch mendadak — pesawat harus kembali level dalam 1–2 detik tanpa osilasi
+3. Berikan input roll mendadak — respon harus smooth tanpa overshoot berlebihan
+4. Aktifkan mode **LOITER** — pesawat harus bisa loiter stabil tanpa pitch hunting
+
+---
+
+### 6.6 Troubleshooting Post-Autotune
+
+| Gejala | Kemungkinan Penyebab | Solusi |
+|---|---|---|
+| Pitch jitter masih ada | `PTCH_RATE_D` terlalu rendah | Naikkan `PTCH_RATE_D` sebesar 0.001 per iterasi |
+| Respon pitch terlalu lambat | `PTCH2SRV_TCONST` terlalu besar | Turunkan dari 0.60 ke 0.55 |
+| Osilasi lambat (hunting) | `TECS_TIME_CONST` masih terlalu kecil | Naikkan ke 8.0 atau 9.0 |
+| Autotune menghasilkan P sangat tinggi | Vibrasi motor mengganggu identifikasi | Pastikan `INS_HNTCH_ENABLE = 1` dan frekuensi benar |
+| Alert "Autotune failed" | Area terbang terlalu sempit | Cari area lebih luas, ulangi |
+
+---
+
+### 6.7 Ringkasan Urutan Lengkap
+
+```
+Step A → Set TECS parameters (TECS_PTCH_DAMP, TECS_TIME_CONST)
+Step B → Set PTCH_RATE parameters (turunkan P, tambah D dan FLTE)
+Step C → Set PTCH2SRV parameters (TCONST, D)
+Step D → Aktifkan Notch Filter (INS_HNTCH_ENABLE = 1)
+Step E → Turunkan INS_GYRO_FILTER ke 15
+Step F → Set MIXING_GAIN dan airspeed limits
+          ↓
+Test flight FBWA → verifikasi jitter berkurang
+          ↓
+Set AUTOTUNE_LEVEL = 6
+Terbang FBWA → switch ke AUTOTUNE → tunggu "Autotune complete"
+          ↓
+Test flight post-autotune → verifikasi respon pitch halus
+          ↓
+Simpan parameter ke file dan ke Pixhawk
+```
+
+---
+
 ## Ringkasan Kegiatan
 
 | No | Kegiatan | Status |
@@ -336,6 +592,7 @@ TKOFF_ROTATE_SPD 12
 | 6 | Fix AHRS_EKF_TYPE: compass tidak sinkron dengan X-Plane | ✅ Selesai |
 | 7 | Konfigurasi compass SITL (SIM_MAGx_DEVID) | ✅ Selesai |
 | 8 | Dokumentasi seluruh parameter SITL X-Plane | ✅ Selesai |
+| 9 | Manual fix parameter + Autotune FX-61 (minimasi pitch jitter) | ✅ Selesai |
 
 ---
 
