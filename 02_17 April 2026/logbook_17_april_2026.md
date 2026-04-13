@@ -13,15 +13,6 @@
 
 Sebelum memulai setup environment, dipelajari arsitektur lengkap sistem drone kamikaze yang terdiri dari dua subsistem utama.
 
-### Gambaran Umum
-
-Sistem terdiri dari dua repo yang bekerja bersama:
-
-| Repo | Peran |
-|---|---|
-| **drone-seeker** | Pelacak target hot-pink berbasis Python + kamera, berjalan di companion PC |
-| **drone-kamikaze** | Firmware ArduPlane custom untuk Pixhawk, mengeksekusi kendali terbang |
-
 ### Arsitektur HITL
 
 HITL (Hardware-in-the-Loop) menggunakan Pixhawk v2 (fmuv3) yang menjalankan firmware ArduPlane custom. X-Plane menyediakan model fisika penerbangan; Pixhawk menjalankan kode autopilot nyata. Injeksi sensor dan output aktuator ditangani sepenuhnya **di dalam firmware** via SITL XPlane backend — tidak memerlukan bridge script atau MAVProxy.
@@ -61,6 +52,115 @@ X-Plane dan QGC berjalan di laptop yang sama.
 | CH2 (elevator) | `sim/joystick/yoke_pitch_ratio` | angle_neg (inverted) |
 | CH3 (throttle) | `sim/flightmodel/engine/ENGN_thro_use[0]` | range (0…1) |
 | CH4 (rudder) | `sim/joystick/yoke_heading_ratio` | angle (−1…+1) |
+
+---
+
+## 1. Instalasi Git
+
+**Kegiatan:**
+Instalasi Git pada laptop yang digunakan sebagai build machine untuk firmware ArduPilot.
+
+**Langkah:**
+1. Download Git dari https://git-scm.com/download/win
+2. Jalankan installer → pada bagian **"Adjusting your PATH environment"**, pilih **"Git from the command line and also from 3rd-party software"**
+3. Pilihan lain biarkan default → klik Next hingga selesai
+4. Verifikasi di Command Prompt:
+   ```
+   git --version
+   ```
+
+**Hasil:** Git berhasil terinstal dan dapat diakses dari terminal.
+
+---
+
+## 2. Pendaftaran Akun GitHub
+
+**Kegiatan:**
+Membuat akun GitHub untuk menyimpan repositori firmware drone-kamikaze dan logbook penelitian.
+
+**Langkah:**
+1. Buka https://github.com
+2. Klik **"Sign up"** → masukkan email, password, dan username
+3. Verifikasi email melalui link konfirmasi
+4. Generate SSH key dan daftarkan ke GitHub:
+   ```
+   ssh-keygen -t ed25519 -C "email@gmail.com"
+   cat ~/.ssh/id_ed25519.pub
+   ```
+   Salin output → GitHub → Settings → SSH Keys → New SSH Key → Paste → Save
+5. Verifikasi koneksi SSH:
+   ```
+   ssh -T git@github.com
+   ```
+
+**Hasil:** Akun GitHub berhasil dibuat dan SSH key terdaftar.
+
+---
+
+## 3. Clone Repositori Satria Firmware
+
+**Kegiatan:**
+Clone repositori firmware flight controller yang sudah dikustomisasi untuk HITL dari akun GitHub musaelhanafi. Repo ini merupakan fork ArduPilot yang sudah memiliki konfigurasi board `fmuv3-hil` dan patch HITL — **bukan** clone langsung dari ArduPilot upstream.
+
+**Perintah:**
+```bash
+git clone git@github.com:musaelhanafi/satria-firmware.git
+cd satria-firmware
+git submodule update --init --recursive
+```
+
+**Catatan:** Proses `submodule update` memakan waktu ±10–15 menit tergantung koneksi internet karena submodul MAVLink, ChibiOS, dan lainnya berukuran besar.
+
+**Hasil:** Repositori satria-firmware berhasil di-clone lengkap dengan seluruh submodul.
+
+---
+
+## 4. Konfigurasi Environment Build & Kompilasi Firmware fmuv3-hil
+
+**Kegiatan:**
+Konfigurasi build environment menggunakan WAF build system ArduPilot dan kompilasi firmware ArduPlane dengan konfigurasi board `fmuv3-hil` (Pixhawk 2.4.8 mode HITL).
+
+**Langkah:**
+1. Install dependensi Python yang diperlukan:
+   ```bash
+   pip install empy==3.3.4 pexpect pymavlink future
+   ```
+2. Fix MAVLink headers yang berpotensi konflik sebelum build:
+   ```bash
+   python3 fix_mavlink_headers.py
+   ```
+3. Konfigurasi board `fmuv3-hil`:
+   ```bash
+   ./waf configure --board fmuv3-hil
+   ```
+4. Kompilasi firmware ArduPlane:
+   ```bash
+   ./waf plane
+   ```
+
+**Output:** File firmware `arduplane.apj` tersimpan di folder `build/fmuv3-hil/bin/`.
+
+> **Catatan:** Jika build gagal dengan error `redefinition of 'param_union'`, jalankan ulang `python3 fix_mavlink_headers.py` lalu `./waf distclean` sebelum configure ulang.
+
+**Hasil:** Firmware ArduPlane HITL berhasil dikompilasi untuk board `fmuv3-hil` tanpa error.
+
+---
+
+## 5. Upload Firmware ke Pixhawk 2.4.8
+
+**Kegiatan:**
+Upload firmware ArduPlane hasil kompilasi ke Pixhawk 2.4.8 langsung melalui WAF via koneksi USB.
+
+**Langkah:**
+1. Hubungkan Pixhawk ke laptop via kabel USB
+2. Jalankan perintah upload:
+   ```bash
+   ./waf plane --upload
+   ```
+   WAF otomatis mendeteksi Pixhawk pada port USB dan meng-upload firmware `arduplane.apj`.
+3. Pixhawk reboot otomatis setelah upload selesai.
+
+**Hasil:** Firmware berhasil di-upload ke Pixhawk 2.4.8.
 
 ---
 
@@ -242,107 +342,6 @@ Nyalakan RC transmitter, konfirmasi RC receiver menampilkan link. Arm via QGC at
 | "Waiting for RC" / tidak bisa arm | Failsafe aktif | Verifikasi `THR_FAILSAFE 0` sudah ter-load; reset params jika perlu |
 | Takeoff tidak mulai di AUTO | Throttle gate tidak terbuka | Verifikasi `TKOFF_THR_MINSPD 0`, `TKOFF_THR_MINACC 0` |
 | Build gagal `redefinition of 'param_union'` | Spurious MAVLink headers di source tree | Jalankan `python3 fix_mavlink_headers.py` lalu `./waf distclean && ./waf configure --board fmuv3-hil && ./waf plane` |
-
----
-
-## 1. Instalasi Git
-
-**Kegiatan:**
-Instalasi Git pada laptop yang digunakan sebagai build machine untuk firmware ArduPilot.
-
-**Langkah:**
-1. Download Git dari https://git-scm.com/download/win
-2. Jalankan installer → pada bagian **"Adjusting your PATH environment"**, pilih **"Git from the command line and also from 3rd-party software"**
-3. Pilihan lain biarkan default → klik Next hingga selesai
-4. Verifikasi di Command Prompt:
-   ```
-   git --version
-   ```
-
-**Hasil:** Git berhasil terinstal dan dapat diakses dari terminal.
-
----
-
-## 2. Pendaftaran Akun GitHub
-
-**Kegiatan:**
-Membuat akun GitHub untuk menyimpan repositori firmware drone-kamikaze dan logbook penelitian.
-
-**Langkah:**
-1. Buka https://github.com
-2. Klik **"Sign up"** → masukkan email, password, dan username
-3. Verifikasi email melalui link konfirmasi
-4. Generate SSH key dan daftarkan ke GitHub:
-   ```
-   ssh-keygen -t ed25519 -C "email@gmail.com"
-   cat ~/.ssh/id_ed25519.pub
-   ```
-   Salin output → GitHub → Settings → SSH Keys → New SSH Key → Paste → Save
-5. Verifikasi koneksi SSH:
-   ```
-   ssh -T git@github.com
-   ```
-
-**Hasil:** Akun GitHub berhasil dibuat dan SSH key terdaftar.
-
----
-
-## 3. Clone Repositori ArduPilot
-
-**Kegiatan:**
-Clone repositori ArduPilot resmi dari GitHub sebagai basis pengembangan firmware drone-kamikaze.
-
-**Perintah:**
-```
-git clone https://github.com/ArduPilot/ardupilot.git
-cd ardupilot
-git submodule update --init --recursive
-```
-
-**Catatan:** Proses `submodule update` memakan waktu ±10–15 menit tergantung koneksi internet karena submodul MAVLink, ChibiOS, dan lainnya berukuran besar.
-
-**Hasil:** Repositori ArduPilot berhasil di-clone lengkap dengan seluruh submodul.
-
----
-
-## 4. Konfigurasi Environment Build & Kompilasi Firmware fmuv3 Standar
-
-**Kegiatan:**
-Konfigurasi build environment menggunakan WAF build system ArduPilot dan kompilasi firmware ArduPlane standar untuk board fmuv3 (Pixhawk 2.4.8).
-
-**Langkah:**
-1. Install dependensi Python yang diperlukan:
-   ```
-   pip install empy==3.3.4 pexpect pymavlink future
-   ```
-2. Konfigurasi board fmuv3:
-   ```
-   ./waf configure --board fmuv3
-   ```
-3. Kompilasi firmware ArduPlane:
-   ```
-   ./waf plane
-   ```
-
-**Output:** File firmware `arduplane.apj` tersimpan di folder `build/fmuv3/bin/`.
-
-**Hasil:** Firmware ArduPlane berhasil dikompilasi untuk board fmuv3 tanpa error.
-
----
-
-## 5. Upload Firmware ke Pixhawk 2.4.8
-
-**Kegiatan:**
-Upload firmware ArduPlane hasil kompilasi ke Pixhawk 2.4.8 menggunakan QGroundControl.
-
-**Langkah:**
-1. Hubungkan Pixhawk ke laptop via kabel USB
-2. Buka QGroundControl → **Vehicle Setup** → **Firmware**
-3. Pilih **Custom firmware** → arahkan ke file `arduplane.apj` hasil kompilasi
-4. Klik OK → QGroundControl meng-upload firmware secara otomatis
-5. Pixhawk reboot otomatis setelah upload selesai
-
-**Hasil:** Firmware berhasil di-upload ke Pixhawk 2.4.8.
 
 ---
 
@@ -552,14 +551,14 @@ Menguji kemampuan FX-61 untuk melakukan takeoff otomatis dan mengikuti flight pl
 
 ---
 
-## 6. Manual Fix & Autotune FX-61 — Minimasi Pitch Jitter
+## 19. Manual Fix & Autotune FX-61 — Minimasi Pitch Jitter
 
 **Kegiatan:**
 Melakukan perbaikan parameter manual untuk mengurangi pitch jitter pada FX-61 Phantom sebelum menjalankan Autotune ArduPlane. Urutan ini penting — Autotune tidak dapat bekerja optimal jika pitch jitter belum diminimasi secara manual terlebih dahulu.
 
 ---
 
-### 6.1 Root Cause Pitch Jitter pada FX-61
+### 19.1 Root Cause Pitch Jitter pada FX-61
 
 Pitch jitter pada flying wing seperti FX-61 umumnya disebabkan oleh kombinasi faktor berikut:
 
@@ -573,7 +572,7 @@ Pitch jitter pada flying wing seperti FX-61 umumnya disebabkan oleh kombinasi fa
 
 ---
 
-### 6.2 Manual Fix (Lakukan Sebelum Autotune)
+### 19.2 Manual Fix (Lakukan Sebelum Autotune)
 
 Set parameter berikut via QGroundControl **sebelum** terbang Autotune. Masuk ke **Vehicle Setup → Parameters**, cari nama parameter, ubah nilainya.
 
@@ -635,7 +634,7 @@ Set parameter berikut via QGroundControl **sebelum** terbang Autotune. Masuk ke 
 
 ---
 
-### 6.3 Verifikasi Manual Fix (Test Flight Pertama)
+### 19.3 Verifikasi Manual Fix (Test Flight Pertama)
 
 Setelah semua parameter di-set, lakukan test flight singkat dalam mode FBWA **sebelum** Autotune:
 
@@ -704,7 +703,7 @@ ArduPlane memetakan 6 slot mode (`FLTMODE1`–`FLTMODE6`) ke rentang PWM channel
 
 ---
 
-### 6.4 Menjalankan Autotune
+### 19.4 Menjalankan Autotune
 
 Setelah manual fix berhasil menstabilkan pitch, jalankan Autotune untuk mendapatkan gain optimal secara otomatis.
 
@@ -754,7 +753,7 @@ Parameters → Tools → Save to Vehicle (permanent)
 
 ---
 
-### 6.5 Verifikasi Post-Autotune
+### 19.5 Verifikasi Post-Autotune
 
 Setelah Autotune selesai, cek nilai gain hasil tuning:
 
@@ -774,7 +773,7 @@ Setelah Autotune selesai, cek nilai gain hasil tuning:
 
 ---
 
-### 6.6 Troubleshooting Post-Autotune
+### 19.6 Troubleshooting Post-Autotune
 
 | Gejala | Kemungkinan Penyebab | Solusi |
 |---|---|---|
@@ -786,7 +785,7 @@ Setelah Autotune selesai, cek nilai gain hasil tuning:
 
 ---
 
-### 6.7 Ringkasan Urutan Lengkap
+### 19.7 Ringkasan Urutan Lengkap
 
 ```
 Step A → Set TECS parameters (TECS_PTCH_DAMP, TECS_TIME_CONST)
@@ -814,8 +813,8 @@ Simpan parameter ke file dan ke Pixhawk
 |---|---|---|
 | 1 | Instalasi Git | ✅ Selesai |
 | 2 | Pendaftaran akun GitHub | ✅ Selesai |
-| 3 | Clone repositori ArduPilot dari GitHub | ✅ Selesai |
-| 4 | Konfigurasi environment build & kompilasi firmware fmuv3 standar | ✅ Selesai |
+| 3 | Clone repositori satria-firmware dari GitHub | ✅ Selesai |
+| 4 | Konfigurasi environment build & kompilasi firmware fmuv3-hil | ✅ Selesai |
 | 5 | Upload firmware ke Pixhawk 2.4.8 | ✅ Selesai |
 | 6 | Verifikasi boot via QGroundControl | ✅ Selesai |
 | 7 | Fork repositori ArduPilot → drone-kamikaze | ✅ Selesai |
