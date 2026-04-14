@@ -418,6 +418,29 @@ Aktifkan DATA@ rows berikut (**Settings → Data Output**, centang "Send data ov
 | 20 | Lat, lon, altitude | Posisi GPS |
 | 21 | Loc, vel, dist | Kecepatan NED → GPS velocity |
 
+#### Langkah 1b — Registrasi Keyboard J untuk JATO di X-Plane
+
+JATO (Jet Assisted Take Off) diaktifkan secara manual via keyboard saat berada di runway. Daftarkan key **J** ke command JATO di X-Plane agar bisa digunakan saat sesi HITL berlangsung.
+
+**Settings → Keyboard → cari "JATO":**
+
+1. Buka X-Plane → **Settings → Keyboard**
+2. Di kolom pencarian ketik `JATO`
+3. Pilih command **"Engage/Disengage JATO rockets"**
+4. Klik kolom **Key** di sebelah kanan → tekan tombol **J** di keyboard
+5. Klik **Done** untuk menyimpan
+
+**Penggunaan saat terbang:**
+
+| Kondisi | Aksi |
+|---|---|
+| Pesawat di runway, siap takeoff | Tekan **J** → JATO menyala, dorongan ekstra selama burn time |
+| JATO habis | Otomatis mati sesuai durasi yang dikonfigurasi di Plane Maker |
+
+> **Catatan:** JATO hanya efektif saat kecepatan masih rendah di runway. Tekan **J** segera setelah arm dan throttle naik.
+
+---
+
 #### Langkah 2 — Start PPP Tunnel
 
 Hubungkan USB–UART adapter ke port TELEM2 Pixhawk. Cari nama device, lalu jalankan `pppd`:
