@@ -9,7 +9,7 @@
 
 ---
 
-Kegiatan hari ini dibagi dalam dua bagian utama: **Bagian I — Darat** mencakup setup environment pengembangan, fork dan clone repositori firmware, serta kompilasi dan upload firmware ke Pixhawk; **Bagian II — Pesawat** mencakup implementasi firmware khusus SATRIA (board config HITL, elevon mapping, konfigurasi SITL), setup sesi terbang, uji terbang manual, autotune, dan auto takeoff dengan navigasi waypoint.
+Kegiatan hari ini dibagi dalam dua bagian utama: **Bagian I — Darat** mencakup setup environment pengembangan, fork dan clone repositori firmware, serta kompilasi dan upload firmware ke Pixhawk; **Bagian II — Udara** mencakup implementasi firmware khusus SATRIA (board config HITL, elevon mapping, konfigurasi SITL), setup sesi terbang, uji terbang manual, autotune, dan auto takeoff dengan navigasi waypoint.
 
 ---
 
@@ -201,7 +201,7 @@ Verifikasi bahwa Pixhawk berhasil boot dengan firmware ArduPlane yang baru diupl
 
 ---
 
-## Bagian II — Pesawat
+## Bagian II — Udara
 
 ---
 
