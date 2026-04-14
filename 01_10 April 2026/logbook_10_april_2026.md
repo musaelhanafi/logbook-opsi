@@ -143,8 +143,6 @@ Model SATRIA terinspirasi dari model FX-61 dari forum X-Plane.org: [https://foru
 
 **Hasil:** SATRIA berhasil dimuat di X-Plane, model fisika dan kontrol permukaan berfungsi normal.
 
-![SATRIA di Plane Maker — tampilan awal](X_PlaneMaker.png)
-
 ---
 
 ## 4. Modifikasi SATRIA — Penambahan JATO (Jet Assisted Take Off)
