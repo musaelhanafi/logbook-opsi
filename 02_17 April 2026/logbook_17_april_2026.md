@@ -9,11 +9,11 @@
 
 ---
 
-## Arsitektur Sistem
+Kegiatan hari ini dibagi dalam dua bagian utama: **Bagian I — Darat** mencakup setup environment pengembangan, fork dan clone repositori firmware, serta kompilasi dan upload firmware ke Pixhawk; **Bagian II — Pesawat** mencakup implementasi firmware khusus SATRIA (board config HITL, elevon mapping, konfigurasi SITL), setup sesi terbang, uji terbang manual, autotune, dan auto takeoff dengan navigasi waypoint.
 
-Sebelum memulai setup environment, dipelajari arsitektur lengkap sistem drone kamikaze yang terdiri dari dua subsistem utama.
+---
 
-### Arsitektur HITL
+## Arsitektur Sistem HITL
 
 HITL (Hardware-in-the-Loop) menggunakan Pixhawk v2 (fmuv3) yang menjalankan firmware ArduPlane custom. X-Plane menyediakan model fisika penerbangan; Pixhawk menjalankan kode autopilot nyata. Injeksi sensor dan output aktuator ditangani sepenuhnya **di dalam firmware** via SITL XPlane backend — tidak memerlukan bridge script atau MAVProxy.
 
@@ -42,8 +42,6 @@ HITL (Hardware-in-the-Loop) menggunakan Pixhawk v2 (fmuv3) yang menjalankan firm
 | USB-A → micro-B | Laptop | Pixhawk USB (SERIAL0) |
 | USB–UART adapter | Laptop (pppd) | Pixhawk TELEM2 (SERIAL2) @ 115200 baud |
 
-X-Plane dan QGC berjalan di laptop yang sama.
-
 **DREF mapping (`xplane_plane.json`):**
 
 | Channel | DREF | Tipe |
@@ -55,7 +53,11 @@ X-Plane dan QGC berjalan di laptop yang sama.
 
 ---
 
-## 1. Instalasi Git
+## Bagian I — Darat
+
+---
+
+### 1. Instalasi Git
 
 **Kegiatan:**
 Instalasi Git pada laptop yang digunakan sebagai build machine untuk firmware ArduPilot.
@@ -73,23 +75,23 @@ Instalasi Git pada laptop yang digunakan sebagai build machine untuk firmware Ar
 
 ---
 
-## 2. Pendaftaran Akun GitHub
+### 2. Pendaftaran Akun GitHub
 
 **Kegiatan:**
-Membuat akun GitHub untuk menyimpan repositori firmware drone-kamikaze dan logbook penelitian.
+Membuat akun GitHub untuk menyimpan repositori firmware SATRIA dan logbook penelitian.
 
 **Langkah:**
 1. Buka https://github.com
 2. Klik **"Sign up"** → masukkan email, password, dan username
 3. Verifikasi email melalui link konfirmasi
 4. Generate SSH key dan daftarkan ke GitHub:
-   ```
-   ssh-keygen -t ed25519 -C "email@gmail.com"
-   cat ~/.ssh/id_ed25519.pub
+   ```bash
+   ssh-keygen -t rsa -b 4096 -C "email@gmail.com"
+   cat ~/.ssh/id_rsa.pub
    ```
    Salin output → GitHub → Settings → SSH Keys → New SSH Key → Paste → Save
 5. Verifikasi koneksi SSH:
-   ```
+   ```bash
    ssh -T git@github.com
    ```
 
@@ -97,25 +99,45 @@ Membuat akun GitHub untuk menyimpan repositori firmware drone-kamikaze dan logbo
 
 ---
 
-## 3. Clone Repositori Satria Firmware
+### 3. Fork Repositori ArduPilot → satria-firmaware
 
 **Kegiatan:**
-Clone repositori firmware flight controller yang sudah dikustomisasi untuk HITL dari akun GitHub musaelhanafi. Repo ini merupakan fork ArduPilot yang sudah memiliki konfigurasi board `fmuv3-hil` dan patch HITL — **bukan** clone langsung dari ArduPilot upstream.
+Fork repositori ArduPilot ke akun GitHub `musaelhanafi` sebagai basis pengembangan firmware custom SATRIA.
+
+**Langkah:**
+1. Buka https://github.com/ArduPilot/ardupilot
+2. Klik **"Fork"** → pilih akun `musaelhanafi` sebagai owner → rename menjadi `satria-firmaware` → klik **Create fork**
+3. Repositori fork tersedia di `git@github.com:musaelhanafi/satria-firmaware.git`
+4. Set remote pada repositori lokal:
+   ```bash
+   git remote rename origin upstream
+   git remote add origin git@github.com:musaelhanafi/satria-firmaware.git
+   git push -u origin main
+   ```
+
+**Hasil:** Fork berhasil. Repositori satria-firmaware tersedia di `git@github.com:musaelhanafi/satria-firmaware.git`.
+
+---
+
+### 4. Clone Repositori satria-firmaware
+
+**Kegiatan:**
+Clone repositori firmware yang sudah di-fork ke mesin lokal. Repo ini merupakan fork ArduPilot yang akan dimodifikasi dengan konfigurasi board `fmuv3-hil` dan patch HITL khusus SATRIA.
 
 **Perintah:**
 ```bash
-git clone git@github.com:musaelhanafi/satria-firmware.git
-cd satria-firmware
+git clone git@github.com:musaelhanafi/satria-firmaware.git
+cd satria-firmaware
 git submodule update --init --recursive
 ```
 
 **Catatan:** Proses `submodule update` memakan waktu ±10–15 menit tergantung koneksi internet karena submodul MAVLink, ChibiOS, dan lainnya berukuran besar.
 
-**Hasil:** Repositori satria-firmware berhasil di-clone lengkap dengan seluruh submodul.
+**Hasil:** Repositori satria-firmaware berhasil di-clone lengkap dengan seluruh submodul.
 
 ---
 
-## 4. Konfigurasi Environment Build & Kompilasi Firmware fmuv3-hil
+### 5. Konfigurasi Environment Build & Kompilasi Firmware
 
 **Kegiatan:**
 Konfigurasi build environment menggunakan WAF build system ArduPilot dan kompilasi firmware ArduPlane dengan konfigurasi board `fmuv3-hil` (Pixhawk 2.4.8 mode HITL).
@@ -146,7 +168,7 @@ Konfigurasi build environment menggunakan WAF build system ArduPilot dan kompila
 
 ---
 
-## 5. Upload Firmware ke Pixhawk 2.4.8
+### 6. Upload Firmware ke Pixhawk 2.4.8
 
 **Kegiatan:**
 Upload firmware ArduPlane hasil kompilasi ke Pixhawk 2.4.8 langsung melalui WAF via koneksi USB.
@@ -164,13 +186,217 @@ Upload firmware ArduPlane hasil kompilasi ke Pixhawk 2.4.8 langsung melalui WAF 
 
 ---
 
-## Instruksi Setup HITL (Prosedur)
+### 7. Verifikasi Boot via QGroundControl
 
+**Kegiatan:**
+Verifikasi bahwa Pixhawk berhasil boot dengan firmware ArduPlane yang baru diupload.
+
+**Langkah:**
+1. Setelah upload, Pixhawk reboot otomatis dan terhubung kembali ke QGroundControl
+2. Cek vehicle summary: firmware version, board type, dan status sensor
+3. Verifikasi tidak ada critical error di message log QGC
+4. Cek deteksi sensor: IMU, barometer, dan compass
+
+**Hasil:** Pixhawk berhasil boot dengan ArduPlane. QGroundControl menampilkan status normal — sensor IMU dan barometer terdeteksi tanpa error.
+
+---
+
+## Bagian II — Pesawat
+
+---
+
+### 8. Implementasi Board Config HITL: fmuv3-hil, fmuv3-hil-plane, x86-hil
+
+**Kegiatan:**
+Membuat tiga konfigurasi board baru di firmware satria-firmaware untuk mendukung mode HITL dengan X-Plane sebagai physics engine.
+
+#### A. fmuv3-hil (Pixhawk — Flying Wing Elevon)
+
+**File:** `libraries/AP_HAL_ChibiOS/hwdef/fmuv3-hil/hwdef.dat` dan `defaults.parm`
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `AHRS_EKF_TYPE` | 2 | EKF2 (sesuai keterbatasan STM32F427) |
+| `EK2_ENABLE` | 1 | EKF2 aktif |
+| `EK3_ENABLE` | 0 | EKF3 nonaktif |
+| `GPS1_TYPE` | 100 | SITL GPS |
+| `ARSPD_TYPE` | 100 | SITL airspeed |
+| `NET_ENABLE` | 1 | PPP networking aktif |
+| `SERIAL2_PROTOCOL` | 48 | PPP protocol di TELEM2 |
+| `SERIAL2_BAUD` | 115 | 115200 baud |
+| `NET_OPTIONS` | 64 | PPP options |
+| `SIM_OPOS_LAT` | −6.897434 | Bandara WICC — Bandung |
+| `SIM_OPOS_LNG` | 107.566887 | |
+| `SIM_OPOS_ALT` | 744.0 | AMSL (m) |
+
+#### B. fmuv3-hil-plane (Pixhawk — Fixed Wing Konvensional)
+
+**File:** `libraries/AP_HAL_ChibiOS/hwdef/fmuv3-hil-plane/hwdef.dat` dan `defaults.parm`
+
+Sama dengan fmuv3-hil tetapi menggunakan `xplane_plane.json` (aileron/elevator/throttle/rudder terpisah).
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `SERVO1_FUNCTION` | 4 | Aileron |
+| `SERVO2_FUNCTION` | 19 | Elevator |
+| `SERVO3_FUNCTION` | 70 | Throttle |
+| `SERVO4_FUNCTION` | 21 | Rudder |
+
+#### C. x86-hil (SITL Binary — Laptop/x86)
+
+**File:** `libraries/AP_HAL_SITL/hwdef/x86-hil/hwdef.dat` dan `defaults.parm`
+
+Konfigurasi untuk menjalankan ArduPlane sebagai SITL binary di laptop yang sama dengan X-Plane. Tidak memerlukan PPP — koneksi UDP langsung.
+
+**Hasil:** Tiga konfigurasi board HITL berhasil dibuat dan dapat dikompilasi.
+
+---
+
+### 9. Implementasi xplane_elevon.json
+
+**Kegiatan:**
+Membuat file DREF map baru untuk flying wing (elevon) yang digunakan oleh board x86-hil dan fmuv3-hil.
+
+**File:** `Tools/autotest/models/xplane_elevon.json`
+
+`SIM_XPlane.cpp` melakukan demix servo sebelum mengirim ke X-Plane:
+
+| DRef X-Plane | Tipe | Formula (SIM_XPlane.cpp) |
+|---|---|---|
+| `sim/joystick/yoke_roll_ratio` | `elevon_aileron` | `(CH1_left − CH2_right) / 1000` |
+| `sim/joystick/yoke_pitch_ratio` | `elevon_elevator` | `(CH1_left + CH2_right − 3000) / 1000 + 0.5` |
+| `sim/flightmodel/engine/ENGN_thro_use[0]` | `range` | `(CH3 − 1000) / 1000` |
+
+**Channel mapping:**
+
+| Channel | Servo | Keterangan |
+|---|---|---|
+| `channel: 1` | SERVO1 | Left elevon (CH1) |
+| `channel2: 2` | SERVO2 | Right elevon (CH2) |
+| `channel: 3` | SERVO3 | Throttle |
+
+**Hasil:** xplane_elevon.json berhasil dibuat dan elevon SATRIA bergerak benar di X-Plane.
+
+---
+
+### 10. Fix Build & Konfigurasi Sensor SITL
+
+**Kegiatan:**
+Menyelesaikan tiga isu yang muncul setelah konfigurasi SITL.
+
+#### A. Fix AHRS_EKF_TYPE — Compass Tidak Sinkron dengan X-Plane
+
+`AHRS_EKF_TYPE 3` (EKF3) menyebabkan heading lag karena heading harus konvergen melalui fusi gyro + compass. Dengan `AHRS_EKF_TYPE 10` (SIM backend), attitude langsung dari `fdm.quaternion` X-Plane — zero lag.
+
+> Constructor `SIM_XPlane` sendiri mengomentari: *"XPlane sensor data is not good enough for EKF. Use fake EKF by default."*
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `AHRS_EKF_TYPE` | **10** | Attitude langsung dari X-Plane quaternion |
+| `EK3_ENABLE` | 1 | EKF3 tetap aktif untuk terrain/odometry |
+| `EK2_ENABLE` | 0 | EKF2 nonaktif |
+
+#### B. Konfigurasi Compass SITL (SIM_MAGx_DEVID)
+
+Di binary SITL, `AP_Compass_SITL` dibuat otomatis untuk setiap `SIM_MAGx_DEVID` yang bernilai non-nol. Default ada 7 compass phantom — cukup aktifkan satu.
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `COMPASS_USE` | 1 | Gunakan compass 1 |
+| `COMPASS_USE2` | 0 | Nonaktifkan compass 2 |
+| `COMPASS_USE3` | 0 | Nonaktifkan compass 3 |
+| `SIM_MAG1_DEVID` | 97539 | Non-nol = compass 1 aktif |
+| `SIM_MAG2_DEVID` | **0** | Nol = tidak membuat instance compass 2 |
+| `SIM_MAG3_DEVID` | **0** | Nol = tidak membuat instance compass 3 |
+
+**Hasil:** Heading sinkron dengan X-Plane. Compass phantom berlebih dinonaktifkan.
+
+---
+
+### 11. Konfigurasi Parameter SITL X-Plane
+
+**Kegiatan:**
+Dokumentasi dan verifikasi seluruh parameter ArduPilot yang relevan untuk konfigurasi SITL dengan X-Plane backend.
+
+#### Parameter Home / Origin
+
+| Parameter | Nilai (WICC Bandung) | Keterangan |
+|---|---|---|
+| `SIM_OPOS_LAT` | −6.897434 | Latitude startup |
+| `SIM_OPOS_LNG` | 107.566887 | Longitude startup |
+| `SIM_OPOS_ALT` | 744.0 | Altitude AMSL (m) |
+| `SIM_OPOS_HDG` | 108.0 | Heading startup (°) |
+
+#### Parameter Sensor Backend
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `GPS1_TYPE` | 100 | SITL GPS backend |
+| `ARSPD_TYPE` | 100 | SITL airspeed backend |
+| `AHRS_EKF_TYPE` | **10** | Attitude dari X-Plane — jangan ubah ke 3 |
+| `INS_GYR_CAL` | 0 | Skip kalibrasi gyro saat startup |
+
+#### Parameter Kontrol Simulasi
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `SIM_SPEEDUP` | **1** | Wajib 1 — X-Plane berjalan real-time |
+| `SIM_XP_BIND_PORT` | 49005 | Port UDP yang didengarkan ArduPilot dari X-Plane |
+| `SIM_OH_MASK` | 255 (fmuv3) / 0 (x86) | Bitmask channel servo ke hardware |
+
+#### Ringkasan defaults.parm x86-hil
+
+```
+# AHRS
+AHRS_EKF_TYPE  10
+EK3_ENABLE      1
+EK2_ENABLE      0
+
+# Sensor backends
+GPS1_TYPE     100
+ARSPD_TYPE    100
+
+# Compass
+COMPASS_USE     1
+COMPASS_USE2    0
+COMPASS_USE3    0
+SIM_MAG2_DEVID  0
+SIM_MAG3_DEVID  0
+
+# Home position (WICC Bandung)
+SIM_OPOS_LAT   -6.897434
+SIM_OPOS_LNG  107.566887
+SIM_OPOS_ALT  744.0
+SIM_OPOS_HDG  108.0
+
+# Simulasi
+SIM_SPEEDUP     1
+SIM_OH_MASK     0
+SIM_XP_BIND_PORT 49005
+
+# RC & Arming
+THR_FAILSAFE    0
+RC_OVERRIDE_TIME -1
+BRD_SAFETY_DEFLT 0
+ARMING_SKIPCHK  -1
+ARMING_REQUIRE   1
+
+# Takeoff
+TKOFF_THR_MINACC 0
+TKOFF_THR_MINSPD 0
+TKOFF_ROTATE_SPD 12
+```
+
+**Hasil:** Seluruh parameter SITL X-Plane terdokumentasi dan terverifikasi.
+
+---
+
+### 12. Setup Sesi HITL — Jaringan X-Plane, PPP Tunnel, dan QGroundControl
+
+**Kegiatan:**
 Prosedur lengkap menjalankan sesi HITL ArduPlane fmuv3-hil + X-Plane 11/12.
 
-### Langkah 1 — Konfigurasi Jaringan X-Plane
-
-X-Plane harus mengirim data sensor DATA@ langsung ke alamat PPP Pixhawk dan menerima perintah DREF kembali. Konfigurasi sekali di X-Plane (tersimpan otomatis):
+#### Langkah 1 — Konfigurasi Jaringan X-Plane
 
 **Settings → Net Connections → Data:**
 
@@ -192,7 +418,7 @@ Aktifkan DATA@ rows berikut (**Settings → Data Output**, centang "Send data ov
 | 20 | Lat, lon, altitude | Posisi GPS |
 | 21 | Loc, vel, dist | Kecepatan NED → GPS velocity |
 
-### Langkah 2 — Start PPP Tunnel
+#### Langkah 2 — Start PPP Tunnel
 
 Hubungkan USB–UART adapter ke port TELEM2 Pixhawk. Cari nama device, lalu jalankan `pppd`:
 
@@ -219,233 +445,66 @@ sudo pppd /dev/ttyUSB0 115200 \
 | `10.0.0.1` | Laptop (sisi X-Plane) |
 | `10.0.0.2` | Pixhawk |
 
-Biarkan terminal ini tetap terbuka. Setelah Pixhawk boot dan firmware menginisialisasi PPP interface, `pppd` akan mencetak `local IP address 10.0.0.1`.
+> - `lcp-echo-interval 0` — nonaktifkan LCP keepalive (tanpa ini pppd putus setelah ~12 detik)
+> - `novj` — nonaktifkan VJ TCP header compression (kurangi latensi)
+> - `asyncmap 0` — tidak ada escaping karakter kontrol
 
-> **Penjelasan flag pppd:**
-> - `asyncmap 0` — tidak ada escaping karakter kontrol (~20% penghematan bandwidth di 115200)
-> - `novj` — nonaktifkan VJ TCP header compression (mengurangi latensi)
-> - `nopcomp noaccomp` — nonaktifkan kompresi PPP header (framing lebih sederhana)
-> - `lcp-echo-interval 0` — nonaktifkan LCP keepalive (firmware tidak membalas LCP Echo-Request; tanpa ini pppd putus dengan "Peer not responding" setelah ~12 detik)
-
-### Langkah 3 — Hubungkan QGroundControl
+#### Langkah 3 — Hubungkan QGroundControl
 
 Colokkan USB Pixhawk ke laptop. Buka QGroundControl — akan auto-connect via USB di 921600 baud (SERIAL0).
 
-Harus terlihat:
-- Vehicle connected (ArduPlane)
-- Parameters loaded
-- Flight mode (mis. MANUAL)
+Harus terlihat: vehicle connected (ArduPlane), parameters loaded, flight mode aktif.
 
-### Langkah 3b — Membuat Flight Plan di QGroundControl
+#### Langkah 4 — Membuat Flight Plan di QGroundControl
 
-Flight plan (misi) berisi urutan perintah yang akan dieksekusi otomatis oleh ArduPlane dalam mode AUTO. Berikut prosedur lengkap membuat flight plan di QGC:
+1. Klik ikon **Plan** di toolbar atas QGC → tampilan beralih ke peta top-down
+2. Klik **"+ Waypoint"** → klik posisi runway di peta → ubah type WP1 menjadi **Takeoff**:
+   - Set **Min. Pitch**: `15°`
+   - Set **Altitude**: `100 m` AGL
+3. Tambah WP2, WP3, dst. dengan altitude `150 m` dan acceptance radius `25 m`
+4. Tambah **LOITER_UNLIM** sebagai perintah akhir
+5. Klik **Upload** → konfirmasi **"Mission uploaded"**
 
-**Membuka Plan View:**
+> **Catatan:** Takeoff wajib menjadi WP1. ArduPlane tidak akan memasuki mode AUTO jika WP1 bukan Takeoff atau misi kosong.
 
-1. Di toolbar atas QGC, klik ikon **Plan** (ikon peta dengan waypoint). Tampilan beralih ke peta top-down dengan vehicle position ditandai.
-2. Pastikan posisi GPS vehicle sudah muncul di peta (EKF harus sudah konvergen). Jika peta masih kosong, tunggu hingga GPS fix muncul di status bar.
+#### Langkah 5 — Unpause X-Plane & Arm
 
-**Menambahkan Takeoff Waypoint:**
+1. Tekan **P** di X-Plane untuk memulai simulasi
+2. Tunggu EKF konvergen — GPS fix muncul di QGC
+3. Nyalakan RC transmitter → verifikasi RC link
+4. Arm via QGC → terbang
 
-1. Klik **"+ Waypoint"** di toolbar kiri, lalu klik posisi runway di peta — ini akan menjadi WP1. Ubah type-nya:
-   - Klik WP1 di daftar waypoint (panel kiri) → ubah command dari **Waypoint** menjadi **Takeoff**
-   - Set **Min. Pitch**: `15°` (sudut climb minimum saat takeoff)
-   - Set **Altitude**: ketinggian target setelah takeoff, misalnya `100 m` (AGL, relatif terhadap home)
-2. Takeoff command wajib menjadi waypoint pertama (WP1). ArduPlane tidak akan memasuki mode AUTO jika WP1 bukan Takeoff atau jika misi kosong.
-
-**Menambahkan Waypoint Navigasi:**
-
-1. Klik **"+ Waypoint"** lagi → klik titik di peta untuk WP2, WP3, dst.
-2. Untuk setiap waypoint, atur:
-   - **Altitude**: ketinggian jelajah, misalnya `150 m`
-   - **Acceptance Radius**: jarak (meter) dari waypoint agar dianggap "tercapai", default `25 m` cukup untuk sim
-   - **Hold Time**: waktu (detik) untuk berputar di atas waypoint sebelum lanjut (set `0` untuk langsung lanjut)
-3. Waypoint dieksekusi secara berurutan dari WP1 → WP2 → WP3 → dst.
-
-**Menambahkan Perintah Akhir (Opsional):**
-
-| Perintah | Fungsi |
-|---|---|
-| **LOITER_UNLIM** | Berputar tak terbatas di koordinat tersebut hingga mode diganti manual |
-| **RETURN_TO_LAUNCH** | Terbang balik ke home point dan land otomatis |
-| **LAND** | Pendaratan otomatis di koordinat yang ditentukan |
-
-Untuk skenario pengujian awal, tambahkan **LOITER_UNLIM** sebagai waypoint terakhir agar vehicle tidak hilang jika misi selesai.
-
-**Upload Misi ke Vehicle:**
-
-1. Setelah semua waypoint ditambahkan, klik tombol **Upload** (ikon panah ke atas, di toolbar kanan panel waypoint).
-2. QGC mengirim misi via MAVLink ke Pixhawk dan menyimpannya di flash. Konfirmasi muncul: **"Mission uploaded"**.
-3. Kembali ke **Fly View** (ikon pesawat di toolbar atas) — waypoint akan terlihat tergambar di peta.
-
-**Verifikasi Misi:**
-
-| Item | Yang Harus Terlihat |
-|---|---|
-| Jumlah waypoint | Sesuai jumlah WP yang dibuat |
-| WP1 | Bertipe Takeoff |
-| Altitude setiap WP | Sesuai yang diset (bukan 0) |
-| Garis penghubung | Jalur misi tergambar di peta dari WP1 ke WP terakhir |
-
-> **Catatan:** Altitude di QGC default relatif terhadap **home point** (AGL). Home point di-set otomatis saat vehicle pertama kali mendapat GPS fix dan di-arm. Pastikan X-Plane sudah di-unpause dan GPS lock sudah tercapai sebelum arm agar home point benar.
-
-### Langkah 4 — Unpause X-Plane
-
-Tekan **P** (atau klik tombol pause) di X-Plane untuk memulai simulasi.
-
-Setelah di-unpause:
-- Pixhawk mulai menerima DATA@ rows via PPP dan melakukan injeksi sensor
-- EKF menginisialisasi (GPS fix terlihat di QGC dalam beberapa detik)
-- DREF packets kontrol permukaan mengalir dari Pixhawk ke X-Plane pada ~25 Hz
-
-**Verifikasi di QGC:**
-- Posisi GPS sesuai lokasi pesawat di X-Plane
-- Attitude (roll/pitch/heading) sesuai cockpit X-Plane
-- Airspeed berubah sesuai kecepatan di X-Plane
-
-### Langkah 5 — Arm dan Terbang
-
-Nyalakan RC transmitter, konfirmasi RC receiver menampilkan link. Arm via QGC atau urutan arming RC transmitter.
-
-### Parameter Kunci (`defaults.parm`)
+**Parameter kunci:**
 
 | Parameter | Nilai | Tujuan |
 |---|---|---|
-| `GPS1_TYPE` | 100 | SITL GPS backend (baca dari SIMState / X-Plane) |
-| `ARSPD_TYPE` | 100 | SITL airspeed backend |
-| `AHRS_EKF_TYPE` | 2 | EKF2 (stabil di STM32F427 dengan SITL backend) |
-| `BRD_SAFETY_DEFLT` | 0 | Tidak ada safety switch di simulasi |
-| `ARMING_SKIPCHK` | -1 | Skip semua pre-arm checks |
-| `THR_FAILSAFE` | 0 | Nonaktifkan RC/throttle failsafe |
-| `RC_OVERRIDE_TIME` | -1 | Tidak ada timeout pada RC_CHANNELS_OVERRIDE |
-| `SERIAL0_PROTOCOL` | 2 | USB = MAVLink2 (QGC) |
-| `SERIAL2_PROTOCOL` | 48 | TELEM2 = PPP |
-| `SERIAL2_BAUD` | 115 | 115200 baud untuk PPP |
-| `NET_ENABLE` | 1 | Aktifkan lwIP networking |
-| `NET_OPTIONS` | 64 | Nonaktifkan batas PPP LCP echo |
-| `SCHED_LOOP_RATE` | 50 | 50 Hz mencegah watchdog di STM32F427 |
-| `SIM_OH_MASK` | 255 | Teruskan semua servo channel melalui SITL |
-| `TKOFF_THR_MINACC` | 0 | Tidak ada cek akselerasi sebelum throttle-up |
-| `TKOFF_THR_MINSPD` | 0 | Tidak ada cek kecepatan GPS sebelum throttle-up |
-| `GROUND_STEER_ALT` | 5 | Ground steering aktif di bawah 5 m AGL |
-| `SIM_XP_BIND_PORT` | 49005 | Port UDP yang didengarkan ArduPilot untuk data X-Plane (harus sama dengan "Send data port" di X-Plane Net Connections) |
+| `BRD_SAFETY_DEFLT` | 0 | Tidak ada safety switch |
+| `ARMING_SKIPCHK` | -1 | Skip pre-arm checks |
+| `THR_FAILSAFE` | 0 | Nonaktifkan RC failsafe |
+| `TKOFF_THR_MINSPD` | 0 | Tidak ada cek kecepatan GPS |
+| `TKOFF_THR_MINACC` | 0 | Tidak ada cek akselerasi |
 
-### Troubleshooting
+**Troubleshooting:**
 
 | Gejala | Kemungkinan Penyebab | Solusi |
 |---|---|---|
-| pppd "Peer not responding" | LCP echo tidak dinonaktifkan | Tambahkan `lcp-echo-interval 0` ke perintah pppd |
-| pppd terhubung tapi X-Plane tidak dapat data | IP salah di konfigurasi jaringan X-Plane | Set send IP ke `10.0.0.2`, port `49005` |
-| QGC tidak menampilkan GPS | EKF belum konvergen | Cek parameter `SIM_OPOS_*` sesuai lokasi X-Plane; pastikan X-Plane di-unpause |
-| Kontrol tidak bergerak di X-Plane | Override DREFs timeout | Firmware mengirim ulang overrides otomatis setiap ~1 detik |
-| Throttle tetap 0 saat arm | RANGE DREFs dinolkan saat disarm | Ini by design — arm dulu baru throttle |
-| "Waiting for RC" / tidak bisa arm | Failsafe aktif | Verifikasi `THR_FAILSAFE 0` sudah ter-load; reset params jika perlu |
+| pppd "Peer not responding" | LCP echo tidak dinonaktifkan | Tambahkan `lcp-echo-interval 0` |
+| QGC tidak menampilkan GPS | EKF belum konvergen | Cek `SIM_OPOS_*`, pastikan X-Plane di-unpause |
+| Kontrol tidak bergerak di X-Plane | Override DREFs timeout | Firmware mengirim ulang overrides otomatis tiap ~1 detik |
+| "Waiting for RC" | Failsafe aktif | Verifikasi `THR_FAILSAFE 0` |
 | Takeoff tidak mulai di AUTO | Throttle gate tidak terbuka | Verifikasi `TKOFF_THR_MINSPD 0`, `TKOFF_THR_MINACC 0` |
-| Build gagal `redefinition of 'param_union'` | Spurious MAVLink headers di source tree | Jalankan `python3 fix_mavlink_headers.py` lalu `./waf distclean && ./waf configure --board fmuv3-hil && ./waf plane` |
 
 ---
 
-## 6. Verifikasi Boot via QGroundControl
-
-**Kegiatan:**
-Verifikasi bahwa Pixhawk berhasil boot dengan firmware ArduPlane yang baru diupload.
-
-**Langkah:**
-1. Setelah upload, Pixhawk reboot otomatis dan terhubung kembali ke QGroundControl
-2. Cek vehicle summary: firmware version, board type, dan status sensor
-3. Verifikasi tidak ada critical error di message log QGC
-4. Cek deteksi sensor: IMU, barometer, dan compass
-
-**Hasil:** Pixhawk berhasil boot dengan ArduPlane. QGroundControl menampilkan status normal — sensor IMU dan barometer terdeteksi tanpa error.
-
----
-
-## 7. Fork Repositori ArduPilot → drone-kamikaze
-
-**Kegiatan:**
-Fork repositori ArduPilot ke akun GitHub pribadi sebagai basis pengembangan firmware custom drone-kamikaze.
-
-**Langkah:**
-1. Buka https://github.com/ArduPilot/ardupilot
-2. Klik **"Fork"** → pilih akun `musaelhanafi` sebagai owner → klik **Create fork**
-3. Repositori fork tersedia di https://github.com/musaelhanafi/drone-kamikaze
-4. Update remote pada repositori lokal:
-   ```
-   git remote rename origin upstream
-   git remote add origin git@github.com:musaelhanafi/drone-kamikaze.git
-   git push -u origin main
-   ```
-
-**Hasil:** Fork berhasil. Repositori drone-kamikaze tersedia di https://github.com/musaelhanafi/drone-kamikaze.
-
----
-
-## 8. Modifikasi Konfigurasi Board fmuv3 untuk HITL Mode
-
-**Kegiatan:**
-Membuat konfigurasi board baru `fmuv3-hil` di firmware drone-kamikaze untuk mendukung mode HITL (Hardware-in-the-Loop) dengan X-Plane sebagai physics engine. Koneksi menggunakan PPP tunnel via TELEM2.
-
-**File yang dibuat:**
-
-| File | Keterangan |
-|---|---|
-| `libraries/AP_HAL_ChibiOS/hwdef/fmuv3-hil/hwdef.dat` | Definisi hardware board |
-| `libraries/AP_HAL_ChibiOS/hwdef/fmuv3-hil/defaults.parm` | Parameter default HITL |
-
-**Parameter utama `defaults.parm`:**
-
-| Parameter | Nilai | Keterangan |
-|---|---|---|
-| `AHRS_EKF_TYPE` | 2 | EKF2 (sesuai keterbatasan STM32F427) |
-| `EK2_ENABLE` | 1 | EKF2 aktif |
-| `EK3_ENABLE` | 0 | EKF3 nonaktif |
-| `GPS1_TYPE` | 100 | SITL GPS (data dari X-Plane) |
-| `ARSPD_TYPE` | 100 | SITL airspeed (data dari X-Plane) |
-| `NET_ENABLE` | 1 | PPP networking aktif |
-| `SERIAL2_PROTOCOL` | 48 | PPP protocol di TELEM2 |
-| `SERIAL2_BAUD` | 115 | 115200 baud |
-| `NET_OPTIONS` | 64 | PPP options |
-| `SIM_OPOS_LAT` | −6.897434 | Home position — Bandara WICC Bandung |
-| `SIM_OPOS_LNG` | 107.566887 | |
-| `SIM_OPOS_ALT` | 744.0 | Altitude AMSL (m) |
-
-**Prinsip kerja HITL:**
-- X-Plane menjalankan fisika penerbangan dan mengirim data sensor (IMU, GPS, airspeed) ke ArduPilot via PPP tunnel
-- ArduPilot menjalankan algoritma kendali (EKF, PID) menggunakan data sensor dari X-Plane
-- Output servo ArduPilot dikirim kembali ke X-Plane sebagai DREF packets untuk menggerakkan permukaan kontrol SATRIA
-
-**Hasil:** Konfigurasi board fmuv3-hil berhasil dibuat.
-
----
-
-## 9. Kompilasi Firmware fmuv3-hil & Upload ke Pixhawk
-
-**Kegiatan:**
-Kompilasi firmware ArduPlane dengan konfigurasi board fmuv3-hil dan upload ke Pixhawk.
-
-**Kompilasi:**
-```
-./waf configure --board fmuv3-hil
-./waf plane
-```
-
-**Upload:**
-Sama seperti langkah 5, menggunakan QGroundControl dengan file `arduplane.apj` hasil kompilasi fmuv3-hil.
-
-**Hasil:** Firmware fmuv3-hil berhasil dikompilasi tanpa error dan di-upload ke Pixhawk.
-
----
-
-## 10. Verifikasi Data X-Plane Terkirim ke Pixhawk
+### 13. Verifikasi Data X-Plane → Pixhawk
 
 **Kegiatan:**
 Verifikasi bahwa data sensor dari X-Plane berhasil diterima oleh Pixhawk melalui koneksi PPP over TELEM2.
 
 **Langkah:**
-1. Jalankan X-Plane dengan plugin HITL aktif
-2. Hubungkan Pixhawk ke laptop via TELEM2 (USB-UART bridge)
-3. Setup koneksi PPP antara laptop dan Pixhawk
-4. Cek log ArduPlane di QGroundControl — verifikasi:
+1. Jalankan X-Plane dengan simulasi aktif
+2. Hubungkan PPP tunnel laptop ↔ Pixhawk via TELEM2
+3. Cek log ArduPlane di QGroundControl — verifikasi:
    - GPS lock diperoleh dari data X-Plane
    - Data IMU bergerak sesuai manuver di X-Plane
    - Airspeed berubah sesuai kecepatan di X-Plane
@@ -454,10 +513,10 @@ Verifikasi bahwa data sensor dari X-Plane berhasil diterima oleh Pixhawk melalui
 
 ---
 
-## 11. Menerbangkan SATRIA di X-Plane
+### 14. Terbang Manual SATRIA (Mode HITL)
 
 **Kegiatan:**
-Uji terbang SATRIA Phantom di X-Plane dalam mode HITL dengan Pixhawk sebagai flight controller aktif.
+Uji terbang SATRIA di X-Plane dalam mode HITL dengan Pixhawk sebagai flight controller aktif.
 
 **Skenario:**
 1. Spawn SATRIA di threshold runway 11 WICC Bandung
@@ -470,103 +529,55 @@ Uji terbang SATRIA Phantom di X-Plane dalam mode HITL dengan Pixhawk sebagai fli
 
 ---
 
-## 12. Autotune
+### 15. Konfigurasi Channel 5 RC — MANUAL / STABILIZE / AUTOTUNE
 
 **Kegiatan:**
-Menjalankan fitur Autotune ArduPlane pada SATRIA di X-Plane untuk mendapatkan gain PID roll dan pitch yang optimal secara otomatis.
+Konfigurasi RC channel 5 sebagai 3-position flight mode switch sebelum menjalankan Autotune.
 
-**Langkah:**
-1. Set parameter awal:
-   - `AUTOTUNE_LEVEL = 6` (agresivitas tuning sedang)
-2. Terbangkan SATRIA dalam mode FBWA (Fly By Wire A)
-3. Aktifkan mode AUTOTUNE via QGroundControl
-4. ArduPilot melakukan manuver otomatis untuk mengidentifikasi gain PID optimal
-5. Tunggu konvergensi — QGC menampilkan alert **"Autotune complete"**
-6. Save parameter hasil autotune ke Pixhawk
+#### Set Flight Mode Channel
 
-**Hasil:** Autotune berhasil dijalankan. Gain PID roll dan pitch berhasil diidentifikasi dan disimpan.
-
----
-
-## 13. Auto Takeoff dan Navigasi Waypoint (Mode AUTO)
-
-**Kegiatan:**
-Menguji kemampuan SATRIA untuk melakukan takeoff otomatis dan mengikuti flight plan waypoint yang sudah diupload ke Pixhawk, menggunakan mode AUTO ArduPlane dalam simulasi HITL.
-
-**Prasyarat:**
-- Misi sudah dibuat dan diupload ke Pixhawk via QGC (lihat Langkah 3b)
-- HITL aktif: X-Plane berjalan, PPP tunnel aktif, GPS lock tercapai
-- Parameter TKOFF sudah benar (`TKOFF_THR_MINSPD 0`, `TKOFF_THR_MINACC 0`)
-
-**Parameter tambahan yang perlu diverifikasi:**
-
-| Parameter | Nilai | Tujuan |
+| Parameter | Nilai | Keterangan |
 |---|---|---|
-| `TKOFF_THR_MINACC` | `0` | Tidak ada cek akselerasi minimum sebelum throttle-up |
-| `TKOFF_THR_MINSPD` | `0` | Tidak ada cek kecepatan GPS sebelum throttle-up |
-| `TKOFF_ALT` | `100` | Altitude target takeoff (m AGL) — sesuaikan dengan WP1 di misi |
-| `RTL_ALTITUDE` | `150` | Altitude Return-to-Launch jika dipicu (m AGL) |
-| `CRUISE_SPEED` | `20` | Kecepatan jelajah menuju waypoint (m/s) |
-| `WP_RADIUS` | `25` | Jarak acceptance radius waypoint (m) |
-| `WP_LOITER_RAD` | `80` | Radius loiter saat mode LOITER (m) |
-| `ARMING_REQUIRE` | `1` | Vehicle harus di-arm sebelum AUTO bisa berjalan |
+| `FLTMODE_CH` | **5** | Channel RC yang digunakan untuk flight mode switch |
 
-**Langkah eksekusi:**
+#### Mapping 3-Position Switch ke Flight Mode
 
-1. **Verifikasi misi di Fly View** — Pastikan jalur waypoint tergambar di peta QGC. Cek jumlah waypoint dan WP1 bertipe Takeoff.
+| Slot | Parameter | Nilai | Mode | Rentang PWM |
+|---|---|---|---|---|
+| Posisi 1 (bawah) | `FLTMODE1` | **0** | MANUAL | 1000 – 1230 |
+| | `FLTMODE2` | **0** | MANUAL | 1231 – 1360 |
+| Posisi 2 (tengah) | `FLTMODE3` | **2** | STABILIZE | 1361 – 1490 |
+| | `FLTMODE4` | **2** | STABILIZE | 1491 – 1620 |
+| Posisi 3 (atas) | `FLTMODE5` | **8** | AUTOTUNE | 1621 – 1749 |
+| | `FLTMODE6` | **8** | AUTOTUNE | 1750 – 2000 |
 
-2. **Set mode ke AUTO** — Di QGC Fly View, klik dropdown flight mode → pilih **AUTO**. Pixhawk beralih ke AUTO dan langsung siap mengeksekusi misi saat di-arm.
+> **Kode mode ArduPlane:** MANUAL = 0, STABILIZE = 2, AUTOTUNE = 8.
 
-3. **Arm vehicle** — Klik tombol **Arm** di QGC (atau gunakan urutan arm RC transmitter). Setelah arm:
-   - Throttle naik otomatis ke nilai takeoff
-   - Permukaan kontrol aktif
-   - X-Plane: SATRIA mulai berakselerasi di runway
+#### Langkah Set di QGroundControl
 
-4. **Takeoff otomatis** — ArduPlane mengeksekusi WP1 (Takeoff command):
-   - Throttle full, ground steering aktif hingga airspeed tercapai
-   - Saat airspeed > stall speed, ArduPlane rotate dan climb menuju altitude WP1
-   - Selama climb: aileron/elevator dikontrol penuh oleh autopilot
-   - Verifikasi di QGC: altitude bar naik, mode tetap AUTO, WP aktif menunjuk WP1
+1. **Vehicle Setup → Parameters** → set `FLTMODE_CH = 5`
+2. Set `FLTMODE1` s.d. `FLTMODE6` sesuai tabel di atas
+3. Reboot Pixhawk
+4. Verifikasi di **QGC Fly View → Flight Mode indicator**: gerakkan switch transmitter
 
-5. **Transisi ke navigasi waypoint** — Setelah altitude WP1 tercapai, ArduPlane otomatis beralih ke WP2:
-   - Autopilot mengatur heading menuju koordinat WP2
-   - Altitude dijaga sesuai nilai yang diset di setiap waypoint
-   - Di QGC: indikator waypoint aktif bergeser ke WP2, garis jalur terbang terlihat di peta
+| Posisi Switch | Mode yang Harus Muncul |
+|---|---|
+| Bawah | MANUAL |
+| Tengah | STABILIZE |
+| Atas | AUTOTUNE |
 
-6. **Monitoring selama misi:**
-
-| Yang Dimonitor | Di Mana | Nilai Normal |
-|---|---|---|
-| Flight mode | QGC status bar | AUTO (tidak berubah) |
-| Waypoint aktif | QGC Fly View peta | Nomor WP bertambah seiring misi berjalan |
-| Altitude | QGC altitude indicator | Sesuai altitude WP yang sedang dituju |
-| Airspeed | QGC speed indicator | Sekitar nilai `CRUISE_SPEED` |
-| Cross-track error | QGC attitude widget | Kecil — pesawat tidak menyimpang jauh dari jalur |
-
-7. **Akhir misi** — Jika waypoint terakhir adalah LOITER_UNLIM, SATRIA akan berputar di titik tersebut tanpa batas. Untuk mengakhiri:
-   - Ganti mode ke **MANUAL** atau **FBWA** dari QGC untuk ambil alih kendali
-   - Atau ganti ke **RTL** untuk kembali ke home dan land otomatis
-
-**Hasil:** SATRIA berhasil melakukan auto takeoff dari runway WICC Bandung dan mengikuti seluruh waypoint yang diprogram, dengan Pixhawk sebagai flight controller aktif melalui HITL. Mode AUTO berjalan penuh tanpa intervensi manual.
-
-**Video Auto Takeoff SATRIA (mode AUTO):**
-
-[![Auto Takeoff SATRIA (mode AUTO)](autotakeoff_preview.png)](https://www.youtube.com/watch?v=Fu6zhfEW_hM)
+> **Penting:** Pastikan switch di posisi **MANUAL** atau **STABILIZE** saat arm. Jangan arm dalam kondisi AUTOTUNE.
 
 ---
 
-## 19. Manual Fix & Autotune SATRIA — Minimasi Pitch Jitter
+### 16. Manual Fix Parameter — Minimasi Pitch Jitter SATRIA
 
 **Kegiatan:**
-Melakukan perbaikan parameter manual untuk mengurangi pitch jitter pada SATRIA Phantom sebelum menjalankan Autotune ArduPlane. Urutan ini penting — Autotune tidak dapat bekerja optimal jika pitch jitter belum diminimasi secara manual terlebih dahulu.
+Perbaikan parameter manual untuk mengurangi pitch jitter sebelum menjalankan Autotune. Autotune tidak dapat bekerja optimal jika jitter belum diminimasi terlebih dahulu.
 
----
+**Root Cause Pitch Jitter:**
 
-### 19.1 Root Cause Pitch Jitter pada SATRIA
-
-Pitch jitter pada flying wing seperti SATRIA umumnya disebabkan oleh kombinasi faktor berikut:
-
-| Penyebab | Parameter ArduPlane | Dampak |
+| Penyebab | Parameter | Dampak |
 |---|---|---|
 | Gain PID pitch terlalu tinggi | `PTCH_RATE_P`, `PTCH_RATE_D` | Osilasi cepat di axis pitch |
 | TECS terlalu agresif | `TECS_PTCH_DAMP`, `TECS_TIME_CONST` | Hunting panjang saat altitude hold |
@@ -574,29 +585,23 @@ Pitch jitter pada flying wing seperti SATRIA umumnya disebabkan oleh kombinasi f
 | Filter gyro kurang kuat | `INS_GYRO_FILTER` | Noise tidak tersaring |
 | Respon elevon terlalu sensitif | `MIXING_GAIN` | Over-correction tiap frame |
 
----
-
-### 19.2 Manual Fix (Lakukan Sebelum Autotune)
-
-Set parameter berikut via QGroundControl **sebelum** terbang Autotune. Masuk ke **Vehicle Setup → Parameters**, cari nama parameter, ubah nilainya.
-
-#### Step A — TECS (Paling Berpengaruh untuk Pitch Hunting)
+#### Step A — TECS
 
 | Parameter | Nilai Lama | **Nilai Baru** | Alasan |
 |---|---|---|---|
 | `TECS_PTCH_DAMP` | 0.0 | **0.30** | Tambah damping pitch di TECS |
-| `TECS_TIME_CONST` | 5.0 | **7.0** | Perlambat respon TECS untuk flying wing |
-| `TECS_THR_DAMP` | 0.1 | **0.50** | Damping throttle agar tidak fight pitch |
-| `TECS_VERT_ACC` | 7.0 | **6.0** | Kurangi akselerasi vertikal maksimum |
+| `TECS_TIME_CONST` | 5.0 | **7.0** | Perlambat respon TECS |
+| `TECS_THR_DAMP` | 0.1 | **0.50** | Damping throttle |
+| `TECS_VERT_ACC` | 7.0 | **6.0** | Kurangi akselerasi vertikal maks |
 
-#### Step B — Pitch Rate PID (Turunkan Gain Awal)
+#### Step B — Pitch Rate PID
 
 | Parameter | Nilai Lama | **Nilai Baru** | Alasan |
 |---|---|---|---|
 | `PTCH_RATE_P` | 0.10 | **0.07** | Turunkan P untuk kurangi osilasi |
 | `PTCH_RATE_I` | 0.10 | **0.08** | Turunkan I agar tidak windup |
-| `PTCH_RATE_D` | 0.001 | **0.002** | Naikkan D sedikit untuk damping |
-| `PTCH_RATE_FF` | 0.0 | **0.18** | Tambah feedforward untuk respon halus |
+| `PTCH_RATE_D` | 0.001 | **0.002** | Naikkan D untuk damping |
+| `PTCH_RATE_FF` | 0.0 | **0.18** | Feedforward respon halus |
 | `PTCH_RATE_FLTE` | 0.0 | **2.0** | Filter error pitch — kunci anti-jitter |
 | `PTCH_RATE_FLTD` | 0.0 | **10.0** | Filter derivative pitch |
 
@@ -613,17 +618,17 @@ Set parameter berikut via QGroundControl **sebelum** terbang Autotune. Masuk ke 
 | Parameter | Nilai | Keterangan |
 |---|---|---|
 | `INS_HNTCH_ENABLE` | **1** | Aktifkan harmonic notch filter |
-| `INS_HNTCH_FREQ` | **100** | Estimasi frekuensi motor SATRIA (8–9 in prop) |
-| `INS_HNTCH_BW` | **50** | Bandwidth filter = setengah frekuensi |
+| `INS_HNTCH_FREQ` | **100** | Estimasi frekuensi motor SATRIA |
+| `INS_HNTCH_BW` | **50** | Bandwidth = setengah frekuensi |
 | `INS_HNTCH_ATT` | **40** | Atenuasi 40 dB |
-| `INS_HNTCH_MODE` | **1** | Mode throttle-based (tanpa ESC telemetry) |
+| `INS_HNTCH_MODE` | **1** | Mode throttle-based |
 | `INS_HNTCH_HMNCS` | **3** | Filter harmonik 1 dan 2 |
 
 #### Step E — Filter Gyro
 
 | Parameter | Nilai Lama | **Nilai Baru** | Alasan |
 |---|---|---|---|
-| `INS_GYRO_FILTER` | 20 | **15** | Filter lebih kuat untuk SATRIA yang ringan |
+| `INS_GYRO_FILTER` | 20 | **15** | Filter lebih kuat |
 | `INS_ACCEL_FILTER` | 20 | **15** | Filter akselerometer |
 
 #### Step F — Elevon & Airspeed
@@ -631,135 +636,56 @@ Set parameter berikut via QGroundControl **sebelum** terbang Autotune. Masuk ke 
 | Parameter | Nilai Lama | **Nilai Baru** | Alasan |
 |---|---|---|---|
 | `MIXING_GAIN` | 0.5 | **0.45** | Kurangi sensitivitas elevon |
-| `ARSPD_FBW_MIN` | 9 | **11** | Batas airspeed minimum (m/s) |
-| `ARSPD_FBW_MAX` | 22 | **22** | Batas airspeed maksimum (m/s) |
-| `TRIM_ARSPD_CM` | 1500 | **1500** | Kecepatan cruise target (cm/s) |
+| `ARSPD_FBW_MIN` | 9 | **11** | Airspeed minimum (m/s) |
 | `STALL_PREVENTION` | 0 | **1** | Aktifkan stall prevention |
 
----
+**Verifikasi (Test Flight FBWA Sebelum Autotune):**
 
-### 19.3 Verifikasi Manual Fix (Test Flight Pertama)
-
-Setelah semua parameter di-set, lakukan test flight singkat dalam mode FBWA **sebelum** Autotune:
-
-**Langkah:**
-
-1. Terbangkan SATRIA dalam mode **FBWA** di ketinggian aman (>100 m AGL)
-2. Lepas stick — biarkan pesawat terbang level tanpa input
-3. Observasi selama 30 detik:
-
-| Yang Diobservasi | Kondisi Buruk (jitter) | Kondisi Baik (siap autotune) |
+| Yang Diobservasi | Kondisi Buruk | Kondisi Baik (siap autotune) |
 |---|---|---|
 | Gerak pitch | Osilasi terus-menerus | Stabil atau osilasi sangat kecil |
 | Gerak roll | Hunting kiri-kanan | Level stabil |
-| Throttle | Naik-turun konstan | Relatif konstan |
 | Altitude | Berfluktuasi >5 m | Stabil dalam ±3 m |
 
-4. Jika masih jitter berat: turunkan `PTCH_RATE_P` sebesar 0.01 per iterasi hingga stabil
-5. Jika sudah stabil: lanjut ke langkah Autotune (6.4)
-
-> **Catatan:** Jangan jalankan Autotune jika jitter masih parah — Autotune akan menghasilkan gain yang salah karena mengidentifikasi osilasi buatan sebagai respon sistem yang valid.
+> Jangan jalankan Autotune jika jitter masih parah — Autotune akan menghasilkan gain yang salah.
 
 ---
 
-### Pra-langkah: Konfigurasi Channel 5 RC — MANUAL / STABILIZE / AUTOTUNE
+### 17. Autotune SATRIA
 
-Sebelum menjalankan Autotune, pastikan RC channel 5 sudah dikonfigurasi sebagai 3-position flight mode switch. Ini memungkinkan pilot switch antar mode secara fisik dari transmitter tanpa menyentuh QGC.
-
-#### A. Set Flight Mode Channel
-
-| Parameter | Nilai | Keterangan |
-|---|---|---|
-| `FLTMODE_CH` | **5** | Channel RC yang digunakan untuk flight mode switch |
-
-#### B. Mapping 3-Position Switch ke Flight Mode
-
-ArduPlane memetakan 6 slot mode (`FLTMODE1`–`FLTMODE6`) ke rentang PWM channel 5. Untuk switch 3-posisi (PWM ≈ 1000 / 1500 / 2000), set pasangan slot berikut:
-
-| Slot | Parameter | Nilai | Mode | Rentang PWM |
-|---|---|---|---|---|
-| Posisi 1 (bawah) | `FLTMODE1` | **0** | MANUAL | 1000 – 1230 |
-| | `FLTMODE2` | **0** | MANUAL | 1231 – 1360 |
-| Posisi 2 (tengah) | `FLTMODE3` | **2** | STABILIZE | 1361 – 1490 |
-| | `FLTMODE4` | **2** | STABILIZE | 1491 – 1620 |
-| Posisi 3 (atas) | `FLTMODE5` | **8** | AUTOTUNE | 1621 – 1749 |
-| | `FLTMODE6` | **8** | AUTOTUNE | 1750 – 2000 |
-
-> **Kode mode ArduPlane:** MANUAL = 0, STABILIZE = 2, AUTOTUNE = 8.
-
-#### C. Langkah Set di QGroundControl
-
-1. Buka **Vehicle Setup → Parameters**
-2. Cari dan set `FLTMODE_CH = 5`
-3. Set `FLTMODE1` s.d. `FLTMODE6` sesuai tabel di atas
-4. Reboot Pixhawk
-5. Verifikasi di **QGC Fly View → Flight Mode indicator**: gerakkan switch transmitter, pastikan mode berganti sesuai posisi
-
-#### D. Verifikasi di Lapangan (Sebelum Arm)
-
-| Posisi Switch | Mode yang Harus Muncul di QGC |
-|---|---|
-| Bawah | MANUAL |
-| Tengah | STABILIZE |
-| Atas | AUTOTUNE |
-
-> **Penting:** Pastikan switch berada di posisi **MANUAL** atau **STABILIZE** saat arm. Jangan arm dalam kondisi AUTOTUNE — ArduPlane akan menolak arm jika `ARMING_REQUIRE = 1` dan mode tidak mendukung takeoff manual.
-
----
-
-### 19.4 Menjalankan Autotune
-
-Setelah manual fix berhasil menstabilkan pitch, jalankan Autotune untuk mendapatkan gain optimal secara otomatis.
+**Kegiatan:**
+Menjalankan Autotune ArduPlane pada SATRIA untuk mendapatkan gain PID roll dan pitch yang optimal secara otomatis.
 
 **Parameter Autotune:**
 
 | Parameter | Nilai | Keterangan |
 |---|---|---|
-| `AUTOTUNE_LEVEL` | **6** | Agresivitas tuning 1–10, nilai 6 sesuai untuk flying wing |
+| `AUTOTUNE_LEVEL` | **6** | Agresivitas tuning 1–10 |
 | `AUTOTUNE_OPTIONS` | **0** | Tune semua axis (roll + pitch) |
 
-**Langkah Autotune:**
-
+**Langkah:**
 1. Set `AUTOTUNE_LEVEL = 6` di QGroundControl Parameters
-2. Terbangkan SATRIA dalam mode **FBWA** — naik ke ketinggian aman minimal **150 m AGL**
-3. Pastikan area terbang cukup luas (radius >200 m) karena Autotune akan melakukan manuver otomatis
-4. Switch mode ke **AUTOTUNE** via QGroundControl:
-   - QGC Fly View → dropdown flight mode → pilih **AUTOTUNE**
-5. ArduPlane mulai melakukan manuver identifikasi secara otomatis:
+2. Terbangkan SATRIA dalam mode **FBWA** — naik minimal **150 m AGL**
+3. Pastikan area terbang radius >200 m
+4. Switch mode ke **AUTOTUNE** via QGC Fly View → dropdown flight mode
 
    | Fase | Yang Terjadi |
    |---|---|
-   | Roll sweep | Pesawat melakukan roll kiri-kanan berulang untuk identifikasi gain roll |
-   | Pitch sweep | Pesawat melakukan pitch up-down berulang untuk identifikasi gain pitch |
+   | Roll sweep | Pesawat roll kiri-kanan berulang untuk identifikasi gain roll |
+   | Pitch sweep | Pesawat pitch up-down berulang untuk identifikasi gain pitch |
    | Konvergensi | Gain diperhalus — manuver semakin kecil amplitudonya |
 
-6. Monitor di QGC — Autotune selesai ditandai dengan:
-   - Alert di QGC: **"Autotune complete"**
-   - Manuver otomatis berhenti
-   - Pesawat kembali ke attitude normal FBWA
-7. **Jangan langsung land** — setelah alert muncul, biarkan pesawat terbang dalam AUTOTUNE mode selama 30 detik lagi untuk stabilisasi
-8. Switch kembali ke **FBWA** — lakukan test flight singkat untuk verifikasi respon
-9. Jika respon terasa baik: land dan simpan parameter
+5. Tunggu alert **"Autotune complete"** di QGC → biarkan 30 detik lagi sebelum land
+6. Switch ke **FBWA** → test respon pitch dan roll
 
 **Menyimpan hasil Autotune:**
 
 ```
 QGroundControl → Vehicle Setup → Parameters
-→ Tools (ikon titik tiga) → Save to file
-→ Simpan sebagai: FX61_autotune_result.params
+→ Tools → Save to file → SATRIA_autotune_result.params
 ```
 
-Atau simpan ke Pixhawk permanen:
-
-```
-Parameters → Tools → Save to Vehicle (permanent)
-```
-
----
-
-### 19.5 Verifikasi Post-Autotune
-
-Setelah Autotune selesai, cek nilai gain hasil tuning:
+**Verifikasi nilai gain hasil tuning:**
 
 | Parameter | Range Normal SATRIA | Jika Diluar Range |
 |---|---|---|
@@ -768,46 +694,59 @@ Setelah Autotune selesai, cek nilai gain hasil tuning:
 | `RLL_RATE_P` | 0.05 – 0.15 | Normal untuk flying wing |
 | `RLL_RATE_D` | 0.001 – 0.004 | Periksa vibrasi motor |
 
-**Test flight post-autotune:**
-
-1. Terbang dalam mode FBWA — lepas stick, observasi attitude
-2. Berikan input pitch mendadak — pesawat harus kembali level dalam 1–2 detik tanpa osilasi
-3. Berikan input roll mendadak — respon harus smooth tanpa overshoot berlebihan
-4. Aktifkan mode **LOITER** — pesawat harus bisa loiter stabil tanpa pitch hunting
-
----
-
-### 19.6 Troubleshooting Post-Autotune
+**Troubleshooting:**
 
 | Gejala | Kemungkinan Penyebab | Solusi |
 |---|---|---|
-| Pitch jitter masih ada | `PTCH_RATE_D` terlalu rendah | Naikkan `PTCH_RATE_D` sebesar 0.001 per iterasi |
-| Respon pitch terlalu lambat | `PTCH2SRV_TCONST` terlalu besar | Turunkan dari 0.60 ke 0.55 |
-| Osilasi lambat (hunting) | `TECS_TIME_CONST` masih terlalu kecil | Naikkan ke 8.0 atau 9.0 |
-| Autotune menghasilkan P sangat tinggi | Vibrasi motor mengganggu identifikasi | Pastikan `INS_HNTCH_ENABLE = 1` dan frekuensi benar |
+| Pitch jitter masih ada | `PTCH_RATE_D` terlalu rendah | Naikkan 0.001 per iterasi |
+| Osilasi lambat (hunting) | `TECS_TIME_CONST` kecil | Naikkan ke 8.0 atau 9.0 |
+| Autotune P sangat tinggi | Vibrasi motor | Pastikan `INS_HNTCH_ENABLE = 1` |
 | Alert "Autotune failed" | Area terbang terlalu sempit | Cari area lebih luas, ulangi |
+
+**Hasil:** Autotune berhasil dijalankan. Gain PID roll dan pitch teridentifikasi optimal dan tersimpan.
 
 ---
 
-### 19.7 Ringkasan Urutan Lengkap
+### 18. Auto Takeoff dan Navigasi Waypoint (Mode AUTO)
 
-```
-Step A → Set TECS parameters (TECS_PTCH_DAMP, TECS_TIME_CONST)
-Step B → Set PTCH_RATE parameters (turunkan P, tambah D dan FLTE)
-Step C → Set PTCH2SRV parameters (TCONST, D)
-Step D → Aktifkan Notch Filter (INS_HNTCH_ENABLE = 1)
-Step E → Turunkan INS_GYRO_FILTER ke 15
-Step F → Set MIXING_GAIN dan airspeed limits
-          ↓
-Test flight FBWA → verifikasi jitter berkurang
-          ↓
-Set AUTOTUNE_LEVEL = 6
-Terbang FBWA → switch ke AUTOTUNE → tunggu "Autotune complete"
-          ↓
-Test flight post-autotune → verifikasi respon pitch halus
-          ↓
-Simpan parameter ke file dan ke Pixhawk
-```
+**Kegiatan:**
+Menguji kemampuan SATRIA untuk melakukan takeoff otomatis dan mengikuti flight plan waypoint menggunakan mode AUTO ArduPlane dalam simulasi HITL.
+
+**Prasyarat:**
+- Misi sudah dibuat dan diupload ke Pixhawk via QGC (lihat seksi 12.4)
+- HITL aktif: X-Plane berjalan, PPP tunnel aktif, GPS lock tercapai
+
+| Parameter | Nilai | Tujuan |
+|---|---|---|
+| `TKOFF_THR_MINACC` | `0` | Tidak ada cek akselerasi minimum |
+| `TKOFF_THR_MINSPD` | `0` | Tidak ada cek kecepatan GPS |
+| `TKOFF_ALT` | `100` | Altitude target takeoff (m AGL) |
+| `CRUISE_SPEED` | `20` | Kecepatan jelajah (m/s) |
+| `WP_RADIUS` | `25` | Acceptance radius waypoint (m) |
+| `ARMING_REQUIRE` | `1` | Vehicle harus di-arm |
+
+**Langkah eksekusi:**
+
+1. **Verifikasi misi di Fly View** — pastikan jalur waypoint tergambar, WP1 bertipe Takeoff
+2. **Set mode ke AUTO** via QGC dropdown → Pixhawk siap mengeksekusi misi saat di-arm
+3. **Arm vehicle** → throttle naik otomatis → SATRIA berakselerasi di runway
+4. **Takeoff otomatis** — ArduPlane rotate dan climb menuju altitude WP1
+5. **Transisi ke navigasi** — setelah WP1 tercapai, autopilot heading ke WP2, dst.
+6. **Monitoring:**
+
+| Yang Dimonitor | Nilai Normal |
+|---|---|
+| Flight mode | AUTO (tidak berubah) |
+| Altitude | Sesuai altitude WP yang dituju |
+| Airspeed | Sekitar nilai `CRUISE_SPEED` |
+
+7. **Akhir misi** — ganti ke **FBWA** atau **RTL** untuk mengakhiri
+
+**Video Auto Takeoff SATRIA (mode AUTO):**
+
+[![Auto Takeoff SATRIA (mode AUTO)](autotakeoff_preview.png)](https://www.youtube.com/watch?v=Fu6zhfEW_hM)
+
+**Hasil:** SATRIA berhasil melakukan auto takeoff dari runway WICC Bandung dan mengikuti seluruh waypoint yang diprogram. Mode AUTO berjalan penuh tanpa intervensi manual.
 
 ---
 
@@ -816,25 +755,23 @@ Simpan parameter ke file dan ke Pixhawk
 | No | Kegiatan | Status |
 |---|---|---|
 | 1 | Instalasi Git | ✅ Selesai |
-| 2 | Pendaftaran akun GitHub | ✅ Selesai |
-| 3 | Clone repositori satria-firmware dari GitHub | ✅ Selesai |
-| 4 | Konfigurasi environment build & kompilasi firmware fmuv3-hil | ✅ Selesai |
-| 5 | Upload firmware ke Pixhawk 2.4.8 | ✅ Selesai |
-| 6 | Verifikasi boot via QGroundControl | ✅ Selesai |
-| 7 | Fork repositori ArduPilot → drone-kamikaze | ✅ Selesai |
-| 8 | Board config HITL: fmuv3-hil, fmuv3-hil-plane, x86-hil | ✅ Selesai |
-| 9 | Kompilasi firmware fmuv3-hil & upload ke Pixhawk | ✅ Selesai |
-| 10 | Verifikasi data X-Plane terkirim ke Pixhawk | ✅ Selesai |
-| 11 | Implementasi ModeTracking (mode 27) + Parameters | ✅ Selesai |
-| 12 | Implementasi MAVLink TRACKING_MESSAGE (ID 11045) | ✅ Selesai |
-| 13 | File xplane_elevon.json (demix elevon untuk X-Plane) | ✅ Selesai |
-| 14 | Fix -Wswitch build error (GCS_Plane.cpp, events.cpp) | ✅ Selesai |
-| 15 | Fix AHRS_EKF_TYPE: compass tidak sinkron dengan X-Plane | ✅ Selesai |
-| 16 | Konfigurasi compass SITL (SIM_MAGx_DEVID) | ✅ Selesai |
-| 17 | Dokumentasi seluruh parameter SITL X-Plane | ✅ Selesai |
-| 18 | Menerbangkan SATRIA di X-Plane | ✅ Selesai |
-| 19 | Manual fix parameter + Autotune SATRIA (minimasi pitch jitter) | ✅ Selesai |
-| 20 | Autotakeoff dan navigasi waypoint (mode AUTO) | ✅ Selesai |
+| 2 | Pendaftaran akun GitHub + SSH key | ✅ Selesai |
+| 3 | Fork ArduPilot → satria-firmaware | ✅ Selesai |
+| 4 | Clone repositori satria-firmaware + submodule | ✅ Selesai |
+| 5 | Konfigurasi environment build & kompilasi firmware fmuv3-hil | ✅ Selesai |
+| 6 | Upload firmware ke Pixhawk 2.4.8 | ✅ Selesai |
+| 7 | Verifikasi boot via QGroundControl | ✅ Selesai |
+| 8 | Implementasi board config HITL: fmuv3-hil, fmuv3-hil-plane, x86-hil | ✅ Selesai |
+| 9 | Implementasi xplane_elevon.json (demix elevon) | ✅ Selesai |
+| 10 | Fix AHRS_EKF_TYPE & konfigurasi compass SITL | ✅ Selesai |
+| 11 | Dokumentasi & verifikasi seluruh parameter SITL X-Plane | ✅ Selesai |
+| 12 | Setup sesi HITL: X-Plane network, PPP tunnel, QGC, flight plan | ✅ Selesai |
+| 13 | Verifikasi data X-Plane terkirim ke Pixhawk | ✅ Selesai |
+| 14 | Terbang manual SATRIA dalam mode HITL | ✅ Selesai |
+| 15 | Konfigurasi channel 5 RC (MANUAL / STABILIZE / AUTOTUNE) | ✅ Selesai |
+| 16 | Manual fix parameter — minimasi pitch jitter SATRIA | ✅ Selesai |
+| 17 | Autotune SATRIA — identifikasi gain PID roll & pitch optimal | ✅ Selesai |
+| 18 | Auto takeoff dan navigasi waypoint (mode AUTO) | ✅ Selesai |
 
 ---
 
