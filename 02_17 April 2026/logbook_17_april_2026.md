@@ -412,7 +412,7 @@ Membuat konfigurasi board baru `fmuv3-hil` di firmware drone-kamikaze untuk mend
 **Prinsip kerja HITL:**
 - X-Plane menjalankan fisika penerbangan dan mengirim data sensor (IMU, GPS, airspeed) ke ArduPilot via PPP tunnel
 - ArduPilot menjalankan algoritma kendali (EKF, PID) menggunakan data sensor dari X-Plane
-- Output servo ArduPilot dikirim kembali ke X-Plane sebagai DREF packets untuk menggerakkan permukaan kontrol FX-61
+- Output servo ArduPilot dikirim kembali ke X-Plane sebagai DREF packets untuk menggerakkan permukaan kontrol SATRIA
 
 **Hasil:** Konfigurasi board fmuv3-hil berhasil dibuat.
 
@@ -454,31 +454,31 @@ Verifikasi bahwa data sensor dari X-Plane berhasil diterima oleh Pixhawk melalui
 
 ---
 
-## 11. Menerbangkan FX-61 di X-Plane
+## 11. Menerbangkan SATRIA di X-Plane
 
 **Kegiatan:**
-Uji terbang FX-61 Phantom di X-Plane dalam mode HITL dengan Pixhawk sebagai flight controller aktif.
+Uji terbang SATRIA Phantom di X-Plane dalam mode HITL dengan Pixhawk sebagai flight controller aktif.
 
 **Skenario:**
-1. Spawn FX-61 di threshold runway 11 WICC Bandung
+1. Spawn SATRIA di threshold runway 11 WICC Bandung
 2. Arm Pixhawk via QGroundControl
 3. Set mode MANUAL
 4. Takeoff dan uji manuver dasar: roll, pitch, climb, descent
-5. Observasi sinkronisasi respons servo fisik FX-61 dengan tampilan X-Plane
+5. Observasi sinkronisasi respons servo fisik SATRIA dengan tampilan X-Plane
 
-**Hasil:** FX-61 berhasil diterbangkan dalam mode HITL. Respons kontrol normal — input RC menggerakkan permukaan kontrol di X-Plane secara real-time melalui Pixhawk.
+**Hasil:** SATRIA berhasil diterbangkan dalam mode HITL. Respons kontrol normal — input RC menggerakkan permukaan kontrol di X-Plane secara real-time melalui Pixhawk.
 
 ---
 
 ## 12. Autotune
 
 **Kegiatan:**
-Menjalankan fitur Autotune ArduPlane pada FX-61 di X-Plane untuk mendapatkan gain PID roll dan pitch yang optimal secara otomatis.
+Menjalankan fitur Autotune ArduPlane pada SATRIA di X-Plane untuk mendapatkan gain PID roll dan pitch yang optimal secara otomatis.
 
 **Langkah:**
 1. Set parameter awal:
    - `AUTOTUNE_LEVEL = 6` (agresivitas tuning sedang)
-2. Terbangkan FX-61 dalam mode FBWA (Fly By Wire A)
+2. Terbangkan SATRIA dalam mode FBWA (Fly By Wire A)
 3. Aktifkan mode AUTOTUNE via QGroundControl
 4. ArduPilot melakukan manuver otomatis untuk mengidentifikasi gain PID optimal
 5. Tunggu konvergensi — QGC menampilkan alert **"Autotune complete"**
@@ -491,7 +491,7 @@ Menjalankan fitur Autotune ArduPlane pada FX-61 di X-Plane untuk mendapatkan gai
 ## 13. Auto Takeoff dan Navigasi Waypoint (Mode AUTO)
 
 **Kegiatan:**
-Menguji kemampuan FX-61 untuk melakukan takeoff otomatis dan mengikuti flight plan waypoint yang sudah diupload ke Pixhawk, menggunakan mode AUTO ArduPlane dalam simulasi HITL.
+Menguji kemampuan SATRIA untuk melakukan takeoff otomatis dan mengikuti flight plan waypoint yang sudah diupload ke Pixhawk, menggunakan mode AUTO ArduPlane dalam simulasi HITL.
 
 **Prasyarat:**
 - Misi sudah dibuat dan diupload ke Pixhawk via QGC (lihat Langkah 3b)
@@ -520,7 +520,7 @@ Menguji kemampuan FX-61 untuk melakukan takeoff otomatis dan mengikuti flight pl
 3. **Arm vehicle** — Klik tombol **Arm** di QGC (atau gunakan urutan arm RC transmitter). Setelah arm:
    - Throttle naik otomatis ke nilai takeoff
    - Permukaan kontrol aktif
-   - X-Plane: FX-61 mulai berakselerasi di runway
+   - X-Plane: SATRIA mulai berakselerasi di runway
 
 4. **Takeoff otomatis** — ArduPlane mengeksekusi WP1 (Takeoff command):
    - Throttle full, ground steering aktif hingga airspeed tercapai
@@ -543,16 +543,16 @@ Menguji kemampuan FX-61 untuk melakukan takeoff otomatis dan mengikuti flight pl
 | Airspeed | QGC speed indicator | Sekitar nilai `CRUISE_SPEED` |
 | Cross-track error | QGC attitude widget | Kecil — pesawat tidak menyimpang jauh dari jalur |
 
-7. **Akhir misi** — Jika waypoint terakhir adalah LOITER_UNLIM, FX-61 akan berputar di titik tersebut tanpa batas. Untuk mengakhiri:
+7. **Akhir misi** — Jika waypoint terakhir adalah LOITER_UNLIM, SATRIA akan berputar di titik tersebut tanpa batas. Untuk mengakhiri:
    - Ganti mode ke **MANUAL** atau **FBWA** dari QGC untuk ambil alih kendali
    - Atau ganti ke **RTL** untuk kembali ke home dan land otomatis
 
-**Hasil:** FX-61 berhasil melakukan auto takeoff dari runway WICC Bandung dan mengikuti seluruh waypoint yang diprogram, dengan Pixhawk sebagai flight controller aktif melalui HITL. Mode AUTO berjalan penuh tanpa intervensi manual.
+**Hasil:** SATRIA berhasil melakukan auto takeoff dari runway WICC Bandung dan mengikuti seluruh waypoint yang diprogram, dengan Pixhawk sebagai flight controller aktif melalui HITL. Mode AUTO berjalan penuh tanpa intervensi manual.
 
 **Video Auto Takeoff SATRIA (mode AUTO):**
 
 <a href="https://www.youtube.com/watch?v=Fu6zhfEW_hM" target="_blank" style="position:relative;display:block;">
-  <img src="https://img.youtube.com/vi/Fu6zhfEW_hM/maxresdefault.jpg" style="width:100%;display:block;border-radius:6px;" alt="Auto Takeoff FX-61 HITL" />
+  <img src="https://img.youtube.com/vi/Fu6zhfEW_hM/maxresdefault.jpg" style="width:100%;display:block;border-radius:6px;" alt="Auto Takeoff SATRIA HITL" />
   <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;">
     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="56" viewBox="0 0 68 48">
       <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#ff0000" fill-opacity="0.9"/>
@@ -563,16 +563,16 @@ Menguji kemampuan FX-61 untuk melakukan takeoff otomatis dan mengikuti flight pl
 
 ---
 
-## 19. Manual Fix & Autotune FX-61 — Minimasi Pitch Jitter
+## 19. Manual Fix & Autotune SATRIA — Minimasi Pitch Jitter
 
 **Kegiatan:**
-Melakukan perbaikan parameter manual untuk mengurangi pitch jitter pada FX-61 Phantom sebelum menjalankan Autotune ArduPlane. Urutan ini penting — Autotune tidak dapat bekerja optimal jika pitch jitter belum diminimasi secara manual terlebih dahulu.
+Melakukan perbaikan parameter manual untuk mengurangi pitch jitter pada SATRIA Phantom sebelum menjalankan Autotune ArduPlane. Urutan ini penting — Autotune tidak dapat bekerja optimal jika pitch jitter belum diminimasi secara manual terlebih dahulu.
 
 ---
 
-### 19.1 Root Cause Pitch Jitter pada FX-61
+### 19.1 Root Cause Pitch Jitter pada SATRIA
 
-Pitch jitter pada flying wing seperti FX-61 umumnya disebabkan oleh kombinasi faktor berikut:
+Pitch jitter pada flying wing seperti SATRIA umumnya disebabkan oleh kombinasi faktor berikut:
 
 | Penyebab | Parameter ArduPlane | Dampak |
 |---|---|---|
@@ -621,7 +621,7 @@ Set parameter berikut via QGroundControl **sebelum** terbang Autotune. Masuk ke 
 | Parameter | Nilai | Keterangan |
 |---|---|---|
 | `INS_HNTCH_ENABLE` | **1** | Aktifkan harmonic notch filter |
-| `INS_HNTCH_FREQ` | **100** | Estimasi frekuensi motor FX-61 (8–9 in prop) |
+| `INS_HNTCH_FREQ` | **100** | Estimasi frekuensi motor SATRIA (8–9 in prop) |
 | `INS_HNTCH_BW` | **50** | Bandwidth filter = setengah frekuensi |
 | `INS_HNTCH_ATT` | **40** | Atenuasi 40 dB |
 | `INS_HNTCH_MODE` | **1** | Mode throttle-based (tanpa ESC telemetry) |
@@ -631,7 +631,7 @@ Set parameter berikut via QGroundControl **sebelum** terbang Autotune. Masuk ke 
 
 | Parameter | Nilai Lama | **Nilai Baru** | Alasan |
 |---|---|---|---|
-| `INS_GYRO_FILTER` | 20 | **15** | Filter lebih kuat untuk FX-61 yang ringan |
+| `INS_GYRO_FILTER` | 20 | **15** | Filter lebih kuat untuk SATRIA yang ringan |
 | `INS_ACCEL_FILTER` | 20 | **15** | Filter akselerometer |
 
 #### Step F — Elevon & Airspeed
@@ -652,7 +652,7 @@ Setelah semua parameter di-set, lakukan test flight singkat dalam mode FBWA **se
 
 **Langkah:**
 
-1. Terbangkan FX-61 dalam mode **FBWA** di ketinggian aman (>100 m AGL)
+1. Terbangkan SATRIA dalam mode **FBWA** di ketinggian aman (>100 m AGL)
 2. Lepas stick — biarkan pesawat terbang level tanpa input
 3. Observasi selama 30 detik:
 
@@ -729,7 +729,7 @@ Setelah manual fix berhasil menstabilkan pitch, jalankan Autotune untuk mendapat
 **Langkah Autotune:**
 
 1. Set `AUTOTUNE_LEVEL = 6` di QGroundControl Parameters
-2. Terbangkan FX-61 dalam mode **FBWA** — naik ke ketinggian aman minimal **150 m AGL**
+2. Terbangkan SATRIA dalam mode **FBWA** — naik ke ketinggian aman minimal **150 m AGL**
 3. Pastikan area terbang cukup luas (radius >200 m) karena Autotune akan melakukan manuver otomatis
 4. Switch mode ke **AUTOTUNE** via QGroundControl:
    - QGC Fly View → dropdown flight mode → pilih **AUTOTUNE**
@@ -769,7 +769,7 @@ Parameters → Tools → Save to Vehicle (permanent)
 
 Setelah Autotune selesai, cek nilai gain hasil tuning:
 
-| Parameter | Range Normal FX-61 | Jika Diluar Range |
+| Parameter | Range Normal SATRIA | Jika Diluar Range |
 |---|---|---|
 | `PTCH_RATE_P` | 0.05 – 0.12 | Ulangi Autotune dengan level lebih rendah |
 | `PTCH_RATE_D` | 0.001 – 0.005 | Periksa vibrasi motor |
@@ -840,8 +840,8 @@ Simpan parameter ke file dan ke Pixhawk
 | 15 | Fix AHRS_EKF_TYPE: compass tidak sinkron dengan X-Plane | ✅ Selesai |
 | 16 | Konfigurasi compass SITL (SIM_MAGx_DEVID) | ✅ Selesai |
 | 17 | Dokumentasi seluruh parameter SITL X-Plane | ✅ Selesai |
-| 18 | Menerbangkan FX-61 di X-Plane | ✅ Selesai |
-| 19 | Manual fix parameter + Autotune FX-61 (minimasi pitch jitter) | ✅ Selesai |
+| 18 | Menerbangkan SATRIA di X-Plane | ✅ Selesai |
+| 19 | Manual fix parameter + Autotune SATRIA (minimasi pitch jitter) | ✅ Selesai |
 | 20 | Autotakeoff dan navigasi waypoint (mode AUTO) | ✅ Selesai |
 
 ---

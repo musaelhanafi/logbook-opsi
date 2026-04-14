@@ -129,9 +129,9 @@ Menambahkan model pesawat custom SATRIA Phantom ke dalam library X-Plane sebagai
 Model SATRIA Phantom diambil dari forum X-Plane.org: [https://forums.x-plane.org/files/file/33623-fx-61-uav/](https://forums.x-plane.org/files/file/33623-fx-61-uav/)
 
 **Langkah:**
-1. Unduh file `FX-61.zip` dari forum X-Plane.org (link di atas)
-2. Ekstrak (unzip) `FX-61.zip` ke direktori `X-Plane/Aircraft/Extra Aircraft/`
-   - Pastikan hasil ekstrak membentuk folder `FX-61/` berisi file `.acf`, `.param`, dan tekstur
+1. Unduh file `SATRIA.zip` dari forum X-Plane.org (link di atas)
+2. Ekstrak (unzip) `SATRIA.zip` ke direktori `X-Plane/Aircraft/Extra Aircraft/`
+   - Pastikan hasil ekstrak membentuk folder `SATRIA/` berisi file `.acf`, `.param`, dan tekstur
 3. Buka X-Plane → pilih aircraft SATRIA Phantom dari menu Aircraft
 3. Verifikasi model aerodinamika: karakteristik fixed-wing delta wing tampil sesuai
 4. Uji kontrol dasar (aileron, elevator, throttle) dalam mode manual di X-Plane
@@ -194,7 +194,7 @@ Verifikasi dan modifikasi parameter sayap (Wing 1 & Wing 2) SATRIA Phantom di Pl
 
 ### Tampilan 3D SATRIA di Plane Maker
 
-Visualisasi 3D model SATRIA Phantom di Plane Maker (menu Standard → Wings). File aircraft: `Aircraft/Extra Aircraft/FX61/FX-61.acf`.
+Visualisasi 3D model SATRIA Phantom di Plane Maker (menu Standard → Wings). File aircraft: `Aircraft/Extra Aircraft/SATRIA/SATRIA.acf`.
 
 ![Plane Maker — 3D View SATRIA Phantom](X_PlaneMaker.png)
 
