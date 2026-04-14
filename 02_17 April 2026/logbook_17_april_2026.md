@@ -551,10 +551,7 @@ Menguji kemampuan FX-61 untuk melakukan takeoff otomatis dan mengikuti flight pl
 
 **Rekaman sesi HITL:**
 
-<video width="100%" controls>
-  <source src="auto_takeoff.mp4" type="video/mp4">
-  Video tidak dapat ditampilkan — buka file <a href="auto_takeoff.mp4">auto_takeoff.mp4</a> secara langsung.
-</video>
+[![Auto Takeoff FX-61 HITL](https://img.youtube.com/vi/Fu6zhfEW_hM/maxresdefault.jpg)](https://www.youtube.com/watch?v=Fu6zhfEW_hM)
 
 ---
 
