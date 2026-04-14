@@ -187,7 +187,6 @@ Modifikasi model SATRIA di X-Plane untuk menambahkan sistem JATO guna mendukung 
 
 ![Plane Maker — JATO & Special Contents SATRIA](jato_planemaker.png)
 
-![Plane Maker — Konfigurasi JATO SATRIA](jato_planemaker.png)
 
 ---
 
@@ -416,7 +415,7 @@ Konfigurasi: **BOTH wings** aktif (kedua sisi — radio button RIGHT wing dan LE
 
 > **Catatan:** Vert Stab 2 dikonfigurasi dengan **BOTH wings** (kedua sisi), sehingga Plane Maker menampilkan model winglet simetris di kiri dan kanan. Semua kontrol permukaan tetap tidak aktif (pasif).
 
-![Plane Maker — Vert Stab 2 SATRIA](Stab2_planemaker.png)
+![Plane Maker — Vert Stab 2 SATRIA](Stab2_Planemaker.png)
 
 ---
 
