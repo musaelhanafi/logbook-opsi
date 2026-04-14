@@ -549,6 +549,13 @@ Menguji kemampuan FX-61 untuk melakukan takeoff otomatis dan mengikuti flight pl
 
 **Hasil:** FX-61 berhasil melakukan autotakeoff dari runway WICC Bandung dan mengikuti seluruh waypoint yang diprogram, dengan Pixhawk sebagai flight controller aktif melalui HITL. Mode AUTO berjalan penuh tanpa intervensi manual.
 
+**Rekaman sesi HITL:**
+
+<video width="100%" controls>
+  <source src="auto_takeoff.mp4" type="video/mp4">
+  Video tidak dapat ditampilkan — buka file <a href="auto_takeoff.mp4">auto_takeoff.mp4</a> secara langsung.
+</video>
+
 ---
 
 ## 19. Manual Fix & Autotune FX-61 — Minimasi Pitch Jitter
