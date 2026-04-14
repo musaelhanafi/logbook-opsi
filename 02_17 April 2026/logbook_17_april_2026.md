@@ -488,7 +488,7 @@ Menjalankan fitur Autotune ArduPlane pada FX-61 di X-Plane untuk mendapatkan gai
 
 ---
 
-## 13. Autotakeoff dan Navigasi Waypoint (Mode AUTO)
+## 13. Auto Takeoff dan Navigasi Waypoint (Mode AUTO)
 
 **Kegiatan:**
 Menguji kemampuan FX-61 untuk melakukan takeoff otomatis dan mengikuti flight plan waypoint yang sudah diupload ke Pixhawk, menggunakan mode AUTO ArduPlane dalam simulasi HITL.
@@ -547,9 +547,9 @@ Menguji kemampuan FX-61 untuk melakukan takeoff otomatis dan mengikuti flight pl
    - Ganti mode ke **MANUAL** atau **FBWA** dari QGC untuk ambil alih kendali
    - Atau ganti ke **RTL** untuk kembali ke home dan land otomatis
 
-**Hasil:** FX-61 berhasil melakukan autotakeoff dari runway WICC Bandung dan mengikuti seluruh waypoint yang diprogram, dengan Pixhawk sebagai flight controller aktif melalui HITL. Mode AUTO berjalan penuh tanpa intervensi manual.
+**Hasil:** FX-61 berhasil melakukan auto takeoff dari runway WICC Bandung dan mengikuti seluruh waypoint yang diprogram, dengan Pixhawk sebagai flight controller aktif melalui HITL. Mode AUTO berjalan penuh tanpa intervensi manual.
 
-**Rekaman sesi HITL:**
+**Video Auto Takeoff SATRIA (mode AUTO):**
 
 <a href="https://www.youtube.com/watch?v=Fu6zhfEW_hM" target="_blank" style="position:relative;display:block;">
   <img src="https://img.youtube.com/vi/Fu6zhfEW_hM/maxresdefault.jpg" style="width:100%;display:block;border-radius:6px;" alt="Auto Takeoff FX-61 HITL" />

@@ -9,6 +9,10 @@
 
 ---
 
+> **Konteks Penelitian:** Kegiatan ini merupakan langkah awal pengembangan **SATRIA** — *Sistem Autonomi Tempur berbasis Citra* — sebuah drone kamikaze fixed-wing yang mampu mendeteksi dan menyerang target secara otonom menggunakan computer vision. Platform yang digunakan sebagai wahana simulasi adalah airframe flying wing yang dikonfigurasi dalam lingkungan HITL (Hardware-in-the-Loop) bersama X-Plane dan ArduPlane.
+
+---
+
 ## 1. Instalasi Tools & Environment Setup
 
 **Kegiatan:**
@@ -116,38 +120,38 @@ Menghubungkan dua laptop dalam satu sesi X-Plane — satu sebagai player (pengen
 
 ---
 
-## 3. Penambahan Custom Aircraft FX-61 Phantom
+## 3. Penambahan Custom Aircraft SATRIA Phantom
 
 **Kegiatan:**
-Menambahkan model pesawat custom FX-61 Phantom ke dalam library X-Plane sebagai wahana utama pengujian HITL.
+Menambahkan model pesawat custom SATRIA Phantom ke dalam library X-Plane sebagai wahana utama pengujian HITL.
 
 **Sumber model:**
-Model FX-61 Phantom diambil dari forum X-Plane.org: [https://forums.x-plane.org/files/file/33623-fx-61-uav/](https://forums.x-plane.org/files/file/33623-fx-61-uav/)
+Model SATRIA Phantom diambil dari forum X-Plane.org: [https://forums.x-plane.org/files/file/33623-fx-61-uav/](https://forums.x-plane.org/files/file/33623-fx-61-uav/)
 
 **Langkah:**
 1. Unduh file `FX-61.zip` dari forum X-Plane.org (link di atas)
 2. Ekstrak (unzip) `FX-61.zip` ke direktori `X-Plane/Aircraft/Extra Aircraft/`
    - Pastikan hasil ekstrak membentuk folder `FX-61/` berisi file `.acf`, `.param`, dan tekstur
-3. Buka X-Plane → pilih aircraft FX-61 Phantom dari menu Aircraft
+3. Buka X-Plane → pilih aircraft SATRIA Phantom dari menu Aircraft
 3. Verifikasi model aerodinamika: karakteristik fixed-wing delta wing tampil sesuai
 4. Uji kontrol dasar (aileron, elevator, throttle) dalam mode manual di X-Plane
 
-**Spesifikasi FX-61 Phantom:**
+**Spesifikasi SATRIA Phantom:**
 - Bentang sayap: ±1.5 m (delta flying wing)
 - Kecepatan cruise: ±65–80 km/h
 - Payload: mendukung kamera/seeker mount
 
-**Hasil:** FX-61 Phantom berhasil dimuat di X-Plane, model fisika dan kontrol permukaan berfungsi normal.
+**Hasil:** SATRIA Phantom berhasil dimuat di X-Plane, model fisika dan kontrol permukaan berfungsi normal.
 
 ---
 
-## 4. Modifikasi FX-61 — Penambahan JATO (Jet Assisted Take Off)
+## 4. Modifikasi SATRIA — Penambahan JATO (Jet Assisted Take Off)
 
 **Kegiatan:**
-Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna mendukung takeoff tanpa runway panjang.
+Modifikasi model SATRIA Phantom di X-Plane untuk menambahkan sistem JATO guna mendukung takeoff tanpa runway panjang.
 
 **Metode modifikasi (Plane Maker):**
-1. Buka file `.acf` FX-61 di **Plane Maker** (tools bawaan X-Plane)
+1. Buka file `.acf` SATRIA di **Plane Maker** (tools bawaan X-Plane)
 2. Buka tab `Standard → Special` → bagian **Jet Assisted Take-Off**
 3. Set parameter JATO (dari screenshot Special Contents):
 
@@ -177,22 +181,22 @@ Modifikasi model FX-61 Phantom di X-Plane untuk menambahkan sistem JATO guna men
 
 4. Simpan file `.acf` dan reload di X-Plane
 
-**Hasil:** JATO berhasil ditambahkan. FX-61 mampu melakukan accelerated takeoff dalam jarak < 30 m di X-Plane menggunakan dorongan JATO.
+**Hasil:** JATO berhasil ditambahkan. SATRIA mampu melakukan accelerated takeoff dalam jarak < 30 m di X-Plane menggunakan dorongan JATO.
 
-![Plane Maker — JATO & Special Contents FX-61 Phantom](jato_planmaker.png)
+![Plane Maker — JATO & Special Contents SATRIA Phantom](jato_planmaker.png)
 
 ---
 
-## 4b. Konfigurasi Wing FX-61 — Plane Maker
+## 4b. Konfigurasi Wing SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan modifikasi parameter sayap (Wing 1 & Wing 2) FX-61 Phantom di Plane Maker.
+Verifikasi dan modifikasi parameter sayap (Wing 1 & Wing 2) SATRIA Phantom di Plane Maker.
 
-### Tampilan 3D FX-61 di Plane Maker
+### Tampilan 3D SATRIA di Plane Maker
 
-Visualisasi 3D model FX-61 Phantom di Plane Maker (menu Standard → Wings). File aircraft: `Aircraft/Extra Aircraft/FX61/FX-61.acf`.
+Visualisasi 3D model SATRIA Phantom di Plane Maker (menu Standard → Wings). File aircraft: `Aircraft/Extra Aircraft/FX61/FX-61.acf`.
 
-![Plane Maker — 3D View FX-61 Phantom](X_PlaneMaker.png)
+![Plane Maker — 3D View SATRIA Phantom](X_PlaneMaker.png)
 
 ### Wing 1 — Kondisi Original (Sebelum Modifikasi)
 
@@ -222,9 +226,9 @@ Visualisasi 3D model FX-61 Phantom di Plane Maker (menu Standard → Wings). Fil
 | Elevator 1 | 2, 3, 4, 5, 6 | Elevon — aktif dari elemen 2 hingga tip |
 | Incidence with Elevtr 1 | 1 | Hanya root (elemen 1) |
 
-> **Catatan:** FX-61 adalah flying wing — aileron dan elevator digabung sebagai **elevon**. Tidak ada rudder, flap, atau slat yang aktif.
+> **Catatan:** SATRIA adalah flying wing — aileron dan elevator digabung sebagai **elevon**. Tidak ada rudder, flap, atau slat yang aktif.
 
-![Plane Maker — Wing 1 FX-61 Phantom](Wing1_Planemaker.png)
+![Plane Maker — Wing 1 SATRIA Phantom](Wing1_Planemaker.png)
 
 ### Wing 2 — Foil Specs
 
@@ -251,14 +255,14 @@ Visualisasi 3D model FX-61 Phantom di Plane Maker (menu Standard → Wings). Fil
 
 > **Catatan:** Wing 2 berfungsi sebagai permukaan sekunder / strake. Tidak ada kontrol aktif.
 
-![Plane Maker — Wing 2 FX-61 Phantom](Wing2_Planemaker.png)
+![Plane Maker — Wing 2 SATRIA Phantom](Wing2_Planemaker.png)
 
 ---
 
-## 4c. Konfigurasi Landing Gear FX-61 — Plane Maker
+## 4c. Konfigurasi Landing Gear SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan pencatatan parameter landing gear FX-61 Phantom di Plane Maker (tab Gear Loc).
+Verifikasi dan pencatatan parameter landing gear SATRIA Phantom di Plane Maker (tab Gear Loc).
 
 ### Tipe Gear
 
@@ -299,14 +303,14 @@ Verifikasi dan pencatatan parameter landing gear FX-61 Phantom di Plane Maker (t
 
 > **Catatan:** Ketiga gear bersifat retractable. Tidak ada gear yang menggunakan castor.
 
-![Plane Maker — Landing Gear FX-61 Phantom](LandingGear_Planemaker.png)
+![Plane Maker — Landing Gear SATRIA Phantom](LandingGear_Planemaker.png)
 
 ---
 
-## 4d. Konfigurasi Control Geometry FX-61 — Plane Maker
+## 4d. Konfigurasi Control Geometry SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) FX-61 Phantom di Plane Maker (tab Controls → Control Sizes).
+Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) SATRIA Phantom di Plane Maker (tab Controls → Control Sizes).
 
 ### Control Sizes — Ukuran Permukaan Kontrol
 
@@ -343,22 +347,22 @@ Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) FX-61 Ph
 | Flap speed ratio at deploy-start | 1.0 | — |
 | Flap detents | 0.1 | — |
 
-![Plane Maker — Control Geometry FX-61 Phantom](control_geometry_planmaker.png)
+![Plane Maker — Control Geometry SATRIA Phantom](control_geometry_planmaker.png)
 
 ### Trim & Speed Settings
 
-Pengaturan trim dan kecepatan kontrol permukaan FX-61 di Plane Maker (sub-tab Trim & Speed pada Control Geometry).
+Pengaturan trim dan kecepatan kontrol permukaan SATRIA di Plane Maker (sub-tab Trim & Speed pada Control Geometry).
 
-![Plane Maker — Control Geometry Trim & Speed FX-61 Phantom](Trim_Planemaker.png)
+![Plane Maker — Control Geometry Trim & Speed SATRIA Phantom](Trim_Planemaker.png)
 
 ---
 
-## 4e. Konfigurasi Stabilizer FX-61 — Plane Maker
+## 4e. Konfigurasi Stabilizer SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi parameter vertical stabilizer (winglet kiri & kanan) FX-61 Phantom di Plane Maker.
+Verifikasi parameter vertical stabilizer (winglet kiri & kanan) SATRIA Phantom di Plane Maker.
 
-FX-61 adalah flying wing — tidak memiliki fin vertikal konvensional. Vert Stab 1 dan Vert Stab 2 memodelkan **dua winglet** di ujung sayap kiri dan kanan sebagai permukaan stabilisasi yaw pasif.
+SATRIA adalah flying wing — tidak memiliki fin vertikal konvensional. Vert Stab 1 dan Vert Stab 2 memodelkan **dua winglet** di ujung sayap kiri dan kanan sebagai permukaan stabilisasi yaw pasif.
 
 ### Vert Stab 1 — Foil Specs
 
@@ -382,9 +386,9 @@ Konfigurasi: **RIGHT wing** aktif (winglet kanan).
 | Speed brake 1–2 | — | Tidak aktif |
 | Incidence (semua) | — | Tidak aktif |
 
-> **Catatan:** Vert Stab 1 adalah permukaan **pasif** — berfungsi sebagai winglet kanan murni tanpa defleksi aktif. Yaw control pada FX-61 dilakukan melalui diferensial throttle atau differential elevon, bukan rudder.
+> **Catatan:** Vert Stab 1 adalah permukaan **pasif** — berfungsi sebagai winglet kanan murni tanpa defleksi aktif. Yaw control pada SATRIA dilakukan melalui diferensial throttle atau differential elevon, bukan rudder.
 
-![Plane Maker — Vert Stab 1 FX-61 Phantom](Stab1_Planemaker.png)
+![Plane Maker — Vert Stab 1 SATRIA Phantom](Stab1_Planemaker.png)
 
 ### Vert Stab 2 — Foil Specs
 
@@ -410,14 +414,14 @@ Konfigurasi: **BOTH wings** aktif (kedua sisi — radio button RIGHT wing dan LE
 
 > **Catatan:** Vert Stab 2 dikonfigurasi dengan **BOTH wings** (kedua sisi), sehingga Plane Maker menampilkan model winglet simetris di kiri dan kanan. Semua kontrol permukaan tetap tidak aktif (pasif).
 
-![Plane Maker — Vert Stab 2 FX-61 Phantom](Stab2_planemaker.png)
+![Plane Maker — Vert Stab 2 SATRIA Phantom](Stab2_planemaker.png)
 
 ---
 
-## 4f. Weight & Balance FX-61 — Plane Maker
+## 4f. Weight & Balance SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi konfigurasi weight & balance FX-61 Phantom di Plane Maker.
+Verifikasi konfigurasi weight & balance SATRIA Phantom di Plane Maker.
 
 ### Center of Gravity
 
@@ -438,7 +442,7 @@ Verifikasi konfigurasi weight & balance FX-61 Phantom di Plane Maker.
 | Weight shift weight | 0.0 | lbs | Beban penggeser CG |
 | Displaced weight | 0.0 | lbs | Untuk dirigibles/blimps |
 
-![Plane Maker — Weight & Balance FX-61 Phantom](WeightandBalance_Planemaker.png)
+![Plane Maker — Weight & Balance SATRIA Phantom](WeightandBalance_Planemaker.png)
 
 ---
 
@@ -459,13 +463,13 @@ Menambahkan custom airport Bandara Husein Sastranegara (ICAO: WICC) ke dalam lin
 
 ---
 
-## 6. Uji Coba Terbang FX-61 di Lokasi WICC — X-Plane
+## 6. Uji Coba Terbang SATRIA di Lokasi WICC — X-Plane
 
 **Kegiatan:**
-Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein Sastranegara (WICC).
+Uji coba penerbangan perdana SATRIA Phantom di lingkungan simulasi Bandara Husein Sastranegara (WICC).
 
 **Skenario pengujian:**
-1. Spawn FX-61 di threshold runway 11 WICC
+1. Spawn SATRIA di threshold runway 11 WICC
 2. Takeoff menggunakan JATO → transisi ke glide normal
 3. Terbang manual di sekitar area WICC
 4. Observasi respons aerodinamika: roll, pitch, yaw, kecepatan
@@ -483,7 +487,7 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 
 **Dokumentasi:**
 
-![FX-61 Phantom di X-Plane — WICC](FX-61.png)
+![SATRIA di Bandara Husein Sastranegara](Drone_Satria_di_Husein_Sastranegara.png)
 
 **Kendala & Tindak Lanjut:**
 - Terrain mesh WICC perlu fine-tuning (beberapa titik ketinggian tidak rata)
@@ -498,15 +502,15 @@ Uji coba penerbangan perdana FX-61 Phantom di lingkungan simulasi Bandara Husein
 |---|---|---|
 | 1 | Instalasi X-Plane, VS Code, QGroundControl, Git, toolchain ArduPilot | ✅ Selesai |
 | 2 | Verifikasi koneksi X-Plane via LAN (2 laptop) | ✅ Selesai |
-| 3 | Tambah custom aircraft FX-61 Phantom | ✅ Selesai |
-| 4 | Modifikasi FX-61 + JATO & Equipment Options (Special Contents) | ✅ Selesai |
-| 4b | Konfigurasi Wing 1 & Wing 2 FX-61 — Plane Maker (Foil & Element Specs) | ✅ Selesai |
-| 4c | Konfigurasi Landing Gear FX-61 — Plane Maker (Gear Loc) | ✅ Selesai |
-| 4d | Konfigurasi Control Geometry FX-61 — Plane Maker (Control Sizes, Flap/Slat) | ✅ Selesai |
-| 4e | Konfigurasi Vert Stab 1 & 2 (winglet pasif) FX-61 — Plane Maker | ✅ Selesai |
-| 4f | Weight & Balance FX-61 — Plane Maker | ✅ Selesai |
+| 3 | Tambah custom aircraft SATRIA Phantom | ✅ Selesai |
+| 4 | Modifikasi SATRIA + JATO & Equipment Options (Special Contents) | ✅ Selesai |
+| 4b | Konfigurasi Wing 1 & Wing 2 SATRIA — Plane Maker (Foil & Element Specs) | ✅ Selesai |
+| 4c | Konfigurasi Landing Gear SATRIA — Plane Maker (Gear Loc) | ✅ Selesai |
+| 4d | Konfigurasi Control Geometry SATRIA — Plane Maker (Control Sizes, Flap/Slat) | ✅ Selesai |
+| 4e | Konfigurasi Vert Stab 1 & 2 (winglet pasif) SATRIA — Plane Maker | ✅ Selesai |
+| 4f | Weight & Balance SATRIA — Plane Maker | ✅ Selesai |
 | 5 | Tambah custom airport WICC (Husein Sastranegara) | ✅ Selesai |
-| 6 | Uji coba terbang FX-61 di WICC — X-Plane | ✅ Selesai |
+| 6 | Uji coba terbang SATRIA di WICC — X-Plane | ✅ Selesai |
 
 ---
 
