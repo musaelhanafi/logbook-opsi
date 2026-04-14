@@ -120,35 +120,37 @@ Menghubungkan dua laptop dalam satu sesi X-Plane — satu sebagai player (pengen
 
 ---
 
-## 3. Penambahan Custom Aircraft SATRIA Phantom
+## 3. Penambahan Custom Aircraft SATRIA
 
 **Kegiatan:**
-Menambahkan model pesawat custom SATRIA Phantom ke dalam library X-Plane sebagai wahana utama pengujian HITL.
+Menambahkan model pesawat custom SATRIA ke dalam library X-Plane sebagai wahana utama pengujian HITL.
 
 **Sumber model:**
-Model SATRIA Phantom diambil dari forum X-Plane.org: [https://forums.x-plane.org/files/file/33623-fx-61-uav/](https://forums.x-plane.org/files/file/33623-fx-61-uav/)
+Model SATRIA terinspirasi dari model FX-61 dari forum X-Plane.org: [https://forums.x-plane.org/files/file/33623-fx-61-uav/](https://forums.x-plane.org/files/file/33623-fx-61-uav/). Beberapa tambahan pada settingan sayap, wingtip, landing gear, JATO dan texture.
 
 **Langkah:**
-1. Unduh file `SATRIA.zip` dari forum X-Plane.org (link di atas)
+1. Unduh file `SATRIA.zip` dari repositori [https://github.com/musaelhanafi/logbook-opsi/blob/main/01_10%20April%202026/SATRIA.zip](Log book tanggal 10 April 2026)
 2. Ekstrak (unzip) `SATRIA.zip` ke direktori `X-Plane/Aircraft/Extra Aircraft/`
    - Pastikan hasil ekstrak membentuk folder `SATRIA/` berisi file `.acf`, `.param`, dan tekstur
-3. Buka X-Plane → pilih aircraft SATRIA Phantom dari menu Aircraft
+3. Buka X-Plane → pilih aircraft SATRIA dari menu Aircraft
 3. Verifikasi model aerodinamika: karakteristik fixed-wing delta wing tampil sesuai
 4. Uji kontrol dasar (aileron, elevator, throttle) dalam mode manual di X-Plane
 
-**Spesifikasi SATRIA Phantom:**
+**Spesifikasi SATRIA:**
 - Bentang sayap: ±1.5 m (delta flying wing)
 - Kecepatan cruise: ±65–80 km/h
-- Payload: mendukung kamera/seeker mount
+- Payload: mendukung kamera + seeker mount
 
-**Hasil:** SATRIA Phantom berhasil dimuat di X-Plane, model fisika dan kontrol permukaan berfungsi normal.
+**Hasil:** SATRIA berhasil dimuat di X-Plane, model fisika dan kontrol permukaan berfungsi normal.
+
+![SATRIA di Plane Maker — tampilan awal](X_PlaneMaker.png)
 
 ---
 
 ## 4. Modifikasi SATRIA — Penambahan JATO (Jet Assisted Take Off)
 
 **Kegiatan:**
-Modifikasi model SATRIA Phantom di X-Plane untuk menambahkan sistem JATO guna mendukung takeoff tanpa runway panjang.
+Modifikasi model SATRIA di X-Plane untuk menambahkan sistem JATO guna mendukung takeoff tanpa runway panjang.
 
 **Metode modifikasi (Plane Maker):**
 1. Buka file `.acf` SATRIA di **Plane Maker** (tools bawaan X-Plane)
@@ -183,26 +185,24 @@ Modifikasi model SATRIA Phantom di X-Plane untuk menambahkan sistem JATO guna me
 
 **Hasil:** JATO berhasil ditambahkan. SATRIA mampu melakukan accelerated takeoff dalam jarak < 30 m di X-Plane menggunakan dorongan JATO.
 
-![Plane Maker — JATO & Special Contents SATRIA Phantom](jato_planmaker.png)
+![Plane Maker — JATO & Special Contents SATRIA](jato_planemaker.png)
+
+![Plane Maker — Konfigurasi JATO SATRIA](jato_planemaker.png)
 
 ---
 
 ## 4b. Konfigurasi Wing SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan modifikasi parameter sayap (Wing 1 & Wing 2) SATRIA Phantom di Plane Maker.
+Verifikasi dan modifikasi parameter sayap (Wing 1 & Wing 2) SATRIA di Plane Maker.
 
 ### Tampilan 3D SATRIA di Plane Maker
 
-Visualisasi 3D model SATRIA Phantom di Plane Maker (menu Standard → Wings). File aircraft: `Aircraft/Extra Aircraft/SATRIA/SATRIA.acf`.
+Visualisasi 3D model SATRIA di Plane Maker (menu Standard → Wings). File aircraft: `Aircraft/Extra Aircraft/SATRIA/SATRIA.acf`.
 
-![Plane Maker — 3D View SATRIA Phantom](X_PlaneMaker.png)
+![Plane Maker — 3D View SATRIA](X_PlaneMaker.png)
 
-### Wing 1 — Kondisi Original (Sebelum Modifikasi)
-
-![Plane Maker — Wing 1 Original](Original_wing_planemaker.png)
-
-### Wing 1 — Foil Specs (Setelah Modifikasi)
+### Wing 1 — Foil Specs
 
 | Parameter | Nilai | Satuan | Keterangan |
 |---|---|---|---|
@@ -218,7 +218,7 @@ Visualisasi 3D model SATRIA Phantom di Plane Maker (menu Standard → Wings). Fi
 ### Wing 1 — Element Specs
 
 - Jumlah elemen: **6** (root di kiri, tip di kanan)
-- Incidence seluruh elemen: **3.0°**
+- Incidence seluruh elemen: **1.0°**
 
 | Kontrol | Elemen Aktif | Keterangan |
 |---|---|---|
@@ -228,7 +228,7 @@ Visualisasi 3D model SATRIA Phantom di Plane Maker (menu Standard → Wings). Fi
 
 > **Catatan:** SATRIA adalah flying wing — aileron dan elevator digabung sebagai **elevon**. Tidak ada rudder, flap, atau slat yang aktif.
 
-![Plane Maker — Wing 1 SATRIA Phantom](Wing1_Planemaker.png)
+![Plane Maker — Wing 1 SATRIA](Wing1_Planemaker.png)
 
 ### Wing 2 — Foil Specs
 
@@ -255,22 +255,22 @@ Visualisasi 3D model SATRIA Phantom di Plane Maker (menu Standard → Wings). Fi
 
 > **Catatan:** Wing 2 berfungsi sebagai permukaan sekunder / strake. Tidak ada kontrol aktif.
 
-![Plane Maker — Wing 2 SATRIA Phantom](Wing2_Planemaker.png)
+![Plane Maker — Wing 2 SATRIA](Wing2_Planemaker.png)
 
 ---
 
 ## 4c. Konfigurasi Landing Gear SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan pencatatan parameter landing gear SATRIA Phantom di Plane Maker (tab Gear Loc).
+Verifikasi dan pencatatan parameter landing gear SATRIA di Plane Maker (tab Gear Loc).
 
 ### Tipe Gear
 
 | Gear | Tipe |
 |---|---|
-| Gear 1 (Nose) | Single |
-| Gear 2 (Main Kiri) | Single |
-| Gear 3 (Main Kanan) | Single |
+| Gear 1 (Nose) | simple |
+| Gear 2 (Main Kiri) | simple |
+| Gear 3 (Main Kanan) | simple |
 | Gear 4–10 | None |
 
 ### Posisi & Geometri (Gear Loc)
@@ -303,22 +303,22 @@ Verifikasi dan pencatatan parameter landing gear SATRIA Phantom di Plane Maker (
 
 > **Catatan:** Ketiga gear bersifat retractable. Tidak ada gear yang menggunakan castor.
 
-![Plane Maker — Landing Gear SATRIA Phantom](LandingGear_Planemaker.png)
+![Plane Maker — Landing Gear SATRIA](LandingGear_Planemaker.png)
 
 ---
 
 ## 4d. Konfigurasi Control Geometry SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) SATRIA Phantom di Plane Maker (tab Controls → Control Sizes).
+Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) SATRIA di Plane Maker (tab Controls → Control Sizes).
 
 ### Control Sizes — Ukuran Permukaan Kontrol
 
 | Kontrol | Chord Ratio Root | Chord Ratio Tip | Tipe Permukaan | Keterangan |
 |---|---|---|---|---|
-| Aileron 1 | 0.20 | 0.20 | smooth with no gaps | Aktif (elevon roll) |
+| Aileron 1 | 0.25 | 0.25 | smooth with no gaps | Aktif (elevon roll) |
 | Aileron 2 | 0.00 | 0.00 | — | Tidak aktif |
-| Elevator 1 | 0.20 | 0.20 | smooth with no gaps | Aktif (elevon pitch) |
+| Elevator 1 | 0.25 | 0.25 | smooth with no gaps | Aktif (elevon pitch) |
 | Elevator 2 | 0.00 | 0.00 | — | Tidak aktif |
 | Rudder 1 | 0.00 | 0.00 | — | Tidak aktif |
 | Rudder 2 | 0.00 | 0.00 | — | Tidak aktif |
@@ -347,20 +347,22 @@ Verifikasi dan pencatatan parameter geometri kontrol permukaan (elevon) SATRIA P
 | Flap speed ratio at deploy-start | 1.0 | — |
 | Flap detents | 0.1 | — |
 
-![Plane Maker — Control Geometry SATRIA Phantom](control_geometry_planmaker.png)
+![Plane Maker — Control Geometry SATRIA](control_geometry_planmaker.png)
+
+![Plane Maker — Control Geometry SATRIA (detail)](ControlGeometri_Planemaker.png)
 
 ### Trim & Speed Settings
 
 Pengaturan trim dan kecepatan kontrol permukaan SATRIA di Plane Maker (sub-tab Trim & Speed pada Control Geometry).
 
-![Plane Maker — Control Geometry Trim & Speed SATRIA Phantom](Trim_Planemaker.png)
+![Plane Maker — Control Geometry Trim & Speed SATRIA](Trim_Planemaker.png)
 
 ---
 
 ## 4e. Konfigurasi Stabilizer SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi parameter vertical stabilizer (winglet kiri & kanan) SATRIA Phantom di Plane Maker.
+Verifikasi parameter vertical stabilizer (winglet kiri & kanan) SATRIA di Plane Maker.
 
 SATRIA adalah flying wing — tidak memiliki fin vertikal konvensional. Vert Stab 1 dan Vert Stab 2 memodelkan **dua winglet** di ujung sayap kiri dan kanan sebagai permukaan stabilisasi yaw pasif.
 
@@ -388,7 +390,7 @@ Konfigurasi: **RIGHT wing** aktif (winglet kanan).
 
 > **Catatan:** Vert Stab 1 adalah permukaan **pasif** — berfungsi sebagai winglet kanan murni tanpa defleksi aktif. Yaw control pada SATRIA dilakukan melalui diferensial throttle atau differential elevon, bukan rudder.
 
-![Plane Maker — Vert Stab 1 SATRIA Phantom](Stab1_Planemaker.png)
+![Plane Maker — Vert Stab 1 SATRIA](Stab1_Planemaker.png)
 
 ### Vert Stab 2 — Foil Specs
 
@@ -414,27 +416,27 @@ Konfigurasi: **BOTH wings** aktif (kedua sisi — radio button RIGHT wing dan LE
 
 > **Catatan:** Vert Stab 2 dikonfigurasi dengan **BOTH wings** (kedua sisi), sehingga Plane Maker menampilkan model winglet simetris di kiri dan kanan. Semua kontrol permukaan tetap tidak aktif (pasif).
 
-![Plane Maker — Vert Stab 2 SATRIA Phantom](Stab2_planemaker.png)
+![Plane Maker — Vert Stab 2 SATRIA](Stab2_planemaker.png)
 
 ---
 
 ## 4f. Weight & Balance SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi konfigurasi weight & balance SATRIA Phantom di Plane Maker.
+Verifikasi konfigurasi weight & balance SATRIA di Plane Maker.
 
 ### Center of Gravity
 
 | Parameter | Nilai | Satuan | Keterangan |
 |---|---|---|---|
-| Long CG | 0.77 | ft | Posisi CG longitudinal (forward limit) |
+| Long CG | 0.74 | ft | Posisi CG longitudinal (forward limit) |
 | Vert CG | 0.0 | ft | Posisi CG vertikal |
 
 ### Weights
 
 | Parameter | Nilai | Satuan | Keterangan |
 |---|---|---|---|
-| Empty weight | 5.0 | lbs | Berat kosong pesawat |
+| Empty weight | 3.2 | lbs | Berat kosong pesawat |
 | Fuel load | 0.0 | lbs | Berat bahan bakar |
 | JATO weight | 0.0 | lbs | Dari Special Cannon screen |
 | Jettisionable load | 0.0 | lbs | Beban yang dapat dilepas |
@@ -442,7 +444,7 @@ Verifikasi konfigurasi weight & balance SATRIA Phantom di Plane Maker.
 | Weight shift weight | 0.0 | lbs | Beban penggeser CG |
 | Displaced weight | 0.0 | lbs | Untuk dirigibles/blimps |
 
-![Plane Maker — Weight & Balance SATRIA Phantom](WeightandBalance_Planemaker.png)
+![Plane Maker — Weight & Balance SATRIA](WeightandBalance_Planemaker.png)
 
 ---
 
@@ -466,7 +468,7 @@ Menambahkan custom airport Bandara Husein Sastranegara (ICAO: WICC) ke dalam lin
 ## 6. Uji Coba Terbang SATRIA di Lokasi WICC — X-Plane
 
 **Kegiatan:**
-Uji coba penerbangan perdana SATRIA Phantom di lingkungan simulasi Bandara Husein Sastranegara (WICC).
+Uji coba penerbangan perdana SATRIA di lingkungan simulasi Bandara Husein Sastranegara (WICC).
 
 **Skenario pengujian:**
 1. Spawn SATRIA di threshold runway 11 WICC
@@ -502,7 +504,7 @@ Uji coba penerbangan perdana SATRIA Phantom di lingkungan simulasi Bandara Husei
 |---|---|---|
 | 1 | Instalasi X-Plane, VS Code, QGroundControl, Git, toolchain ArduPilot | ✅ Selesai |
 | 2 | Verifikasi koneksi X-Plane via LAN (2 laptop) | ✅ Selesai |
-| 3 | Tambah custom aircraft SATRIA Phantom | ✅ Selesai |
+| 3 | Tambah custom aircraft SATRIA | ✅ Selesai |
 | 4 | Modifikasi SATRIA + JATO & Equipment Options (Special Contents) | ✅ Selesai |
 | 4b | Konfigurasi Wing 1 & Wing 2 SATRIA — Plane Maker (Foil & Element Specs) | ✅ Selesai |
 | 4c | Konfigurasi Landing Gear SATRIA — Plane Maker (Gear Loc) | ✅ Selesai |
