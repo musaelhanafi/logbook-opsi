@@ -38,7 +38,7 @@ Instalasi seluruh software dan toolchain yang diperlukan untuk pengembangan sist
   3. Setelah install, buka VS Code → install extension **Python** (Microsoft) dari marketplace
 
 ### C. QGroundControl
-- **Download:** [https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html](https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html)
+- **Download:** [https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html)
 - **Langkah instalasi (Windows):**
   1. Unduh `QGroundControl-installer.exe`
   2. Jalankan installer → ikuti wizard

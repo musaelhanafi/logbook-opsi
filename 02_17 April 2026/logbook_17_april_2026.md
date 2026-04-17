@@ -205,10 +205,10 @@ Verifikasi bahwa Pixhawk berhasil boot dengan firmware ArduPlane yang baru diupl
 
 ---
 
-### 8. Implementasi Board Config HITL: fmuv3-hil, fmuv3-hil-plane, x86-hil
+### 8. Implementasi Board Config HITL: fmuv3-hil, fmuv3-hil-plane
 
 **Kegiatan:**
-Membuat tiga konfigurasi board baru di firmware satria-firmaware untuk mendukung mode HITL dengan X-Plane sebagai physics engine.
+Membuat dua konfigurasi board baru di firmware satria-firmaware untuk mendukung mode HITL dengan X-Plane sebagai physics engine pada Pixhawk 2.4.8.
 
 #### A. fmuv3-hil (Pixhawk — Flying Wing Elevon)
 
@@ -242,13 +242,7 @@ Sama dengan fmuv3-hil tetapi menggunakan `xplane_plane.json` (aileron/elevator/t
 | `SERVO3_FUNCTION` | 70 | Throttle |
 | `SERVO4_FUNCTION` | 21 | Rudder |
 
-#### C. x86-hil (SITL Binary — Laptop/x86)
-
-**File:** `libraries/AP_HAL_SITL/hwdef/x86-hil/hwdef.dat` dan `defaults.parm`
-
-Konfigurasi untuk menjalankan ArduPlane sebagai SITL binary di laptop yang sama dengan X-Plane. Tidak memerlukan PPP — koneksi UDP langsung.
-
-**Hasil:** Tiga konfigurasi board HITL berhasil dibuat dan dapat dikompilasi.
+**Hasil:** Dua konfigurasi board HITL berhasil dibuat dan dapat dikompilasi.
 
 ---
 
@@ -395,6 +389,10 @@ TKOFF_ROTATE_SPD 12
 
 **Kegiatan:**
 Prosedur lengkap menjalankan sesi HITL ArduPlane fmuv3-hil + X-Plane 11/12.
+
+![Kegiatan Set Up HITL](Kegiatan%20Set%20Up%20HITL.jpeg)
+
+![Set Up HITL](Set%20Up%20HITL.jpeg)
 
 #### Langkah 1 — Konfigurasi Jaringan X-Plane
 
@@ -773,6 +771,102 @@ Menguji kemampuan SATRIA untuk melakukan takeoff otomatis dan mengikuti flight p
 
 ---
 
+### 19. Forward Telemetri MAVLink via USB Modem ke GCS Jaringan Lokal
+
+**Kegiatan:**
+Meneruskan (forward) stream MAVLink dari USB modem ke Ground Control Station (GCS) di jaringan lokal menggunakan `mavproxy.py`, sehingga QGroundControl atau aplikasi GCS lain di IP `192.168.1.7` dapat menerima telemetri tanpa koneksi USB langsung ke Pixhawk.
+
+**Kegunaan:**
+Berguna ketika Pixhawk terhubung ke satu laptop melalui USB modem (radio telemetri 3DR/SiK/LoRa), dan laptop kedua atau tablet di jaringan lokal (Wi-Fi/LAN) perlu memonitor atau mengontrol drone secara bersamaan.
+
+#### Instalasi MAVProxy
+
+```bash
+pip install mavproxy
+```
+
+Verifikasi instalasi:
+
+```bash
+mavproxy.py --version
+```
+
+#### Identifikasi Port USB Modem
+
+| OS | Perintah | Contoh Output |
+|---|---|---|
+| Linux | `ls /dev/ttyUSB*` | `/dev/ttyUSB0` |
+| macOS | `ls /dev/tty.usb*` | `/dev/tty.usbserial-0001` |
+| Windows | Device Manager → Ports (COM & LPT) | `COM5` |
+
+#### Perintah MAVProxy
+
+**Linux/macOS:**
+
+```bash
+mavproxy.py \
+  --master=/dev/ttyUSB0 \
+  --baudrate=57600 \
+  --out=udp:192.168.1.7:14550
+```
+
+**Windows:**
+
+```bash
+mavproxy.py --master=COM5 --baudrate=57600 --out=udp:192.168.1.7:14550
+```
+
+**Dengan output ganda (lokal + remote):**
+
+```bash
+mavproxy.py \
+  --master=/dev/ttyUSB0 \
+  --baudrate=57600 \
+  --out=udp:127.0.0.1:14550 \
+  --out=udp:192.168.1.7:14550
+```
+
+#### Penjelasan Parameter
+
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `--master` | `/dev/ttyUSB0` | Port serial USB modem (input MAVLink dari Pixhawk) |
+| `--baudrate` | `57600` | Baud rate modem — sesuaikan dengan konfigurasi radio (default SiK: 57600) |
+| `--out` | `udp:192.168.1.7:14550` | Tujuan forward — IP GCS di jaringan lokal, port UDP 14550 |
+
+> **Baud rate umum radio telemetri:**
+> - SiK/3DR Radio: `57600`
+> - RFD900: `57600` atau `115200`
+> - LoRa (RFDesign): `57600`
+> Sesuaikan dengan nilai `SERIAL1_BAUD` (atau port telemetri yang digunakan) di parameter Pixhawk.
+
+#### Konfigurasi QGroundControl di 192.168.1.7
+
+1. Buka QGroundControl di komputer/tablet `192.168.1.7`
+2. **Application Settings → Comm Links → Add**:
+
+| Field | Nilai |
+|---|---|
+| Type | UDP |
+| Listening Port | `14550` |
+| Auto Connect | Centang |
+
+3. Klik **OK** → **Connect** → vehicle akan muncul di QGC
+
+#### Troubleshooting
+
+| Gejala | Kemungkinan Penyebab | Solusi |
+|---|---|---|
+| `No heartbeat` di QGC | Baud rate salah | Cek `SERIAL1_BAUD` di parameter Pixhawk, sesuaikan `--baudrate` |
+| Permission denied `/dev/ttyUSB0` | User tidak di grup `dialout` | `sudo usermod -aG dialout $USER` → logout/login ulang |
+| MAVProxy gagal buka port | Port sedang dipakai proses lain | `sudo fuser -k /dev/ttyUSB0` |
+| Packet loss tinggi | Jarak radio terlalu jauh | Periksa RSSI di output MAVProxy, dekatkan antenna |
+| QGC tidak terima heartbeat | Firewall blokir UDP 14550 | Tambahkan exception firewall untuk UDP port 14550 |
+
+**Hasil:** MAVLink dari USB modem berhasil diteruskan ke `192.168.1.7:14550`. QGroundControl di komputer tujuan dapat terhubung dan menampilkan telemetri Pixhawk secara real-time.
+
+---
+
 ## Ringkasan Kegiatan
 
 | No | Kegiatan | Status |
@@ -784,7 +878,7 @@ Menguji kemampuan SATRIA untuk melakukan takeoff otomatis dan mengikuti flight p
 | 5 | Konfigurasi environment build & kompilasi firmware fmuv3-hil | ✅ Selesai |
 | 6 | Upload firmware ke Pixhawk 2.4.8 | ✅ Selesai |
 | 7 | Verifikasi boot via QGroundControl | ✅ Selesai |
-| 8 | Implementasi board config HITL: fmuv3-hil, fmuv3-hil-plane, x86-hil | ✅ Selesai |
+| 8 | Implementasi board config HITL: fmuv3-hil, fmuv3-hil-plane | ✅ Selesai |
 | 9 | Implementasi xplane_elevon.json (demix elevon) | ✅ Selesai |
 | 10 | Fix AHRS_EKF_TYPE & konfigurasi compass SITL | ✅ Selesai |
 | 11 | Dokumentasi & verifikasi seluruh parameter SITL X-Plane | ✅ Selesai |
@@ -795,6 +889,7 @@ Menguji kemampuan SATRIA untuk melakukan takeoff otomatis dan mengikuti flight p
 | 16 | Manual fix parameter — minimasi pitch jitter SATRIA | ✅ Selesai |
 | 17 | Autotune SATRIA — identifikasi gain PID roll & pitch optimal | ✅ Selesai |
 | 18 | Auto takeoff dan navigasi waypoint (mode AUTO) | ✅ Selesai |
+| 19 | Forward telemetri MAVLink via USB modem ke GCS jaringan lokal | ✅ Selesai |
 
 ---
 
