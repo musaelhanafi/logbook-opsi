@@ -395,9 +395,6 @@ cv2.destroyAllWindows()
 - **Dilate** setelahnya: mengembalikan ukuran objek yang terkikis oleh erode
 - Urutan ini disebut **morphological opening** — efektif untuk menghilangkan noise halus tanpa menghilangkan objek utama
 
-**State machine deteksi objek:**
-
-![State Machine Deteksi](chart_02_detection_state.png)
 
 **Hasil:** Pipeline deteksi warna berjalan real-time. Centroid target berhasil dihitung dan error posisi (dx, dy) dari pusat frame berhasil diukur.
 
