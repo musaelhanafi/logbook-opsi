@@ -369,7 +369,7 @@ python3 terminal_analyse.py tracking.csv
 
 Seeker pertama kali mengunci target saat drone berada di ketinggian **59.8 m** di atas target dengan jarak horizontal **724.9 m** dan kecepatan **111.0 km/h**. Begitu lock diperoleh, mode TRACKING aktif dan sistem PID mulai mengarahkan drone menukik ke arah target. Drone menjalani descent rata-rata **3.10 m/s** dengan puncak descent mencapai **38.60 m/s** saat fase terminal — menunjukkan manuver menukik tajam mendekati target. 
 
-Dari pertama mendeteksi hingga titik terdekat (hit), waktu yang dibutuhkan adalah **18.5 detik** (t+0.1 s → t+18.6 s). Saat menabrak target drone memiliki kecepatan **111.4 km/h**. Rata-rata pitch pesawat selama tracking adalah **-5.2°** (pitch down).
+Dari pertama mendeteksi hingga titik terdekat (hit), waktu yang dibutuhkan adalah **18.5 detik** (t+0.1 s → t+18.6 s). Saat menabrak target drone memiliki kecepatan **122 km/h**. Rata-rata pitch pesawat selama tracking adalah **-5.2°** (pitch down).
 
 Seeker mempertahankan lock dengan akurasi **95.6%** da(**414 dari 433 frame**) dengan throughput rata-rata **±22.9 FPS**.
 
