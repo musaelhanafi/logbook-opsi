@@ -48,7 +48,6 @@ Seluruh kode seeker dikembangkan secara terbuka di repositori GitHub `musaelhana
 | `seeker.py` | 1026 | Deteksi warna HSV, CamShift/MeanShift tracker, Kalman filter, HUD overlay |
 | `seekerctrl.py` | 832 | MAVLink conn, mode management, TRACKING_MESSAGE, CSV logger, FFmpeg recorder |
 | `main.py` | 226 | Entry point CLI, argument parsing |
-| `calibrate_color.py` | — | Tool kalibrasi threshold warna HSV interaktif |
 | `hud_display.py` | — | Overlay HUD pitch/yaw pada frame video |
 | `joystick_handler.py` | — | Joystick input → RC override MAVLink |
 
@@ -164,7 +163,7 @@ Frame BGR
 Gaussian blur + HSV convert
     │
     ▼
-Masker HSV adaptif (inRange)         ← threshold otomatis dari histogram kalibrasi
+Masker HSV adaptif (inRange)
     │
     ▼
 Nearest blob detection (rectangular)
