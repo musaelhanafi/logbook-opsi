@@ -36,7 +36,7 @@ Kamera / Video Feed
   Contour Detection → Centroid Kalkulasi
        │
        ▼
-  Error Kalkulasi (dx, dy dari pusat frame)
+  Error Kalkulasi (ex, ey dari pusat frame)
        │
        ▼
   MAVLink Command (velocity setpoint / attitude)
