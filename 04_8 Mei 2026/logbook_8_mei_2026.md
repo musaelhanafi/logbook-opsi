@@ -351,6 +351,13 @@ python3 terminal_analyse.py tracking.csv
 
 [![Hasil Video Tracking — HITL 8 Mei 2026](video_tracking_hitl.png)](https://www.youtube.com/watch?v=py4JlvPBbeo)
 
+**Video analisis terminal (`terminal_analyse.py`):**
+
+<a href="https://www.youtube.com/watch?v=Bv60UfUvKkA" target="_blank">
+  <img src="https://img.youtube.com/vi/Bv60UfUvKkA/maxresdefault.jpg"
+       alt="▶ Video Analisis Terminal — HITL 8 Mei 2026" width="640"/>
+</a>
+
 **Grafik analisis fase terminal:**
 
 ![Terminal Analysis Plot](terminal_analysis_plot.png)

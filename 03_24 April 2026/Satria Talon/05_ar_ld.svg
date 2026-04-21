@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 260">
+<rect width="600" height="260" fill="#ffffff" rx="10" stroke="#d4d2c8" stroke-width="0.8"/>
+<text x="300" y="26" text-anchor="middle" font-size="13" font-weight="bold" fill="#444441" font-family="sans-serif">Aspect Ratio & L/D max vs Wingspan</text>
+<text x="300" y="40" text-anchor="middle" font-size="10" fill="#888780" font-family="sans-serif">NACA 2412 · MTOW 5.25 lb · semi 2.13 ft</text>
+  <line x1="44" y1="44" x2="584" y2="44" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="48" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">15</text>
+  <line x1="44" y1="86" x2="584" y2="86" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="90" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">12</text>
+  <line x1="44" y1="129" x2="584" y2="129" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="133" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">9</text>
+  <line x1="44" y1="171" x2="584" y2="171" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="175" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">7</text>
+  <line x1="44" y1="214" x2="584" y2="214" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="218" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">4</text>
+  <text x="44" y="227" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">90</text>
+  <text x="121" y="227" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">100</text>
+  <text x="198" y="227" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">110</text>
+  <text x="275" y="227" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">120</text>
+  <text x="352" y="227" text-anchor="middle" font-size="9" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">130</text>
+  <text x="429" y="227" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">140</text>
+  <text x="506" y="227" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">150</text>
+  <text x="584" y="227" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">160</text>
+  <rect x="350" y="44" width="4" height="170" fill="#0e6b3d" opacity="0.15"/>
+  <polyline points="44,207 121,199 198,193 275,186 352,178 429,171 506,165 584,157" fill="none" stroke="#0e6b3d" stroke-width="2.2" stroke-linejoin="round" />
+  <circle cx="44" cy="207" r="3" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="121" cy="199" r="3" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="198" cy="193" r="3" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="275" cy="186" r="3" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="352" cy="178" r="5" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="429" cy="171" r="3" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="506" cy="165" r="3" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="584" cy="157" r="3" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <polyline points="44,116 121,107 198,100 275,92 352,85 429,79 506,71 584,65" fill="none" stroke="#BA7517" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="5,3"/>
+  <circle cx="44" cy="116" r="3" fill="#BA7517" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="121" cy="107" r="3" fill="#BA7517" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="198" cy="100" r="3" fill="#BA7517" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="275" cy="92" r="3" fill="#BA7517" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="352" cy="85" r="5" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="429" cy="79" r="3" fill="#BA7517" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="506" cy="71" r="3" fill="#BA7517" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="584" cy="65" r="3" fill="#BA7517" stroke="#ffffff" stroke-width="1"/>
+  <line x1="352" y1="44" x2="352" y2="214" stroke="#0e6b3d" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
+  <text x="352" y="240" text-anchor="middle" font-size="8" fill="#0e6b3d" font-family="sans-serif">130 cm saat ini</text>
+  <text x="44" y="254" font-size="9" fill="#0e6b3d" font-family="sans-serif">—— Aspect Ratio</text>
+  <text x="156.0" y="254" font-size="9" fill="#BA7517" font-family="sans-serif">- -  L/D max</text>
+</svg>
