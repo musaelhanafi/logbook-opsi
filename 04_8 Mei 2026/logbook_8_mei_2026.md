@@ -175,7 +175,7 @@ CamShift tracker                     ← update ROI per frame
 Kalman filter prediksi posisi        ← kompensasi oklusi sementara
     │
     ▼
-(cx, cy) → errorx, errory            ← dinormalisasi ke [-1, 1]
+(cx, cy) → ex, ey            ← dinormalisasi ke [-1, 1]
     │
     ▼
 Latency + PN lead prediction         ← LATENCY_S=0.08s, PN_LEAD_S=0.30s
@@ -190,9 +190,9 @@ TRACKING_MESSAGE → Pixhawk
 **Parameter error:**
 
 ```
-errorx  =  (cx - w/2) / (w/2)         # positif = target di kanan
-errory  = -(cy - h/2) / (h/2)         # positif = target di atas
-errory_adj = errory - TRK_PITCH_OFFSET / TRK_MAX_DEG   # kompensasi bias pitch
+ex  =  (cx - w/2) / (w/2)         # positif = target di kanan
+ey  = -(cy - h/2) / (h/2)         # positif = target di atas
+ey_adj = errory - TRK_PITCH_OFFSET / TRK_MAX_DEG   # kompensasi bias pitch karena arah mounting kamera
 ```
 
 ![Detection Algorithm](chart_01_detection.png)
