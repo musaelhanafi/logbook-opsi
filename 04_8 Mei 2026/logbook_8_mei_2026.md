@@ -406,4 +406,32 @@ Seeker mempertahankan lock dengan akurasi **95.6%** da(**414 dari 433 frame**) d
 
 ---
 
+## Ringkasan Kegiatan
+
+| No | Kegiatan | Hasil |
+|---|---|---|
+| 1 | Setup repositori `drone-seeker` dan review struktur modul | ✅ Selesai |
+| 2 | Konfigurasi PPP tunnel Pixhawk–laptop via TELEM2 USB-UART | ✅ Selesai |
+| 3 | Setup MAVProxy — forward MAVLink ke QGC dan drone-seeker (UDP 14560) | ✅ Selesai |
+| 4 | Konfigurasi webcam sebagai input seeker mengarah ke layar X-Plane | ✅ Selesai |
+| 5 | Verifikasi pipeline deteksi dan tracking objek pink — CamShift + Kalman | ✅ Selesai |
+| 6 | Pengujian manajemen mode otomatis: AUTO → TRACKING (mode 27) | ✅ Selesai |
+| 7 | Verifikasi pengiriman `TRACKING_MESSAGE` (ID 11045) ke firmware ArduPlane | ✅ Selesai |
+| 8 | Logging CSV telemetri 13 kolom selama fase TRACKING aktif | ✅ Selesai |
+| 9 | Analisis fase terminal dengan `terminal_analyse.py` | ✅ Selesai |
+| 10 | Simulasi HITL end-to-end: takeoff → cruise → terminal — drone menabrak target | ✅ **Berhasil** |
+
+**Capaian utama sesi ini:**
+
+| Metrik | Nilai |
+|---|---|
+| Durasi fase terminal | 18.9 detik |
+| Akurasi lock kamera | **95.6%** (414/433 frame) |
+| Throughput tracker | ~22.9 FPS |
+| Kecepatan saat hit | **122.4 km/h** |
+| Peak descent | **38.60 m/s** |
+| Altitude saat hit | 2.1 m AGL |
+
+---
+
 *Logbook ditulis oleh: Muhammad Ihsan Fahriansyah & Musa El Hanafi*
