@@ -8,6 +8,7 @@ Alur:
 """
 
 import markdown, base64, os, re, subprocess, tempfile
+from subprocess import TimeoutExpired
 
 CHROME   = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 BASE     = os.path.dirname(os.path.abspath(__file__))
@@ -34,7 +35,6 @@ md = md.replace(
 # ─────────────────────────────────────────────────────────────────────────────
 def render_svg_to_png(svg: str, out_png: str):
     """Render SVG ke file PNG via Chrome headless screenshot."""
-    # Ukuran dari viewBox
     vb = re.search(r'viewBox=["\']([^"\']+)["\']', svg)
     vw, vh = 860, 400
     if vb:
@@ -43,47 +43,54 @@ def render_svg_to_png(svg: str, out_png: str):
             vw = float(parts[2])
             vh = float(parts[3])
 
-    # Viewport = viewBox size × SCALE
-    px_w = int(vw * SCALE)
-    px_h = int(vh * SCALE)
-
-    html = f"""<!DOCTYPE html>
+    def _run(scale):
+        px_w = int(vw * scale)
+        px_h = int(vh * scale)
+        if px_w > 1400:
+            ratio = 1400 / px_w
+            px_w = 1400
+            px_h = int(px_h * ratio)
+        html = f"""<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><style>
   html, body {{ margin:0; padding:0; background:#ffffff; }}
   svg {{ width:{px_w}px; height:{px_h}px; display:block; }}
 </style></head>
 <body>{svg}</body></html>"""
+        with tempfile.NamedTemporaryFile(suffix=".html", delete=False,
+                                         mode="w", encoding="utf-8") as tf:
+            tf.write(html)
+            tmp = tf.name
+        try:
+            subprocess.run([
+                CHROME, "--headless=new", "--disable-gpu", "--no-sandbox",
+                "--hide-scrollbars", "--force-device-scale-factor=1",
+                f"--window-size={px_w},{px_h}",
+                f"--screenshot={out_png}", f"file://{tmp}",
+            ], capture_output=True, timeout=60)
+        finally:
+            os.remove(tmp)
 
-    with tempfile.NamedTemporaryFile(suffix=".html", delete=False,
-                                     mode="w", encoding="utf-8") as tf:
-        tf.write(html)
-        tmp = tf.name
-
-    subprocess.run([
-        CHROME,
-        "--headless=new",
-        "--disable-gpu",
-        "--no-sandbox",
-        "--hide-scrollbars",
-        f"--force-device-scale-factor=1",   # sudah di-scale manual di atas
-        f"--window-size={px_w},{px_h}",
-        f"--screenshot={out_png}",
-        f"file://{tmp}",
-    ], capture_output=True, timeout=30)
-    os.remove(tmp)
+    try:
+        _run(SCALE)
+    except TimeoutExpired:
+        print(f"    timeout @{SCALE}x, retry @1x...", flush=True)
+        _run(1)
 
 
 svg_pngs = []   # list path file PNG yang dihasilkan
 counter  = [0]
 
 def extract_svg(m):
-    idx  = counter[0]
-    png  = os.path.join(BASE, f"svg_{idx:02d}.png")
-    print(f"  [{idx:02d}] render SVG → {os.path.basename(png)}", flush=True)
-    render_svg_to_png(m.group(0), png)
+    idx = counter[0]
+    png = os.path.join(BASE, f"svg_{idx:02d}.png")
+    if os.path.exists(png):
+        print(f"  [{idx:02d}] cache → {os.path.basename(png)}", flush=True)
+    else:
+        print(f"  [{idx:02d}] render SVG → {os.path.basename(png)}", flush=True)
+        render_svg_to_png(m.group(0), png)
     svg_pngs.append(png)
     counter[0] += 1
-    return f"__SVG_{idx:02d}__"   # placeholder
+    return f"SVGBLOCK{idx:02d}HERE"
 
 print("Rendering SVGs ke PNG...")
 md_clean = re.sub(r"<svg\b.*?</svg>", extract_svg, md, flags=re.DOTALL)
@@ -102,8 +109,8 @@ for i, png_path in enumerate(svg_pngs):
     with open(png_path, "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
     img_tag = f'<div class="svg-box"><img src="data:image/png;base64,{b64}" /></div>'
-    body = body.replace(f"<p>__SVG_{i:02d}__</p>", img_tag)
-    body = body.replace(f"__SVG_{i:02d}__", img_tag)
+    body = body.replace(f"<p>SVGBLOCK{i:02d}HERE</p>", img_tag)
+    body = body.replace(f"SVGBLOCK{i:02d}HERE", img_tag)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 4. Bangun HTML lengkap
