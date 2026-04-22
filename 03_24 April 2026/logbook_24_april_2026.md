@@ -636,6 +636,87 @@ HSV_LOWER, HSV_UPPER = load_color_config("target")
 
 ---
 
+## Desain Model UAV di X-Plane Plane Maker
+
+Selain pengembangan modul drone-seeker, pada hari ini juga dilakukan pemodelan tiga varian UAV — **Satria Nano**, **Satria Talon**, dan **Satria Delta** — di **X-Plane Plane Maker** sebagai dasar simulasi HITL. Plane Maker digunakan untuk mendefinisikan geometri sayap, airfoil, titik CG, dan parameter propulsi secara iteratif sehingga menghasilkan model aerodinamis yang realistis sebelum diuji terbang.
+
+---
+
+### Satria Nano
+
+![Satria Nano](Satria%20Nano/Satria%20Nano.png)
+
+UAV fixed-wing mini dengan sayap tapered NACA 2412 dan ekor V-tail. Varian terkecil dalam keluarga Satria, dirancang untuk misi ringan dengan payload minimal dan kemudahan pengoperasian.
+
+| Parameter | Nilai |
+|---|---|
+| **Airfoil** | **NACA 2412** |
+| **Wingspan** | **92.66 cm** |
+| **Semi-length** | **1.52 ft (46.33 cm)** |
+| Wing area | 0.1843 m² |
+| Aspect ratio | 4.68 |
+| Konfigurasi ekor | V-tail twin fin (45°) |
+| **Empty weight** | **2.20 lb (0.998 kg)** |
+| **MTOW** | **3.50 lb (1.588 kg)** |
+| Payload | 590 g |
+| **CG nominal** | **0.63 ft = 5.87 cm dari LE MAC** |
+| Wing loading | 84.8 N/m² |
+| **Stall speed** | **9.61 m/s (34.6 km/h)** |
+| **Cruise speed** | **15.73 m/s (56.6 km/h)** |
+| **L/D max** | **10.76** |
+| Cruise power | 38 W |
+| **Endurance** | **~45 mnt** |
+| **Range one-way** | **~1 km** |
+| Motor | 2212, KV 979–1100 @ 3S |
+| Propeller | APC 9×4.5 |
+| ESC | 30 A BLHeli_32 |
+| Baterai | 4S 2200 mAh / 3S 3000 mAh |
+
+---
+
+### Satria Talon
+
+![Satria Talon](Satria%20Talon/Satria%20Talon.png)
+
+![X-Plane Plane Maker — Satria Talon](Satria%20Talon/X-Plane%20Maker.png)
+
+UAV fixed-wing konvensional berukuran medium dengan sayap tapered NACA 2412 dan ekor V-tail. Dirancang untuk misi endurance jarak jauh dengan payload kamera atau muatan misi.
+
+| Parameter | Nilai |
+|---|---|
+| **Airfoil** | **NACA 2412** |
+| **Wingspan** | **~129.8 cm** |
+| **Semi-length** | **2.13 ft (64.92 cm)** |
+| Wing area | 0.2731 m² |
+| Aspect ratio | 6.17 |
+| Konfigurasi ekor | V-tail twin fin (45°) |
+| **Empty weight** | **3.00 lb (1.361 kg)** |
+| **MTOW** | **5.25 lb (2.381 kg)** |
+| Payload (4S 8Ah) | 571 g |
+| **CG nominal** | **0.92 ft = 5.87 cm dari LE MAC** |
+| Wing loading | 85.5 N/m² |
+| **Stall speed** | **9.65 m/s (34.7 km/h)** |
+| **Cruise speed** | **14.74 m/s (53.1 km/h)** |
+| **L/D max** | **12.37** |
+| Cruise power | 46 W |
+| **Endurance** | **~131 mnt** |
+| **Range one-way** | **~116 km** |
+| **Radius RTH** | **~49–52 km** |
+| Motor | 2216, KV 555–600 @ 4S |
+| Propeller | APC 11×5.5E |
+| ESC | 40 A BLHeli_32 |
+| Baterai | 4S 8000 mAh |
+
+---
+
+### Satria Delta
+
+![Satria Delta](Satria%20Delta/Satria%20Delta.png)
+
+UAV konfigurasi delta wing — sayap menyatu tanpa ekor konvensional. Model ini ditambahkan di X-Plane Plane Maker sebagai varian eksperimental untuk misi kecepatan tinggi dan manuverabilitas. Spesifikasi detail masih dalam tahap finalisasi.
+
+---
+
 ## Ringkasan Kegiatan
 
 | No | Kegiatan | Status |
@@ -646,6 +727,9 @@ HSV_LOWER, HSV_UPPER = load_color_config("target")
 | 4 | Aplikasi Deteksi Objek — pipeline masking, contour, centroid | ✅ Selesai |
 | 5 | Penanganan warna merah (Hue melingkar) | ✅ Selesai |
 | 6 | Aplikasi Kalibrasi Warna — trackbar interaktif + simpan JSON | ✅ Selesai |
+| 7 | Pemodelan Satria Nano di X-Plane Plane Maker | ✅ Selesai |
+| 8 | Pemodelan Satria Talon di X-Plane Plane Maker | ✅ Selesai |
+| 9 | Pemodelan Satria Delta di X-Plane Plane Maker | ✅ Selesai |
 
 ---
 

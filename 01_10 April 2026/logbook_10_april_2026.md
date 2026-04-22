@@ -126,7 +126,7 @@ Menghubungkan dua laptop dalam satu sesi X-Plane — satu sebagai player (pengen
 Menambahkan model pesawat custom SATRIA ke dalam library X-Plane sebagai wahana utama pengujian HITL.
 
 **Sumber model:**
-Model SATRIA terinspirasi dari model FX-61 dari forum X-Plane.org: [https://forums.x-plane.org/files/file/33623-fx-61-uav/](https://forums.x-plane.org/files/file/33623-fx-61-uav/). Beberapa tambahan pada settingan sayap, wingtip, landing gear, JATO dan texture.
+Model SATRIA terinspirasi dari model FX-61 dari forum X-Plane.org: [https://forums.x-plane.org/files/file/33623-fx-61-uav/](https://forums.x-plane.org/files/file/33623-fx-61-uav/). Beberapa tambahan pada settingan sayap, wingtip, landing gear dan texture.
 
 **Langkah:**
 1. Unduh file `SATRIA.zip` dari repositori [https://github.com/musaelhanafi/logbook-opsi/blob/main/01_10%20April%202026/SATRIA.zip](Log book tanggal 10 April 2026)
@@ -145,46 +145,10 @@ Model SATRIA terinspirasi dari model FX-61 dari forum X-Plane.org: [https://foru
 
 ---
 
-## 4. Modifikasi SATRIA — Penambahan JATO (Jet Assisted Take Off)
+## 4. Modifikasi SATRIA — Penambahan Landing Gear
 
 **Kegiatan:**
-Modifikasi model SATRIA di X-Plane untuk menambahkan sistem JATO guna mendukung takeoff tanpa runway panjang.
-
-**Metode modifikasi (Plane Maker):**
-1. Buka file `.acf` SATRIA di **Plane Maker** (tools bawaan X-Plane)
-2. Buka tab `Standard → Special` → bagian **Jet Assisted Take-Off**
-3. Set parameter JATO (dari screenshot Special Contents):
-
-### Parameter JATO (Special Contents — Plane Maker)
-
-| Parameter | Keterangan |
-|---|---|
-| JATO long arm | Posisi longitudinal JATO dari referensi pesawat (ft) |
-| JATO lat arm | Posisi lateral (ft), 0 = centre |
-| JATO vert arm | Posisi vertikal (ft), arah up/down |
-| JATO weight | Berat JATO (lbs) — ditentukan dari Special Contents screen |
-| JATO thrust | Gaya dorong JATO (lbs) |
-| JATO duration | Durasi pembakaran JATO (sec) |
-| JATO specific impulse | Impuls spesifik (sec) |
-
-### Equipment Options (dari screenshot)
-
-| Opsi | Status |
-|---|---|
-| auto fly gear on landing/retract | ✅ aktif |
-| TCAS warning system | ✅ aktif |
-| engine fire self-equipped | ✅ aktif |
-| auto speedbrake display | — tidak aktif |
-| auto flaps | — tidak aktif |
-| inverted fuel and oil systems | — tidak aktif |
-| transonic warning system | — tidak aktif |
-
-4. Simpan file `.acf` dan reload di X-Plane
-
-**Hasil:** JATO berhasil ditambahkan. SATRIA mampu melakukan accelerated takeoff dalam jarak < 30 m di X-Plane menggunakan dorongan JATO.
-
-![Plane Maker — JATO & Special Contents SATRIA](jato_planemaker.png)
-
+Menambahkan dan mengonfigurasi landing gear SATRIA di Plane Maker dengan penyesuaian tire radius dan width agar sesuai proporsi model.
 
 ---
 
@@ -259,7 +223,7 @@ Visualisasi 3D model SATRIA di Plane Maker (menu Standard → Wings). File aircr
 ## 4c. Konfigurasi Landing Gear SATRIA — Plane Maker
 
 **Kegiatan:**
-Verifikasi dan pencatatan parameter landing gear SATRIA di Plane Maker (tab Gear Loc).
+Penambahan dan konfigurasi landing gear SATRIA di Plane Maker (tab Gear Loc) dengan penyesuaian tire radius dan width.
 
 ### Tipe Gear
 
@@ -435,7 +399,6 @@ Verifikasi konfigurasi weight & balance SATRIA di Plane Maker.
 |---|---|---|---|
 | Empty weight | 3.2 | lbs | Berat kosong pesawat |
 | Fuel load | 0.0 | lbs | Berat bahan bakar |
-| JATO weight | 0.0 | lbs | Dari Special Cannon screen |
 | Jettisionable load | 0.0 | lbs | Beban yang dapat dilepas |
 | Maximum weight | 5.0 | lbs | Berat maksimum takeoff |
 | Weight shift weight | 0.0 | lbs | Beban penggeser CG |
@@ -469,7 +432,7 @@ Uji coba penerbangan perdana SATRIA di lingkungan simulasi Bandara Husein Sastra
 
 **Skenario pengujian:**
 1. Spawn SATRIA di threshold runway 11 WICC
-2. Takeoff menggunakan JATO → transisi ke glide normal
+2. Takeoff → transisi ke glide normal
 3. Terbang manual di sekitar area WICC
 4. Observasi respons aerodinamika: roll, pitch, yaw, kecepatan
 5. Landing kembali di runway 11
@@ -490,7 +453,6 @@ Uji coba penerbangan perdana SATRIA di lingkungan simulasi Bandara Husein Sastra
 
 **Kendala & Tindak Lanjut:**
 - Terrain mesh WICC perlu fine-tuning (beberapa titik ketinggian tidak rata)
-- JATO burn time 1 detik
 - Minggu depan: setup koneksi pppd Pixhawk ↔ laptop untuk HITL mode
 
 ---
@@ -502,7 +464,7 @@ Uji coba penerbangan perdana SATRIA di lingkungan simulasi Bandara Husein Sastra
 | 1 | Instalasi X-Plane, VS Code, QGroundControl, Git, toolchain ArduPilot | ✅ Selesai |
 | 2 | Verifikasi koneksi X-Plane via LAN (2 laptop) | ✅ Selesai |
 | 3 | Tambah custom aircraft SATRIA | ✅ Selesai |
-| 4 | Modifikasi SATRIA + JATO & Equipment Options (Special Contents) | ✅ Selesai |
+| 4 | Penambahan Landing Gear SATRIA — Plane Maker (tire radius & width) | ✅ Selesai |
 | 4b | Konfigurasi Wing 1 & Wing 2 SATRIA — Plane Maker (Foil & Element Specs) | ✅ Selesai |
 | 4c | Konfigurasi Landing Gear SATRIA — Plane Maker (Gear Loc) | ✅ Selesai |
 | 4d | Konfigurasi Control Geometry SATRIA — Plane Maker (Control Sizes, Flap/Slat) | ✅ Selesai |

@@ -1,48 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 348">
-<rect width="660" height="348" fill="#ffffff" rx="10" stroke="#d4d2c8" stroke-width="0.8"/>
-<text x="330" y="24" text-anchor="middle" font-size="13" font-weight="bold" fill="#444441" font-family="sans-serif">Karakteristik Airfoil NACA 2412</text>
-  <text x="20" y="44" font-size="10" font-weight="bold" fill="#888780" font-family="sans-serif">Parameter</text>
-<text x="200" y="44" font-size="10" font-weight="bold" fill="#888780" font-family="sans-serif">Nilai</text>
-<text x="310" y="44" font-size="10" font-weight="bold" fill="#888780" font-family="sans-serif">Catatan</text>
-<line x1="8" y1="48" x2="652" y2="48" stroke="#d4d2c8" stroke-width="0.8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 320"><rect width="660" height="320" fill="#ffffff" rx="10" stroke="#d4d2c8" stroke-width="0.8"/><text x="330" y="24" text-anchor="middle" font-size="13" font-weight="bold" fill="#444441" font-family="sans-serif">Karakteristik Airfoil NACA 2412</text>  <text x="20" y="44" font-size="10" font-weight="bold" fill="#888780" font-family="sans-serif">Parameter</text>
+  <text x="190" y="44" font-size="10" font-weight="bold" fill="#888780" font-family="sans-serif">Nilai</text>
+  <text x="300" y="44" font-size="10" font-weight="bold" fill="#888780" font-family="sans-serif">Catatan</text>
+  <line x1="8" y1="48" x2="652" y2="48" stroke="#d4d2c8" stroke-width="0.8"/>
   <rect x="8" y="38" width="644" height="24" fill="#f5f5f5" rx="2"/>
   <text x="20" y="52" font-size="10" fill="#444441" font-family="sans-serif">Profil</text>
-  <text x="200" y="52" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">NACA 2412</text>
-  <text x="310" y="52" font-size="10" fill="#888780" font-family="sans-serif">Camber 2% · max camber di 40% chord · t/c 12%</text>
+  <text x="190" y="52" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">NACA 2412</text>
+  <text x="300" y="52" font-size="10" fill="#888780" font-family="sans-serif">Camber 2% · max camber 40% chord · t/c 12%</text>
   <rect x="8" y="66" width="644" height="24" fill="#e6f4ee" rx="2"/>
   <text x="20" y="80" font-size="10" fill="#444441" font-family="sans-serif">CLmax (Re~700k)</text>
-  <text x="200" y="80" font-size="10" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">1.50</text>
-  <text x="310" y="80" font-size="10" fill="#888780" font-family="sans-serif">vs generic ~1.30 (+15%)</text>
-  <rect x="8" y="94" width="644" height="24" fill="#f5f5f5" rx="2"/>
-  <text x="20" y="108" font-size="10" fill="#444441" font-family="sans-serif">CD0 profil</text>
-  <text x="200" y="108" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">0.0075</text>
-  <text x="310" y="108" font-size="10" fill="#888780" font-family="sans-serif">Lebih rendah dari foil tebal — laminar sebagian</text>
-  <rect x="8" y="122" width="644" height="24" fill="#ffffff" rx="2"/>
-  <text x="20" y="136" font-size="10" fill="#444441" font-family="sans-serif">CD0 total</text>
-  <text x="200" y="136" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">0.026</text>
-  <text x="310" y="136" font-size="10" fill="#888780" font-family="sans-serif">vs generic 0.028 (−7.1%)</text>
-  <rect x="8" y="150" width="644" height="24" fill="#f5f5f5" rx="2"/>
-  <text x="20" y="164" font-size="10" fill="#444441" font-family="sans-serif">Oswald efficiency e</text>
-  <text x="200" y="164" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">0.82</text>
-  <text x="310" y="164" font-size="10" fill="#888780" font-family="sans-serif">vs generic 0.78 (+5.1%)</text>
-  <rect x="8" y="178" width="644" height="24" fill="#e6f4ee" rx="2"/>
-  <text x="20" y="192" font-size="10" fill="#444441" font-family="sans-serif">L/D max</text>
-  <text x="200" y="192" font-size="10" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">12.37</text>
-  <text x="310" y="192" font-size="10" fill="#888780" font-family="sans-serif">vs generic 10.7 (+15.6%)</text>
+  <text x="190" y="80" font-size="10" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">1.50</text>
+  <text x="300" y="80" font-size="10" fill="#888780" font-family="sans-serif">vs generic ~1.30 (+15%)</text>
+  <rect x="8" y="94" width="644" height="24" fill="#e6f4ee" rx="2"/>
+  <text x="20" y="108" font-size="10" fill="#444441" font-family="sans-serif">CD0 total</text>
+  <text x="190" y="108" font-size="10" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">0.026</text>
+  <text x="300" y="108" font-size="10" fill="#888780" font-family="sans-serif">Lebih rendah dari foil tebal</text>
+  <rect x="8" y="122" width="644" height="24" fill="#e6f4ee" rx="2"/>
+  <text x="20" y="136" font-size="10" fill="#444441" font-family="sans-serif">Oswald efficiency e</text>
+  <text x="190" y="136" font-size="10" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">0.82</text>
+  <text x="300" y="136" font-size="10" fill="#888780" font-family="sans-serif">Span efficiency baik</text>
+  <rect x="8" y="150" width="644" height="24" fill="#e6f4ee" rx="2"/>
+  <text x="20" y="164" font-size="10" fill="#444441" font-family="sans-serif">L/D max</text>
+  <text x="190" y="164" font-size="10" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">12.37</text>
+  <text x="300" y="164" font-size="10" fill="#888780" font-family="sans-serif">vs generic ~10.2 (+21%)</text>
+  <rect x="8" y="178" width="644" height="24" fill="#ffffff" rx="2"/>
+  <text x="20" y="192" font-size="10" fill="#444441" font-family="sans-serif">Zero-lift AoA</text>
+  <text x="190" y="192" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">−2.1°</text>
+  <text x="300" y="192" font-size="10" fill="#888780" font-family="sans-serif">Positive camber → slight nose-down at zero lift</text>
   <rect x="8" y="206" width="644" height="24" fill="#f5f5f5" rx="2"/>
-  <text x="20" y="220" font-size="10" fill="#444441" font-family="sans-serif">Zero-lift AoA</text>
-  <text x="200" y="220" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">−2.1°</text>
-  <text x="310" y="220" font-size="10" fill="#888780" font-family="sans-serif">Positif camber → slight nose-down at zero lift</text>
-  <rect x="8" y="234" width="644" height="24" fill="#ffffff" rx="2"/>
-  <text x="20" y="248" font-size="10" fill="#444441" font-family="sans-serif">Stall AoA</text>
-  <text x="200" y="248" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">~16.5°</text>
-  <text x="310" y="248" font-size="10" fill="#888780" font-family="sans-serif">Stall ringan — gradual, forgiving</text>
+  <text x="20" y="220" font-size="10" fill="#444441" font-family="sans-serif">Stall AoA</text>
+  <text x="190" y="220" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">~16.5°</text>
+  <text x="300" y="220" font-size="10" fill="#888780" font-family="sans-serif">Gradual, forgiving — recovery mudah</text>
+  <rect x="8" y="234" width="644" height="24" fill="#fff8ee" rx="2"/>
+  <text x="20" y="248" font-size="10" fill="#444441" font-family="sans-serif">Cm_ac</text>
+  <text x="190" y="248" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">−0.05</text>
+  <text x="300" y="248" font-size="10" fill="#888780" font-family="sans-serif">Nose-down pitching moment → CG tidak terlalu belakang</text>
   <rect x="8" y="262" width="644" height="24" fill="#f5f5f5" rx="2"/>
-  <text x="20" y="276" font-size="10" fill="#444441" font-family="sans-serif">Cm_ac</text>
-  <text x="200" y="276" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">−0.05</text>
-  <text x="310" y="276" font-size="10" fill="#888780" font-family="sans-serif">Nose-down pitching moment → CG tidak boleh terlalu belakang</text>
-  <rect x="8" y="290" width="644" height="24" fill="#ffffff" rx="2"/>
-  <text x="20" y="304" font-size="10" fill="#444441" font-family="sans-serif">AoA @ cruise</text>
-  <text x="200" y="304" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">3.83°</text>
-  <text x="310" y="304" font-size="10" fill="#888780" font-family="sans-serif">Dari zero-lift + CL_cruise/Cl_alpha</text>
-</svg>
+  <text x="20" y="276" font-size="10" fill="#444441" font-family="sans-serif">AoA @ cruise</text>
+  <text x="190" y="276" font-size="10" fill="#444441" font-weight="bold" font-family="sans-serif">3.76°</text>
+  <text x="300" y="276" font-size="10" fill="#888780" font-family="sans-serif">Dari zero-lift + CL_cruise/Cl_alpha</text></svg>

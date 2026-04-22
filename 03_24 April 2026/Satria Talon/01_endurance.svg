@@ -1,38 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 260">
-<rect width="600" height="260" fill="#ffffff" rx="10" stroke="#d4d2c8" stroke-width="0.8"/>
-<text x="300" y="26" text-anchor="middle" font-size="13" font-weight="bold" fill="#444441" font-family="sans-serif">Endurance vs Wingspan — 4S 8000 mAh</text>
-<text x="300" y="40" text-anchor="middle" font-size="10" fill="#888780" font-family="sans-serif">NACA 2412 · MTOW 5.25 lb (2.381 kg) · semi-length 2.13 ft</text>
-<line x1="140" y1="44" x2="140" y2="242" stroke="#d4d2c8" stroke-width="0.8"/>
-  <rect x="140" y="45" width="330" height="21" fill="#f5f5f5" rx="2"/>
-  <rect x="140" y="47" width="58" height="17" fill="#1D9E75" rx="2" opacity="0.88"/>
-  <text x="134" y="59" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">90 cm</text>
-  <text x="203" y="59" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">83 mnt</text>
-  <rect x="140" y="69" width="330" height="21" fill="#f5f5f5" rx="2"/>
-  <rect x="140" y="71" width="88" height="17" fill="#1D9E75" rx="2" opacity="0.88"/>
-  <text x="134" y="83" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">100 cm</text>
-  <text x="233" y="83" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">95 mnt</text>
-  <rect x="140" y="93" width="330" height="21" fill="#f5f5f5" rx="2"/>
-  <rect x="140" y="95" width="119" height="17" fill="#1D9E75" rx="2" opacity="0.88"/>
-  <text x="134" y="107" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">110 cm</text>
-  <text x="264" y="107" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">107 mnt</text>
-  <rect x="140" y="117" width="330" height="21" fill="#f5f5f5" rx="2"/>
-  <rect x="140" y="119" width="149" height="17" fill="#1D9E75" rx="2" opacity="0.88"/>
-  <text x="134" y="131" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">120 cm</text>
-  <text x="294" y="131" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">119 mnt</text>
-  <rect x="140" y="141" width="330" height="21" fill="#e6f4ee" rx="2"/>
-  <rect x="140" y="143" width="182" height="17" fill="#0e6b3d" rx="2" opacity="0.88"/>
-  <text x="134" y="155" text-anchor="end" font-size="11" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">130 cm</text>
-  <text x="327" y="155" font-size="10" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">132 mnt ← 130 cm (saat ini)</text>
-  <rect x="140" y="165" width="330" height="21" fill="#f5f5f5" rx="2"/>
-  <rect x="140" y="167" width="213" height="17" fill="#1D9E75" rx="2" opacity="0.88"/>
-  <text x="134" y="179" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">140 cm</text>
-  <text x="358" y="179" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">144 mnt</text>
-  <rect x="140" y="189" width="330" height="21" fill="#f5f5f5" rx="2"/>
-  <rect x="140" y="191" width="246" height="17" fill="#1D9E75" rx="2" opacity="0.88"/>
-  <text x="134" y="203" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">150 cm</text>
-  <text x="391" y="203" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">157 mnt</text>
-  <rect x="140" y="213" width="330" height="21" fill="#f5f5f5" rx="2"/>
-  <rect x="140" y="215" width="281" height="17" fill="#1D9E75" rx="2" opacity="0.88"/>
-  <text x="134" y="227" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">160 cm</text>
-  <text x="426" y="227" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">171 mnt</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 280"><rect width="600" height="280" fill="#ffffff" rx="10" stroke="#d4d2c8" stroke-width="0.8"/><text x="300" y="26" text-anchor="middle" font-size="13" font-weight="bold" fill="#444441" font-family="sans-serif">Endurance vs Wingspan — 4S 8000 mAh</text><text x="300" y="40" text-anchor="middle" font-size="10" fill="#888780" font-family="sans-serif">NACA 2412 · MTOW 5.25 lb · semi 2.13 ft · root 23.8cm · tip 18.3cm</text><line x1="115" y1="44" x2="115" y2="262" stroke="#d4d2c8" stroke-width="0.8"/>  <rect x="115" y="45" width="330" height="25" fill="#f5f5f5" rx="2"/>
+  <rect x="115" y="47" width="37" height="21" fill="#1D9E75" rx="2" opacity="0.88"/>
+  <text x="109" y="61" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">90 cm</text>
+  <text x="157" y="61" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">83 mnt</text>
+  <rect x="115" y="72" width="330" height="25" fill="#f5f5f5" rx="2"/>
+  <rect x="115" y="74" width="71" height="21" fill="#1D9E75" rx="2" opacity="0.88"/>
+  <text x="109" y="88" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">100 cm</text>
+  <text x="191" y="88" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">95 mnt</text>
+  <rect x="115" y="99" width="330" height="25" fill="#f5f5f5" rx="2"/>
+  <rect x="115" y="101" width="106" height="21" fill="#1D9E75" rx="2" opacity="0.88"/>
+  <text x="109" y="115" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">110 cm</text>
+  <text x="226" y="115" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">107 mnt</text>
+  <rect x="115" y="126" width="330" height="25" fill="#f5f5f5" rx="2"/>
+  <rect x="115" y="128" width="140" height="21" fill="#1D9E75" rx="2" opacity="0.88"/>
+  <text x="109" y="142" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">120 cm</text>
+  <text x="260" y="142" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">119 mnt</text>
+  <rect x="115" y="153" width="330" height="25" fill="#e6f4ee" rx="2"/>
+  <rect x="115" y="155" width="177" height="21" fill="#0e6b3d" rx="2" opacity="0.88"/>
+  <text x="109" y="169" text-anchor="end" font-size="11" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">130 cm</text>
+  <text x="297" y="169" font-size="10" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">132 mnt ← 130 cm ★</text>
+  <rect x="115" y="180" width="330" height="25" fill="#f5f5f5" rx="2"/>
+  <rect x="115" y="182" width="212" height="21" fill="#1D9E75" rx="2" opacity="0.88"/>
+  <text x="109" y="196" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">140 cm</text>
+  <text x="332" y="196" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">144 mnt</text>
+  <rect x="115" y="207" width="330" height="25" fill="#f5f5f5" rx="2"/>
+  <rect x="115" y="209" width="249" height="21" fill="#1D9E75" rx="2" opacity="0.88"/>
+  <text x="109" y="223" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">150 cm</text>
+  <text x="369" y="223" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">157 mnt</text>
+  <rect x="115" y="234" width="330" height="25" fill="#f5f5f5" rx="2"/>
+  <rect x="115" y="236" width="289" height="21" fill="#1D9E75" rx="2" opacity="0.88"/>
+  <text x="109" y="250" text-anchor="end" font-size="11" fill="#888780" font-weight="normal" font-family="sans-serif">160 cm</text>
+  <text x="409" y="250" font-size="10" fill="#1D9E75" font-weight="normal" font-family="sans-serif">171 mnt</text></svg>

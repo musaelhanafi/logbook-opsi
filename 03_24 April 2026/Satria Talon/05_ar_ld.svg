@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 260">
 <rect width="600" height="260" fill="#ffffff" rx="10" stroke="#d4d2c8" stroke-width="0.8"/>
-<text x="300" y="26" text-anchor="middle" font-size="13" font-weight="bold" fill="#444441" font-family="sans-serif">Aspect Ratio & L/D max vs Wingspan</text>
+<text x="300" y="26" text-anchor="middle" font-size="13" font-weight="bold" fill="#444441" font-family="sans-serif">Aspect Ratio &amp; L/D max vs Wingspan</text>
 <text x="300" y="40" text-anchor="middle" font-size="10" fill="#888780" font-family="sans-serif">NACA 2412 · MTOW 5.25 lb · semi 2.13 ft</text>
   <line x1="44" y1="44" x2="584" y2="44" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
   <text x="40" y="48" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">15</text>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 280"><rect width="600" height="280" fill="#ffffff" rx="10" stroke="#d4d2c8" stroke-width="0.8"/><text x="300" y="26" text-anchor="middle" font-size="13" font-weight="bold" fill="#444441" font-family="sans-serif">Kecepatan vs Wingspan</text><text x="300" y="40" text-anchor="middle" font-size="10" fill="#888780" font-family="sans-serif">NACA 2412 · MTOW 3.50 lb · semi 1.52 ft</text>  <line x1="44" y1="44" x2="584" y2="44" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="48" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">24</text>
+  <line x1="44" y1="91" x2="584" y2="91" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="95" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">20</text>
+  <line x1="44" y1="139" x2="584" y2="139" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="143" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">16</text>
+  <line x1="44" y1="186" x2="584" y2="186" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="190" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">12</text>
+  <line x1="44" y1="234" x2="584" y2="234" stroke="#d4d2c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+  <text x="40" y="238" text-anchor="end" font-size="9" fill="#888780" font-family="sans-serif">8</text>
+  <text x="44" y="247" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">60</text>
+  <text x="104" y="247" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">65</text>
+  <text x="164" y="247" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">70</text>
+  <text x="224" y="247" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">76</text>
+  <text x="284" y="247" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">80</text>
+  <text x="344" y="247" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">85</text>
+  <text x="404" y="247" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">90</text>
+  <text x="464" y="247" text-anchor="middle" font-size="9" fill="#0e6b3d" font-weight="bold" font-family="sans-serif">93</text>
+  <text x="524" y="247" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">95</text>
+  <text x="584" y="247" text-anchor="middle" font-size="9" fill="#888780" font-weight="normal" font-family="sans-serif">100</text>
+  <rect x="462" y="44" width="4" height="190" fill="#0e6b3d" opacity="0.12"/>
+  <polyline points="44,71 104,86 164,99 224,112 284,121 344,130 404,139 464,144 524,147 584,153" fill="none" stroke="#534AB7" stroke-width="2.2" stroke-linejoin="round" />
+  <circle cx="44" cy="71" r="3" fill="#534AB7" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="104" cy="86" r="3" fill="#534AB7" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="164" cy="99" r="3" fill="#534AB7" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="224" cy="112" r="3" fill="#534AB7" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="284" cy="121" r="3" fill="#534AB7" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="344" cy="130" r="3" fill="#534AB7" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="404" cy="139" r="3" fill="#534AB7" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="464" cy="144" r="5" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="524" cy="147" r="3" fill="#534AB7" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="584" cy="153" r="3" fill="#534AB7" stroke="#ffffff" stroke-width="1"/>
+  <polyline points="44,189 104,194 164,199 224,205 284,208 344,212 404,214 464,217 524,218 584,221" fill="none" stroke="#D85A30" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="5,3"/>
+  <circle cx="44" cy="189" r="3" fill="#D85A30" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="104" cy="194" r="3" fill="#D85A30" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="164" cy="199" r="3" fill="#D85A30" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="224" cy="205" r="3" fill="#D85A30" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="284" cy="208" r="3" fill="#D85A30" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="344" cy="212" r="3" fill="#D85A30" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="404" cy="214" r="3" fill="#D85A30" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="464" cy="217" r="5" fill="#0e6b3d" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="524" cy="218" r="3" fill="#D85A30" stroke="#ffffff" stroke-width="1"/>
+  <circle cx="584" cy="221" r="3" fill="#D85A30" stroke="#ffffff" stroke-width="1"/>
+  <line x1="464" y1="44" x2="464" y2="234" stroke="#0e6b3d" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
+  <text x="464" y="260" text-anchor="middle" font-size="8" fill="#0e6b3d" font-family="sans-serif">93 cm</text>
+  <text x="44" y="274" font-size="9" fill="#534AB7" font-family="sans-serif">—— Vcruise m/s</text>
+  <text x="150.5" y="274" font-size="9" fill="#D85A30" font-family="sans-serif">- -  Vstall m/s</text></svg>
