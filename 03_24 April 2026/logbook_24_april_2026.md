@@ -9,7 +9,7 @@
 
 ---
 
-Kegiatan hari ini berfokus pada pengembangan modul **drone-seeker** — komponen computer vision yang bertanggung jawab mendeteksi dan melacak target berwarna untuk sistem kendali drone kamikaze. Kegiatan dibagi dalam empat bagian: **Bagian 1** pengenalan OpenCV dan konsep dasar ruang warna; **Bagian 2** implementasi aplikasi dasar (`imshow` dan konversi BGR→HSV); **Bagian 3** implementasi pipeline deteksi dan pelacakan objek berdasarkan warna; **Bagian 4** implementasi aplikasi kalibrasi warna interaktif menggunakan trackbar.
+Kegiatan hari ini berfokus pada pengembangan modul **drone-seeker** — komponen computer vision yang bertanggung jawab mendeteksi dan melacak target berwarna untuk sistem kendali drone kamikaze. Kegiatan dibagi dalam lima bagian: **Bagian 1** pengenalan OpenCV dan konsep dasar ruang warna; **Bagian 2** implementasi aplikasi dasar (`imshow` dan konversi BGR→HSV); **Bagian 3** implementasi pipeline deteksi dan pelacakan objek berdasarkan warna; **Bagian 4** implementasi aplikasi kalibrasi warna interaktif menggunakan trackbar; **Bagian 5** implementasi histogram ROI interaktif dan pelacakan warna dengan algoritma CamShift.
 
 ---
 
@@ -104,61 +104,30 @@ pip install opencv-python numpy
 ### 2. Aplikasi Imshow
 
 **Kegiatan:**
-Membuat aplikasi pertama menggunakan OpenCV untuk membuka gambar, menampilkannya di layar, dan mempelajari cara kerja window OpenCV.
+Membangun aplikasi kamera secara bertahap: pertama menampilkan feed kamera, lalu menambahkan fitur rekam video menggunakan ffmpeg.
 
-**Kode (`app_imshow.py`):**
+---
+
+#### Tahap 1 — Menampilkan Gambar dari Kamera
+
+**Kode:**
 
 ```python
 import cv2
 
-# Baca gambar dari file
-img = cv2.imread("target.png")
+cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
 
-if img is None:
-    print("Error: gambar tidak ditemukan")
+if not cap.isOpened():
+    print("Error: kamera tidak ditemukan")
     exit()
 
-# Tampilkan info gambar
-print(f"Shape : {img.shape}")   # (height, width, channels)
-print(f"Dtype : {img.dtype}")   # uint8
-print(f"Ukuran: {img.size} piksel")
-
-# Tampilkan gambar dalam window
-cv2.imshow("Gambar Target", img)
-
-# Tunggu input keyboard
-# 0    = tunggu selamanya
-# 1000 = tunggu 1 detik (millisecond)
-key = cv2.waitKey(0)
-
-if key == ord('s'):
-    cv2.imwrite("output.png", img)
-    print("Gambar disimpan sebagai output.png")
-
-# Tutup semua window
-cv2.destroyAllWindows()
-```
-
-**Penjelasan fungsi utama:**
-
-| Fungsi | Parameter | Keterangan |
-|---|---|---|
-| `cv2.imread(path)` | path: str | Membaca gambar → ndarray BGR, `None` jika gagal |
-| `cv2.imshow(name, img)` | name: str, img: ndarray | Menampilkan gambar dalam named window |
-| `cv2.waitKey(delay)` | delay: int (ms) | Menunggu input keyboard; 0 = tunggu selamanya |
-| `cv2.destroyAllWindows()` | — | Menutup semua window OpenCV |
-| `cv2.imwrite(path, img)` | path: str, img: ndarray | Menyimpan gambar ke file |
-
-**Menampilkan feed kamera langsung (webcam):**
-
-```python
-import cv2
-
-cap = cv2.VideoCapture(0)  # 0 = kamera default
+print(f"Resolusi: {int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x{int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
+print("Tekan 'q' untuk keluar")
 
 while True:
     ret, frame = cap.read()
     if not ret:
+        print("Error: gagal membaca frame dari kamera")
         break
 
     cv2.imshow("Kamera", frame)
@@ -170,7 +139,197 @@ cap.release()
 cv2.destroyAllWindows()
 ```
 
-**Hasil:** Aplikasi imshow berhasil menampilkan gambar statis dan feed kamera real-time.
+**Penjelasan fungsi utama:**
+
+| Fungsi | Keterangan |
+|---|---|
+| `cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)` | Buka kamera dengan backend AVFoundation (macOS native) — menghindari warning backend lain |
+| `cap.isOpened()` | Cek apakah kamera berhasil dibuka |
+| `cap.read()` | Ambil satu frame; kembalikan `(ret, frame)` — `ret=False` jika gagal |
+| `cv2.imshow(name, img)` | Tampilkan frame dalam named window |
+| `cv2.waitKey(1)` | Tunggu input keyboard 1 ms; loop tetap berjalan real-time |
+| `cap.release()` | Lepas handle kamera |
+| `cv2.destroyAllWindows()` | Tutup semua window OpenCV |
+
+**Hasil:** Feed kamera tampil di window OpenCV secara real-time. Tekan `q` untuk keluar.
+
+---
+
+#### Tahap 2 — Menambahkan Fungsi Rekam Video (`app_imshow.py`)
+
+Rekaman menggunakan **ffmpeg** via `subprocess` — lebih andal dari `cv2.VideoWriter` karena ffmpeg memiliki encoder `libx264` bawaan yang selalu tersedia di macOS.
+
+**Cara kerja:** OpenCV menghasilkan frame raw (BGR) → dikirim ke `stdin` proses ffmpeg → ffmpeg mengompresi dengan H.264 dan menyimpan ke `.mp4`.
+
+**Kode (`app_imshow.py`):**
+
+```python
+import cv2
+import numpy as np
+import time
+import subprocess
+
+cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
+
+if not cap.isOpened():
+    print("Error: kamera tidak ditemukan")
+    exit()
+
+width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))  // 2
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) // 2
+fps    = cap.get(cv2.CAP_PROP_FPS) or 30.0
+
+print(f"Resolusi: {width}x{height} @ {fps:.0f} FPS")
+print("Tekan 'r' untuk mulai/stop rekam | 's' untuk screenshot | 'q' untuk keluar")
+
+ffmpeg_proc = None
+recording   = False
+
+HIST_W, HIST_H = 512, 200
+CHANNELS = [(0, (255, 80,  80),  "B"),
+            (1, (80,  200, 80),  "G"),
+            (2, (80,  80,  255), "R")]
+
+def draw_stat_histogram(frame):
+    img = np.zeros((HIST_H, HIST_W, 3), dtype=np.uint8)
+    for ch, color, label in CHANNELS:
+        hist = cv2.calcHist([frame], [ch], None, [256], [0, 256])
+        cv2.normalize(hist, hist, 0, HIST_H - 30, cv2.NORM_MINMAX)
+        for x in range(256):
+            h = int(hist[x])
+            x0 = x * HIST_W // 256
+            x1 = (x + 1) * HIST_W // 256
+            cv2.rectangle(img, (x0, HIST_H - h), (x1, HIST_H),
+                          [c // 3 for c in color], -1)
+
+        mean, std = cv2.meanStdDev(frame[:, :, ch])
+        m, s = mean[0, 0], std[0, 0]
+        mx  = int(m * HIST_W / 256)
+        sx0 = int(max(0, m - s) * HIST_W / 256)
+        sx1 = int(min(255, m + s) * HIST_W / 256)
+
+        cv2.rectangle(img, (sx0, 0), (sx1, HIST_H - 30),
+                      [c // 5 for c in color], -1)
+        cv2.line(img, (mx, 0), (mx, HIST_H - 30), color, 2)
+        cv2.putText(img, f"{label} u={m:.0f} s={s:.0f}",
+                    (sx0 + 2, HIST_H - 30 + 14 + CHANNELS.index((ch, color, label)) * 14),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.4, color, 1)
+    return img
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("Error: gagal membaca frame dari kamera")
+        break
+
+    frame = cv2.resize(frame, (width, height))
+
+    if recording and ffmpeg_proc is not None:
+        ffmpeg_proc.stdin.write(frame.tobytes())
+
+    display = frame.copy()
+
+    cv2.imshow("Statistik BGR", draw_stat_histogram(frame))
+
+    if recording:
+        cv2.circle(display, (20, 20), 8, (0, 0, 255), -1)
+        cv2.putText(display, "REC", (35, 27),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+
+    cv2.imshow("Kamera", display)
+
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):
+        break
+    elif key == ord('s'):
+        filename = f"screenshot_{int(time.time())}.png"
+        cv2.imwrite(filename, frame)
+        print(f"Screenshot disimpan: {filename}")
+    elif key == ord('r'):
+        if not recording:
+            filename = f"rekaman_{int(time.time())}.mp4"
+            try:
+                ffmpeg_proc = subprocess.Popen(
+                    [
+                        "ffmpeg", "-y",
+                        "-f", "rawvideo",
+                        "-vcodec", "rawvideo",
+                        "-pix_fmt", "bgr24",
+                        "-s", f"{width}x{height}",
+                        "-r", str(fps),
+                        "-i", "pipe:0",
+                        "-c:v", "libx264",
+                        "-pix_fmt", "yuv420p",
+                        "-preset", "fast",
+                        filename,
+                    ],
+                    stdin=subprocess.PIPE,
+                    stderr=subprocess.DEVNULL,
+                )
+                recording = True
+                print(f"Rekaman dimulai: {filename}")
+            except FileNotFoundError:
+                print("Error: ffmpeg tidak ditemukan — install dengan 'brew install ffmpeg'")
+        else:
+            recording = False
+            ffmpeg_proc.stdin.close()
+            ffmpeg_proc.wait()
+            ffmpeg_proc = None
+            print("Rekaman dihentikan dan disimpan.")
+
+if recording and ffmpeg_proc is not None:
+    ffmpeg_proc.stdin.close()
+    ffmpeg_proc.wait()
+
+cap.release()
+cv2.destroyAllWindows()
+```
+
+**Fitur tambahan dibanding Tahap 1:**
+
+| Fitur | Keterangan |
+|---|---|
+| Resize 50% di awal | `width//2`, `height//2` — frame dikecilkan sebelum proses apapun; rekaman juga resolusi 50% |
+| `draw_stat_histogram` | Histogram BGR dengan garis mean (vertikal) dan area mean±std (shaded) per channel |
+| Window "Statistik BGR" | Update real-time tiap frame, menampilkan distribusi warna B, G, R |
+| `display = frame.copy()` | Gambar indikator REC di `display`, bukan `frame` — rekaman tidak terkena overlay |
+| Rekam via ffmpeg | Frame dikirim ke stdin ffmpeg sebagai raw bytes; ffmpeg encode ke H.264 `.mp4` |
+
+**Penjelasan tambahan (fitur rekam):**
+
+| Fungsi / Parameter ffmpeg | Keterangan |
+|---|---|
+| `frame.tobytes()` | Konversi ndarray BGR ke bytes mentah untuk dikirim ke ffmpeg stdin |
+| `subprocess.Popen([...], stdin=PIPE)` | Jalankan ffmpeg sebagai proses terpisah, terima frame dari stdin |
+| `ffmpeg_proc.stdin.write(...)` | Kirim satu frame ke ffmpeg |
+| `ffmpeg_proc.stdin.close()` | Sinyal EOF ke ffmpeg — memulai finalisasi file |
+| `ffmpeg_proc.wait()` | Tunggu ffmpeg selesai menulis sebelum lanjut |
+| `-f rawvideo -pix_fmt bgr24` | Format input: raw BGR sesuai format native OpenCV |
+| `-c:v libx264 -pix_fmt yuv420p` | Encoder H.264, format piksel standar untuk kompatibilitas pemutar |
+| `-preset fast` | Kecepatan encoding vs. ukuran file |
+| `stderr=DEVNULL` | Sembunyikan output verbose ffmpeg dari terminal |
+
+**Kontrol keyboard:**
+
+| Tombol | Fungsi |
+|---|---|
+| `r` | Mulai rekam → tekan lagi untuk stop dan simpan |
+| `s` | Simpan screenshot `screenshot_<timestamp>.png` |
+| `q` | Keluar; rekaman aktif otomatis di-finalisasi sebelum keluar |
+
+**Instalasi ffmpeg:**
+
+```bash
+brew install ffmpeg
+```
+
+**Cara menjalankan:**
+
+```bash
+python app_imshow.py
+```
+
+**Hasil:** Feed kamera tampil real-time dengan indikator `● REC` saat merekam. File rekaman tersimpan sebagai `.mp4` H.264 yang dapat diputar langsung di QuickTime.
 
 ---
 
@@ -185,49 +344,57 @@ Membuat aplikasi untuk memvisualisasikan perbedaan antara ruang warna BGR dan HS
 import cv2
 import numpy as np
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
+
+if not cap.isOpened():
+    print("Error: kamera tidak ditemukan")
+    exit()
+
+print("Tekan 'q' untuk keluar")
+
+def half(img):
+    return cv2.resize(img, None, fx=0.5, fy=0.5)
 
 while True:
     ret, frame = cap.read()
     if not ret:
+        print("Error: gagal membaca frame dari kamera")
         break
 
-    # Konversi BGR → HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    # Pisahkan channel HSV
     h, s, v = cv2.split(hsv)
 
-    # Pisahkan channel BGR
-    b, g, r = cv2.split(frame)
-
-    # Buat visualisasi: channel H, S, V sebagai grayscale
-    # dan channel B, G, R sebagai grayscale
-    vis_top = np.hstack([frame, hsv])        # BGR asli | HSV (tampilan warna)
-    vis_mid = np.hstack([
-        cv2.cvtColor(b, cv2.COLOR_GRAY2BGR),
-        cv2.cvtColor(g, cv2.COLOR_GRAY2BGR),
-        cv2.cvtColor(r, cv2.COLOR_GRAY2BGR),
-    ])  # Channel B | G | R
+    vis_top = np.hstack([frame, hsv])
+    vis_mid = frame
     vis_bot = np.hstack([
         cv2.cvtColor(h, cv2.COLOR_GRAY2BGR),
         cv2.cvtColor(s, cv2.COLOR_GRAY2BGR),
         cv2.cvtColor(v, cv2.COLOR_GRAY2BGR),
-    ])  # Channel H | S | V
+    ])
 
-    # Resize agar muat di layar
-    def half(img):
-        return cv2.resize(img, None, fx=0.5, fy=0.5)
+    # Label kolom di vis_top
+    fw = frame.shape[1]
+    cv2.putText(vis_top, "BGR", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+    cv2.putText(vis_top, "HSV", (fw + 10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+
+    # Label kolom H, S, V
+    for img, labels in [(vis_bot, ["H", "S", "V"])]:
+        for i, label in enumerate(labels):
+            cv2.putText(img, label, (i * fw + 10, 25),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+
+    # Nilai piksel di titik tengah frame
+    cy, cx = frame.shape[0] // 2, frame.shape[1] // 2
+    bgr_val = frame[cy, cx]
+    hsv_val = hsv[cy, cx]
+    info = f"Pusat — BGR:{bgr_val.tolist()}  HSV:{hsv_val.tolist()}"
+    cv2.putText(vis_top, info, (10, vis_top.shape[0] - 10),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
 
     cv2.imshow("BGR | HSV", half(vis_top))
     cv2.imshow("B | G | R", half(vis_mid))
     cv2.imshow("H | S | V", half(vis_bot))
-
-    # Cetak nilai piksel di titik tengah
-    cy, cx = frame.shape[0] // 2, frame.shape[1] // 2
-    bgr_val = frame[cy, cx]
-    hsv_val = hsv[cy, cx]
-    print(f"BGR={bgr_val} → HSV={hsv_val}", end="\r")
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
@@ -633,6 +800,347 @@ HSV_LOWER, HSV_UPPER = load_color_config("target")
 | Background ikut termasking | Warna objek mirip background | Pertimbangkan pencahayaan yang lebih terkontrol |
 
 **Hasil:** Aplikasi kalibrasi warna interaktif berhasil dibuat. Rentang HSV target dapat ditentukan secara visual dan disimpan ke `color_config.json` untuk digunakan oleh modul tracker.
+
+---
+
+## Bagian 5 — Histogram dan CamShift Tracking
+
+---
+
+### 7. Aplikasi Histogram ROI Interaktif
+
+**Kegiatan:**
+Membuat aplikasi untuk memilih region of interest (ROI) pada frame kamera menggunakan mouse, lalu menampilkan histogram Hue dan histogram BGR dari region tersebut secara real-time, lengkap dengan visualisasi mean dan standar deviasi.
+
+**Kode (`app_histogram.py`):**
+
+```python
+import cv2
+import numpy as np
+
+cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
+
+if not cap.isOpened():
+    print("Error: kamera tidak ditemukan")
+    exit()
+
+print("Klik dan drag untuk pilih region | 'r' reset | 'q' keluar")
+
+roi_start = None
+roi_end   = None
+drawing   = False
+
+def on_mouse(event, x, y, flags, param):
+    global roi_start, roi_end, drawing
+    if event == cv2.EVENT_LBUTTONDOWN:
+        roi_start = (x, y)
+        roi_end   = (x, y)
+        drawing   = True
+    elif event == cv2.EVENT_MOUSEMOVE and drawing:
+        roi_end = (x, y)
+    elif event == cv2.EVENT_LBUTTONUP:
+        roi_end = (x, y)
+        drawing = False
+
+cv2.namedWindow("Kamera")
+cv2.setMouseCallback("Kamera", on_mouse)
+
+HIST_W = 540
+HIST_H = 200
+BGR_CHANNELS = [(0, (255, 80,  80),  "B"),
+                (1, (80,  200, 80),  "G"),
+                (2, (80,  80,  255), "R")]
+
+def draw_hue_histogram(roi_hsv):
+    hist_img = np.zeros((HIST_H, HIST_W, 3), dtype=np.uint8)
+    hist = cv2.calcHist([roi_hsv], [0], None, [180], [0, 180])
+    cv2.normalize(hist, hist, 0, HIST_H - 40, cv2.NORM_MINMAX)
+    bin_w = HIST_W // 180
+    for i in range(180):
+        h = int(hist[i])
+        color_bgr = cv2.cvtColor(np.uint8([[[i, 255, 200]]]),
+                                  cv2.COLOR_HSV2BGR)[0][0].tolist()
+        cv2.rectangle(hist_img,
+                      (i * bin_w, HIST_H - 40 - h),
+                      ((i + 1) * bin_w, HIST_H - 40), color_bgr, -1)
+
+    mean, std = cv2.meanStdDev(roi_hsv[:, :, 0])
+    m, s = mean[0, 0], std[0, 0]
+    mx  = int(m * HIST_W / 180)
+    sx0 = int(max(0, m - s) * HIST_W / 180)
+    sx1 = int(min(179, m + s) * HIST_W / 180)
+
+    cv2.rectangle(hist_img, (sx0, 0), (sx1, HIST_H - 40), (60, 60, 60), -1)
+    cv2.line(hist_img, (mx, 0), (mx, HIST_H - 40), (255, 255, 255), 2)
+
+    lx = mx + 3 if mx < HIST_W - 40 else mx - 35
+    cv2.putText(hist_img, f"{m:.1f}", (lx, 14),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1)
+    cv2.putText(hist_img, f"{m-s:.1f}", (max(0, sx0 - 2), 30),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
+    cv2.putText(hist_img, f"{m+s:.1f}", (min(HIST_W - 35, sx1 + 2), 30),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
+
+    for i in range(0, 181, 30):
+        x = i * bin_w
+        cv2.line(hist_img, (x, HIST_H - 45), (x, HIST_H - 40), (180, 180, 180), 1)
+        cv2.putText(hist_img, str(i), (x + 2, HIST_H - 27),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.35, (200, 200, 200), 1)
+
+    peak_hue = int(np.argmax(hist))
+    cv2.putText(hist_img, f"dominan={peak_hue}  mean={m:.1f}  std={s:.1f}",
+                (10, HIST_H - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+    return hist_img
+
+def draw_bgr_histogram(roi_bgr):
+    panels = []
+    for ch, color, label in BGR_CHANNELS:
+        img = np.zeros((HIST_H, HIST_W, 3), dtype=np.uint8)
+        hist = cv2.calcHist([roi_bgr], [ch], None, [256], [0, 256])
+        cv2.normalize(hist, hist, 0, HIST_H - 40, cv2.NORM_MINMAX)
+        for i in range(256):
+            h = int(hist[i])
+            cv2.rectangle(img,
+                          (i * HIST_W // 256, HIST_H - 40 - h),
+                          ((i + 1) * HIST_W // 256, HIST_H - 40),
+                          [c // 3 for c in color], -1)
+
+        mean, std = cv2.meanStdDev(roi_bgr[:, :, ch])
+        m, s = mean[0, 0], std[0, 0]
+        mx  = int(m * HIST_W / 256)
+        sx0 = int(max(0,   m - s) * HIST_W / 256)
+        sx1 = int(min(255, m + s) * HIST_W / 256)
+
+        cv2.rectangle(img, (sx0, 0), (sx1, HIST_H - 40), (50, 50, 50), -1)
+        cv2.line(img, (mx, 0), (mx, HIST_H - 40), color, 2)
+
+        lx = mx + 3 if mx < HIST_W - 40 else mx - 35
+        cv2.putText(img, f"{m:.1f}", (lx, 14),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 1)
+        cv2.putText(img, f"{m-s:.1f}", (max(0, sx0 - 2), 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
+        cv2.putText(img, f"{m+s:.1f}", (min(HIST_W - 35, sx1 + 2), 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
+        cv2.putText(img, f"{label}  mean={m:.1f}  std={s:.1f}",
+                    (10, HIST_H - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+        panels.append(img)
+    return np.vstack(panels)
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    hsv     = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    display = cv2.resize(frame, None, fx=0.5, fy=0.5)
+
+    if roi_start and roi_end:
+        cv2.rectangle(display, roi_start, roi_end, (0, 255, 0), 2)
+        x1 = min(roi_start[0], roi_end[0]) * 2
+        y1 = min(roi_start[1], roi_end[1]) * 2
+        x2 = max(roi_start[0], roi_end[0]) * 2
+        y2 = max(roi_start[1], roi_end[1]) * 2
+        if x2 > x1 and y2 > y1:
+            roi_bgr = frame[y1:y2, x1:x2]
+            roi_hsv = hsv[y1:y2, x1:x2]
+            cv2.imshow("Histogram Hue", draw_hue_histogram(roi_hsv))
+            cv2.imshow("Histogram BGR", draw_bgr_histogram(roi_bgr))
+
+    cv2.imshow("Kamera", display)
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):
+        break
+    elif key == ord('r'):
+        roi_start = roi_end = None
+
+cap.release()
+cv2.destroyAllWindows()
+```
+
+**Penjelasan elemen visualisasi histogram:**
+
+| Elemen | Keterangan |
+|---|---|
+| Bar histogram | Frekuensi kemunculan tiap nilai Hue (0–179) atau BGR (0–255) di dalam ROI |
+| Garis vertikal | Mean — nilai rata-rata channel di region yang dipilih |
+| Area shaded | Rentang mean ± std dev — semakin lebar berarti warna makin bervariasi |
+| Angka di atas garis | Nilai mean secara numerik |
+| Angka di tepi area | Nilai mean−std dan mean+std |
+| `dominan=` | Bin dengan frekuensi tertinggi (puncak histogram) |
+
+**Cara koordinat ROI dikonversi:**
+
+Display di-resize 50%, sehingga koordinat mouse di display perlu dikalikan 2 untuk mendapatkan koordinat di frame full-resolution yang digunakan `calcHist`.
+
+**Kontrol:**
+
+| Tombol | Fungsi |
+|---|---|
+| Klik + drag | Pilih region |
+| `r` | Reset ROI |
+| `q` | Keluar |
+
+**Hasil:** Histogram Hue dan BGR dari region yang dipilih tampil real-time beserta mean, std dev, dan hue dominan.
+
+---
+
+### 8. Aplikasi CamShift Color Tracking
+
+**Kegiatan:**
+Mengimplementasikan algoritma CamShift (Continuously Adaptive Mean-Shift) untuk melacak objek berdasarkan warna secara real-time. Target dipilih dengan klik-drag; histogram Hue target digunakan sebagai referensi tracking di setiap frame.
+
+**Cara kerja CamShift:**
+
+```
+Seleksi ROI → hitung histogram Hue target
+       │
+       ▼
+Setiap frame:
+  calcBackProject(hsv, roi_hist)
+       │  → peta probabilitas: putih = piksel cocok dengan warna target
+       ▼
+  CamShift(backproj, track_window, criteria)
+       │  → geser dan sesuaikan ukuran kotak ke area probabilitas tertinggi
+       ▼
+  Gambar RotatedRect + centroid di frame
+```
+
+**Kode (`app_camshift.py`):**
+
+```python
+import cv2
+import numpy as np
+
+cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
+
+if not cap.isOpened():
+    print("Error: kamera tidak ditemukan")
+    exit()
+
+print("Klik dan drag untuk pilih target | 'r' reset | 'q' keluar")
+
+roi_start    = None
+roi_end      = None
+drawing      = False
+needs_init   = False
+tracking     = False
+track_window = None
+roi_hist     = None
+
+def on_mouse(event, x, y, flags, param):
+    global roi_start, roi_end, drawing, tracking, needs_init
+    if event == cv2.EVENT_LBUTTONDOWN:
+        roi_start  = (x, y)
+        roi_end    = (x, y)
+        drawing    = True
+        tracking   = False
+        needs_init = False
+    elif event == cv2.EVENT_MOUSEMOVE and drawing:
+        roi_end = (x, y)
+    elif event == cv2.EVENT_LBUTTONUP:
+        roi_end    = (x, y)
+        drawing    = False
+        needs_init = True
+
+cv2.namedWindow("CamShift Tracker")
+cv2.setMouseCallback("CamShift Tracker", on_mouse)
+
+criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
+HSV_LOW  = np.array([0,  60,  32])
+HSV_HIGH = np.array([180, 255, 255])
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    frame   = cv2.resize(frame, None, fx=0.5, fy=0.5)
+    hsv     = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    display = frame.copy()
+
+    if drawing and roi_start and roi_end:
+        cv2.rectangle(display, roi_start, roi_end, (0, 255, 0), 2)
+
+    if needs_init:
+        needs_init = False
+        x1 = min(roi_start[0], roi_end[0])
+        y1 = min(roi_start[1], roi_end[1])
+        x2 = max(roi_start[0], roi_end[0])
+        y2 = max(roi_start[1], roi_end[1])
+        if x2 > x1 and y2 > y1:
+            roi_hsv  = hsv[y1:y2, x1:x2]
+            mask     = cv2.inRange(roi_hsv, HSV_LOW, HSV_HIGH)
+            roi_hist = cv2.calcHist([roi_hsv], [0], mask, [180], [0, 180])
+            cv2.normalize(roi_hist, roi_hist, 0, 255, cv2.NORM_MINMAX)
+            track_window = (x1, y1, x2 - x1, y2 - y1)
+            tracking = True
+        cv2.imshow("CamShift Tracker", display)
+        cv2.waitKey(1)
+        continue   # skip CamShift frame ini
+
+    if tracking and roi_hist is not None:
+        fh, fw   = frame.shape[:2]
+        mask     = cv2.inRange(hsv, HSV_LOW, HSV_HIGH)
+        backproj = cv2.calcBackProject([hsv], [0], roi_hist, [0, 180], 1)
+        backproj &= mask
+
+        x, y, w, h = track_window
+        x = int(max(0, min(x, fw - 2)))
+        y = int(max(0, min(y, fh - 2)))
+        w = int(max(2, min(w, fw - x)))
+        h = int(max(2, min(h, fh - y)))
+        track_window = (x, y, w, h)
+
+        ret_cs, track_window = cv2.CamShift(backproj, track_window, criteria)
+
+        pts = np.intp(cv2.boxPoints(ret_cs))
+        cv2.polylines(display, [pts], True, (0, 255, 0), 2)
+
+        cx, cy = int(ret_cs[0][0]), int(ret_cs[0][1])
+        cv2.circle(display, (cx, cy), 5, (0, 0, 255), -1)
+
+        tw, th = int(ret_cs[1][0]), int(ret_cs[1][1])
+        cv2.putText(display, f"cx={cx} cy={cy}  {tw}x{th}px",
+                    (10, display.shape[0] - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 1)
+
+        cv2.imshow("Back Projection", backproj)
+
+    cv2.imshow("CamShift Tracker", display)
+
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):
+        break
+    elif key == ord('r'):
+        roi_start = roi_end = None
+        drawing = needs_init = tracking = False
+        track_window = roi_hist = None
+        cv2.destroyWindow("Back Projection")
+
+cap.release()
+cv2.destroyAllWindows()
+```
+
+**Penjelasan fungsi kunci:**
+
+| Fungsi / Konsep | Keterangan |
+|---|---|
+| `cv2.calcBackProject` | Mengganti tiap piksel dengan probabilitas warnanya cocok dengan `roi_hist`; output = grayscale probability map |
+| `cv2.CamShift` | Jalankan Mean-Shift berulang (maks 10 iterasi) lalu sesuaikan ukuran window; return `RotatedRect` dan `track_window` baru |
+| `cv2.boxPoints(ret_cs)` | Konversi `RotatedRect` ke 4 titik sudut untuk digambar dengan `polylines` |
+| `needs_init` flag | Inisialisasi histogram hanya terpicu sekali saat `LBUTTONUP`; frame init di-`continue` agar CamShift tidak jalan di frame yang sama |
+| Clamp `track_window` | Koordinat dan dimensi dipaksa masuk batas frame sebelum setiap panggilan CamShift untuk mencegah hang |
+| `HSV_LOW / HSV_HIGH` | Mask saturasi ≥ 60 dan value ≥ 32 — menyaring piksel abu-abu/hitam yang tidak representatif |
+
+**Kontrol:**
+
+| Tombol | Fungsi |
+|---|---|
+| Klik + drag | Pilih target warna |
+| `r` | Reset tracking, pilih target baru |
+| `q` | Keluar |
+
+**Hasil:** CamShift berhasil melacak objek berdasarkan warna secara real-time. Kotak rotasi hijau mengikuti target di setiap frame; window Back Projection menampilkan peta probabilitas warna.
 
 ---
 
