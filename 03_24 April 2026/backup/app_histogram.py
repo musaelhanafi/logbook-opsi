@@ -33,61 +33,70 @@ HIST_H = 200
 BGR_CHANNELS = [(0, (255, 80,  80),  "B"),
                 (1, (80,  200, 80),  "G"),
                 (2, (80,  80,  255), "R")]
+HSV_CHANNELS = [(1, (80,  200, 200), "S"),
+                (2, (200, 200, 200), "V")]
 
-def draw_hue_histogram(roi_hsv):
-    hist_img = np.zeros((HIST_H, HIST_W, 3), dtype=np.uint8)
+def draw_hsv_histogram(roi_hsv):
+    panels = []
 
-    hist = cv2.calcHist([roi_hsv], [0], None, [180], [0, 180])
+    # Panel H — per-bin hue color, range 0–179
+    img   = np.zeros((HIST_H, HIST_W, 3), dtype=np.uint8)
+    hist  = cv2.calcHist([roi_hsv], [0], None, [180], [0, 180])
     cv2.normalize(hist, hist, 0, HIST_H - 40, cv2.NORM_MINMAX)
-
     bin_w = HIST_W // 180
     for i in range(180):
-        h = int(hist[i])
-        color_hsv = np.uint8([[[i, 255, 200]]])
-        color_bgr = cv2.cvtColor(color_hsv, cv2.COLOR_HSV2BGR)[0][0].tolist()
-        cv2.rectangle(hist_img,
-                      (i * bin_w, HIST_H - 40 - h),
-                      ((i + 1) * bin_w, HIST_H - 40),
-                      color_bgr, -1)
+        h         = int(hist[i])
+        color_bgr = cv2.cvtColor(np.uint8([[[i, 255, 200]]]), cv2.COLOR_HSV2BGR)[0][0].tolist()
+        cv2.rectangle(img, (i * bin_w, HIST_H - 40 - h), ((i + 1) * bin_w, HIST_H - 40), color_bgr, -1)
 
-    # Mean dan std dev channel Hue
     mean, std = cv2.meanStdDev(roi_hsv[:, :, 0])
     m, s = mean[0, 0], std[0, 0]
+    mx   = int(m * HIST_W / 180)
+    sx0  = int(max(0,   m - s) * HIST_W / 180)
+    sx1  = int(min(179, m + s) * HIST_W / 180)
 
-    mx  = int(m * HIST_W / 180)
-    sx0 = int(max(0, m - s) * HIST_W / 180)
-    sx1 = int(min(179, m + s) * HIST_W / 180)
-
-    # Area mean ± std
-    cv2.rectangle(hist_img, (sx0, 0), (sx1, HIST_H - 40), (60, 60, 60), -1)
-    # Garis mean
-    cv2.line(hist_img, (mx, 0), (mx, HIST_H - 40), (255, 255, 255), 2)
-
-    # Angka mean di atas garis mean
-    mean_label = f"{m:.1f}"
+    cv2.line(img, (mx, 0), (mx, HIST_H - 40), (255, 255, 255), 2)
     lx = mx + 3 if mx < HIST_W - 40 else mx - 35
-    cv2.putText(hist_img, mean_label, (lx, 14),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1)
-
-    # Angka batas std (mean-std dan mean+std)
-    cv2.putText(hist_img, f"{m-s:.1f}", (max(0, sx0 - 2), 30),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
-    cv2.putText(hist_img, f"{m+s:.1f}", (min(HIST_W - 35, sx1 + 2), 30),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
-
-    # Label sumbu x setiap 30 hue
+    cv2.putText(img, f"{m:.1f}", (lx, 14), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1)
+    cv2.putText(img, f"{m-s:.1f}", (max(0, sx0 - 2), 30), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
+    cv2.putText(img, f"{m+s:.1f}", (min(HIST_W - 35, sx1 + 2), 30), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
     for i in range(0, 181, 30):
         x = i * bin_w
-        cv2.line(hist_img, (x, HIST_H - 45), (x, HIST_H - 40), (180, 180, 180), 1)
-        cv2.putText(hist_img, str(i), (x + 2, HIST_H - 27),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.35, (200, 200, 200), 1)
+        cv2.line(img, (x, HIST_H - 45), (x, HIST_H - 40), (180, 180, 180), 1)
+        cv2.putText(img, str(i), (x + 2, HIST_H - 27), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (200, 200, 200), 1)
+    cv2.putText(img, f"H  mean={m:.1f}  std={s:.1f}", (10, HIST_H - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+    panels.append(img)
 
-    # Hue dominan, mean, std
-    peak_hue = int(np.argmax(hist))
-    cv2.putText(hist_img, f"dominan={peak_hue}  mean={m:.1f}  std={s:.1f}",
-                (10, HIST_H - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+    # Panel S dan V — struktur sama dengan BGR
+    for ch, color, label in HSV_CHANNELS:
+        img  = np.zeros((HIST_H, HIST_W, 3), dtype=np.uint8)
+        hist = cv2.calcHist([roi_hsv], [ch], None, [256], [0, 256])
+        cv2.normalize(hist, hist, 0, HIST_H - 40, cv2.NORM_MINMAX)
+        for i in range(256):
+            h  = int(hist[i])
+            x0 = i * HIST_W // 256
+            x1 = (i + 1) * HIST_W // 256
+            cv2.rectangle(img, (x0, HIST_H - 40 - h), (x1, HIST_H - 40), [c // 3 for c in color], -1)
 
-    return hist_img
+        mean, std = cv2.meanStdDev(roi_hsv[:, :, ch])
+        m, s = mean[0, 0], std[0, 0]
+        mx   = int(m * HIST_W / 256)
+        sx0  = int(max(0,   m - s) * HIST_W / 256)
+        sx1  = int(min(255, m + s) * HIST_W / 256)
+
+        cv2.line(img, (mx, 0), (mx, HIST_H - 40), color, 2)
+        lx = mx + 3 if mx < HIST_W - 40 else mx - 35
+        cv2.putText(img, f"{m:.1f}", (lx, 14), cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 1)
+        cv2.putText(img, f"{m-s:.1f}", (max(0, sx0 - 2), 30), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
+        cv2.putText(img, f"{m+s:.1f}", (min(HIST_W - 35, sx1 + 2), 30), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (160, 160, 160), 1)
+        for i in range(0, 257, 64):
+            x = i * HIST_W // 256
+            cv2.line(img, (x, HIST_H - 45), (x, HIST_H - 40), (140, 140, 140), 1)
+            cv2.putText(img, str(i), (x + 2, HIST_H - 27), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (160, 160, 160), 1)
+        cv2.putText(img, f"{label}  mean={m:.1f}  std={s:.1f}", (10, HIST_H - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+        panels.append(img)
+
+    return np.vstack(panels)
 
 def draw_bgr_histogram(roi_bgr):
     panel_h = HIST_H
@@ -114,9 +123,6 @@ def draw_bgr_histogram(roi_bgr):
         sx0 = int(max(0,   m - s) * HIST_W / 256)
         sx1 = int(min(255, m + s) * HIST_W / 256)
 
-        # Area mean ± std
-        cv2.rectangle(img, (sx0, 0), (sx1, panel_h - 40), (50, 50, 50), -1)
-        # Garis mean
         cv2.line(img, (mx, 0), (mx, panel_h - 40), color, 2)
 
         # Angka mean di atas garis
@@ -166,7 +172,7 @@ while True:
         if x2 > x1 and y2 > y1:
             roi_bgr = frame[y1:y2, x1:x2]
             roi_hsv = hsv[y1:y2, x1:x2]
-            cv2.imshow("Histogram Hue", draw_hue_histogram(roi_hsv))
+            cv2.imshow("Histogram HSV", draw_hsv_histogram(roi_hsv))
             cv2.imshow("Histogram BGR", draw_bgr_histogram(roi_bgr))
 
     cv2.imshow("Kamera", display)

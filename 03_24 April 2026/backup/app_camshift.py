@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
 
 cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
 
@@ -7,7 +8,7 @@ if not cap.isOpened():
     print("Error: kamera tidak ditemukan")
     exit()
 
-print("Klik dan drag untuk pilih target | 'r' reset | 'q' keluar")
+print("Klik dan drag untuk pilih target | 'v' rekam | 's' screenshot | 'r' reset | 'q' keluar")
 
 roi_start    = None
 roi_end      = None
@@ -16,6 +17,8 @@ needs_init   = False   # flag: hitung histogram setelah LBUTTONUP
 tracking     = False
 track_window = None
 roi_hist     = None
+writer       = None
+recording    = False
 
 def on_mouse(event, x, y, flags, param):
     global roi_start, roi_end, drawing, tracking, needs_init
@@ -103,11 +106,38 @@ while True:
 
         cv2.imshow("Back Projection", backproj)
 
+    if recording and writer is not None:
+        writer.write(display)
+        cv2.circle(display, (20, 20), 8, (0, 0, 255), -1)
+        cv2.putText(display, "REC", (35, 27),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+
     cv2.imshow("CamShift Tracker", display)
 
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
+    elif key == ord('v'):
+        if not recording:
+            h, w = display.shape[:2]
+            filename = f"rekaman_{int(time.time())}.avi"
+            writer = cv2.VideoWriter(
+                filename,
+                cv2.VideoWriter_fourcc(*"MJPG"),
+                cap.get(cv2.CAP_PROP_FPS) or 30.0,
+                (w, h),
+            )
+            recording = True
+            print(f"Rekaman dimulai: {filename}")
+        else:
+            recording = False
+            writer.release()
+            writer = None
+            print("Rekaman dihentikan dan disimpan.")
+    elif key == ord('s'):
+        filename = f"screenshot_{int(time.time())}.png"
+        cv2.imwrite(filename, display)
+        print(f"Screenshot disimpan: {filename}")
     elif key == ord('r'):
         roi_start    = roi_end = None
         drawing      = False
@@ -116,6 +146,9 @@ while True:
         track_window = None
         roi_hist     = None
         cv2.destroyWindow("Back Projection")
+
+if recording and writer is not None:
+    writer.release()
 
 cap.release()
 cv2.destroyAllWindows()
