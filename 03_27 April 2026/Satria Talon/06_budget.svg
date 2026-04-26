@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 210"><rect width="650" height="210" fill="#ffffff" rx="10" stroke="#d4d2c8" stroke-width="0.8"/><text x="325" y="26" text-anchor="middle" font-size="13" font-weight="bold" fill="#444441" font-family="sans-serif">Power Budget — Satria Talon</text><text x="325" y="40" text-anchor="middle" font-size="10" fill="#888780" font-family="sans-serif">MTOW 5.25 lb · semi 2.13 ft · sys eff 60.6%</text>  <rect x="200" y="52" width="430" height="26" fill="#f5f5f5" rx="3"/>
+  <rect x="200" y="52" width="82" height="26" fill="#1D9E75" rx="3" opacity="0.88"/>
+  <text x="196" y="69" text-anchor="end" font-size="10" fill="#444441" font-family="sans-serif">Cruise (14.7 m/s)</text>
+  <text x="287" y="69" font-size="10" fill="#1D9E75" font-weight="bold" font-family="sans-serif">46 W = 0.062 HP</text>
+  <rect x="200" y="90" width="430" height="26" fill="#f5f5f5" rx="3"/>
+  <rect x="200" y="90" width="249" height="26" fill="#BA7517" rx="3" opacity="0.88"/>
+  <text x="196" y="107" text-anchor="end" font-size="10" fill="#444441" font-family="sans-serif">Climb 4m/s (139 W)</text>
+  <text x="454" y="107" font-size="10" fill="#BA7517" font-weight="bold" font-family="sans-serif">139 W = 0.186 HP</text>
+  <rect x="200" y="128" width="430" height="26" fill="#f5f5f5" rx="3"/>
+  <rect x="200" y="128" width="311" height="26" fill="#D85A30" rx="3" opacity="0.88"/>
+  <text x="196" y="145" text-anchor="end" font-size="10" fill="#444441" font-family="sans-serif">Peak ×1.25 (174 W)</text>
+  <text x="516" y="145" font-size="10" fill="#D85A30" font-weight="bold" font-family="sans-serif">174 W = 0.233 HP</text>
+  <rect x="200" y="166" width="430" height="26" fill="#f5f5f5" rx="3"/>
+  <rect x="200" y="166" width="374" height="26" fill="#D85A30" rx="3" opacity="0.88"/>
+  <text x="196" y="183" text-anchor="end" font-size="10" fill="#444441" font-family="sans-serif">Motor rating min (209 W)</text>
+  <text x="579" y="183" font-size="10" fill="#D85A30" font-weight="bold" font-family="sans-serif">209 W = 0.280 HP</text></svg>
