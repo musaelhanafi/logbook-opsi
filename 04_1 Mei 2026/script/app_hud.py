@@ -10,6 +10,8 @@ Penggunaan
     python app_hud.py --connection udp:0.0.0.0:14550
     python app_hud.py --connection /dev/ttyUSB0 --baud 57600
     python app_hud.py --camera 1
+    python app_hud.py --res 640 480            # set resolusi akuisisi kamera
+    python app_hud.py --crop 0,0,640,480       # crop frame ke region x,y,w,h
 
 Kontrol
 -------
@@ -99,6 +101,18 @@ def mavlink_thread(connection_string: str, baud: int, state: MavState,
         print(f"[MAV] Error: {e}")
 
 
+# ── Helpers ---------------------------------------------------------------
+
+def parse_crop(s: str):
+    try:
+        parts = [int(v) for v in s.split(",")]
+        if len(parts) != 4:
+            raise ValueError
+        return tuple(parts)
+    except ValueError:
+        raise argparse.ArgumentTypeError("--crop harus berupa X,Y,W,H (contoh: 0,0,640,480)")
+
+
 # ── Main ------------------------------------------------------------------
 
 def main():
@@ -108,6 +122,10 @@ def main():
     parser.add_argument("--baud",   type=int, default=57600)
     parser.add_argument("--camera", type=int, default=0,
                         help="Index kamera (default: 0)")
+    parser.add_argument("--res", nargs=2, type=int, metavar=("W", "H"),
+                        help="Resolusi akuisisi kamera (contoh: --res 640 480)")
+    parser.add_argument("--crop", type=parse_crop, metavar="X,Y,W,H",
+                        help="Crop frame dari titik (X,Y) selebar W tinggi H (contoh: --crop 0,0,640,480)")
     parser.add_argument("--no-pitch", action="store_true",
                         help="Sembunyikan pitch ladder")
     parser.add_argument("--no-yaw",   action="store_true",
@@ -120,10 +138,24 @@ def main():
         print(f"Error: kamera {args.camera} tidak ditemukan")
         sys.exit(1)
 
-    width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))  // 2
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) // 2
-    fps    = cap.get(cv2.CAP_PROP_FPS) or 30.0
-    print(f"[CAM] {width}x{height} @ {fps:.0f} FPS")
+    if args.res:
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH,  args.res[0])
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, args.res[1])
+
+    cam_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    cam_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps   = cap.get(cv2.CAP_PROP_FPS) or 30.0
+
+    if args.crop:
+        cx, cy, cw, ch = args.crop
+        if cx + cw > cam_w or cy + ch > cam_h:
+            print(f"[CAM] Error: --crop {args.crop} melebihi ukuran akuisisi {cam_w}x{cam_h}")
+            sys.exit(1)
+        out_info = f"  output={cw}x{ch}  crop={args.crop}"
+    else:
+        out_info = ""
+
+    print(f"[CAM] akuisisi={cam_w}x{cam_h} @ {fps:.0f} FPS{out_info}")
 
     # ── MAVLink thread ────────────────────────────────────────────────────
     state      = MavState()
@@ -140,7 +172,10 @@ def main():
                          show_yaw=not args.no_yaw)
     hud_on  = True
 
-    print("Tekan  h = toggle HUD  |  s = screenshot  |  q = keluar")
+    print("Tekan  h = toggle HUD  |  r = mulai/stop rekam  |  s = screenshot  |  q = keluar")
+
+    writer    = None
+    recording = False
 
     try:
         while True:
@@ -149,10 +184,18 @@ def main():
                 print("[CAM] Gagal membaca frame.")
                 break
 
-            frame = cv2.resize(frame, (width, height))
+            if args.crop:
+                cx, cy, cw, ch = args.crop
+                frame = frame[cy:cy + ch, cx:cx + cw]
             roll, pitch, yaw, lat, lon = state.snapshot()
 
             hud.draw_hud(hud_on, frame, lat, lon, yaw, pitch, roll)
+
+            if recording and writer is not None:
+                writer.write(frame)
+                cv2.circle(frame, (20, 20), 8, (0, 0, 255), -1)
+                cv2.putText(frame, "REC", (35, 27),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
 
             cv2.imshow("HUD", frame)
             key = cv2.waitKey(1) & 0xFF
@@ -166,8 +209,27 @@ def main():
                 fname = f"screenshot_{int(time.time())}.png"
                 cv2.imwrite(fname, frame)
                 print(f"[CAM] Screenshot disimpan: {fname}")
+            elif key == ord("r"):
+                if not recording:
+                    h, w = frame.shape[:2]
+                    fname = f"rekaman_{int(time.time())}.avi"
+                    writer = cv2.VideoWriter(
+                        fname,
+                        cv2.VideoWriter_fourcc(*"MJPG"),
+                        fps,
+                        (w, h),
+                    )
+                    recording = True
+                    print(f"[REC] Rekaman dimulai: {fname}")
+                else:
+                    recording = False
+                    writer.release()
+                    writer = None
+                    print("[REC] Rekaman dihentikan dan disimpan.")
 
     finally:
+        if recording and writer is not None:
+            writer.release()
         stop_event.set()
         cap.release()
         cv2.destroyAllWindows()
