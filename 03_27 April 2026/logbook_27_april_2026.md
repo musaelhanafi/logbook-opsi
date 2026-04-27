@@ -13,6 +13,14 @@ Kegiatan hari ini berfokus pada pengembangan modul **drone-seeker** — komponen
 
 ---
 
+## Foto Kegiatan
+
+![Kegiatan deteksi warna — Musa dan Ihsan menggunakan kertas warna sebagai target kamera](aktivitas_color_detection.jpeg)
+
+*Musa El Hanafi (kiri) dan Muhammad Ihsan Fahriansyah (kanan) saat sesi pengamatan histogram warna. Terlihat kertas warna biru dan oranye yang digunakan sebagai target objek di depan kamera laptop.*
+
+---
+
 ## Arsitektur Modul drone-seeker
 
 Modul `drone-seeker` bertugas memproses frame kamera secara real-time, mendeteksi target berwarna, dan mengirimkan perintah kendali ke Pixhawk via MAVLink. OpenCV menjadi inti pipeline pemrosesan visual.
@@ -956,6 +964,30 @@ Display di-resize 50%, sehingga koordinat mouse di display perlu dikalikan 2 unt
 
 ---
 
+### Hasil Pengamatan Worksheet Histogram
+
+Setelah aplikasi `app_histogram.py` berjalan, dilakukan pengamatan histogram untuk enam warna menggunakan kertas warna sebagai target ROI dalam tiga kondisi pencahayaan. Hasil lengkap dicatat dalam [worksheet_histogram.md](worksheet_histogram.md).
+
+**Ringkasan stabilitas Hue antar kondisi:**
+
+| Warna | Mean H Normal | Mean H Terang | Mean H Bayangan | ΔH maks |
+|---|---|---|---|---|
+| Merah | 15 | 12 | 10 | 5 |
+| Oranye | 18 | 16 | 17 | 2 |
+| Kuning | 30 | 28 | 29 | 2 |
+| Hijau | 62 | 60 | 63 | 3 |
+| **Biru** | **120** | **120** | **120** | **0** |
+| Ungu | 148 | 145 | 150 | 5 |
+
+**Temuan utama:**
+- **H (Hue) paling stabil** — ΔH maksimum hanya 5 unit di semua warna; biru bahkan tidak berubah sama sekali (H=120 konstan).
+- **V (Value) paling sensitif** — naik drastis saat kondisi terang (contoh: Oranye 160→238) dan turun tajam saat bayangan (160→88).
+- **S (Saturation) turun saat terang** — cahaya berlebih membuat warna tampak *washed out* (Hijau: 248→192).
+- **Biru paling mudah dideteksi** — H dan S tidak berubah sama sekali di ketiga kondisi; hanya V yang bergeser.
+- **Rekomendasi threshold**: gunakan toleransi H ±5–10, S min ~80, V dalam rentang lebar 40–255.
+
+---
+
 ### 8. Aplikasi CamShift Color Tracking
 
 **Kegiatan:**
@@ -1159,6 +1191,10 @@ cv2.destroyAllWindows()
 
 **Hasil:** CamShift berhasil melacak objek berdasarkan warna secara real-time. Kotak rotasi hijau mengikuti target di setiap frame; window Back Projection menampilkan peta probabilitas warna. Rekaman video dan screenshot dapat disimpan langsung dari aplikasi.
 
+**Rekaman hasil tracking:**
+
+> [`camshift_color_tracking.mp4`](camshift_color_tracking.mp4) — Rekaman sesi CamShift tracking pada objek berwarna. Terlihat kotak rotasi hijau mengikuti target secara adaptif saat target digerakkan, diputar, dan dipindahkan; window Back Projection menampilkan peta probabilitas Hue secara real-time.
+
 ---
 
 ## Desain Model UAV di X-Plane Plane Maker
@@ -1252,9 +1288,13 @@ UAV konfigurasi delta wing — sayap menyatu tanpa ekor konvensional. Model ini 
 | 4 | Aplikasi Deteksi Objek — pipeline masking, contour, centroid | ✅ Selesai |
 | 5 | Penanganan warna merah (Hue melingkar) | ✅ Selesai |
 | 6 | Aplikasi Kalibrasi Warna — trackbar interaktif + simpan JSON | ✅ Selesai |
-| 7 | Pemodelan Satria Nano di X-Plane Plane Maker | ✅ Selesai |
-| 8 | Pemodelan Satria Talon di X-Plane Plane Maker | ✅ Selesai |
-| 9 | Pemodelan Satria Delta di X-Plane Plane Maker | ✅ Selesai |
+| 7 | Aplikasi Histogram ROI Interaktif (`app_histogram.py`) | ✅ Selesai |
+| 8 | Worksheet Pengamatan Histogram — 6 warna × 3 kondisi cahaya | ✅ Selesai |
+| 9 | Aplikasi CamShift Color Tracking (`app_camshift.py`) | ✅ Selesai |
+| 10 | Rekaman hasil CamShift tracking (`camshift_color_tracking.mp4`) | ✅ Selesai |
+| 11 | Pemodelan Satria Nano di X-Plane Plane Maker | ✅ Selesai |
+| 12 | Pemodelan Satria Talon di X-Plane Plane Maker | ✅ Selesai |
+| 13 | Pemodelan Satria Delta di X-Plane Plane Maker | ✅ Selesai |
 
 ---
 
