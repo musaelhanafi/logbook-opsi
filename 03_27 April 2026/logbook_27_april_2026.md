@@ -988,6 +988,85 @@ Setelah aplikasi `app_histogram.py` berjalan, dilakukan pengamatan histogram unt
 
 ---
 
+### Perbandingan BGR vs HSV dalam Deteksi Warna
+
+Setelah pengamatan histogram selesai, data worksheet digunakan untuk membandingkan secara kuantitatif perilaku channel BGR dan HSV terhadap perubahan kondisi pencahayaan. Perbandingan ini menjadi landasan empiris mengapa pipeline deteksi pada modul `drone-seeker` menggunakan ruang warna HSV, bukan BGR.
+
+#### Fluktuasi channel BGR terhadap perubahan cahaya
+
+Berikut nilai mean tiap channel BGR dari worksheet, untuk empat warna representatif:
+
+| Warna | Kondisi | Mean B | Mean G | Mean R | ΔB | ΔG | ΔR |
+|---|---|---|---|---|---|---|---|
+| **Oranye** | Normal | 6 | 118 | 170 | — | — | — |
+| | Terang | 45 | 185 | 230 | +39 | +67 | +60 |
+| | Bayangan | 12 | 68 | 98 | +6 | −50 | −72 |
+| **Hijau** | Normal | 5 | 172 | 6 | — | — | — |
+| | Terang | 22 | 242 | 28 | +17 | +70 | +22 |
+| | Bayangan | 7 | 88 | 8 | +2 | −84 | +2 |
+| **Biru** | Normal | 203 | 0 | 0 | — | — | — |
+| | Terang | 255 | 0 | 0 | +52 | 0 | 0 |
+| | Bayangan | 217 | 1 | 0 | +14 | +1 | 0 |
+| **Ungu** | Normal | 145 | 10 | 150 | — | — | — |
+| | Terang | 195 | 52 | 200 | +50 | +42 | +50 |
+| | Bayangan | 80 | 8 | 85 | −65 | −2 | −65 |
+
+**Masalah threshold BGR:** Untuk mendeteksi oranye di kondisi normal, rentang R yang dibutuhkan adalah sekitar 150–190. Namun saat kondisi terang, R menjadi 230 — di luar rentang tersebut, objek tidak terdeteksi. Saat bayangan, R turun ke 98 — juga tidak terdeteksi. Memperlebar threshold agar mencakup ketiga kondisi (R: 90–235) membuat threshold terlalu longgar dan berisiko mendeteksi objek lain yang berwarna serupa.
+
+#### Stabilitas channel HSV terhadap perubahan cahaya
+
+| Warna | Kondisi | Mean H | Mean S | Mean V |
+|---|---|---|---|---|
+| **Oranye** | Normal | 18 | 238 | 160 |
+| | Terang | 16 | 178 | 238 |
+| | Bayangan | 17 | 240 | 88 |
+| **Hijau** | Normal | 62 | 248 | 175 |
+| | Terang | 60 | 192 | 244 |
+| | Bayangan | 63 | 245 | 88 |
+| **Biru** | Normal | 120 | 255 | 200 |
+| | Terang | 120 | 255 | 249 |
+| | Bayangan | 120 | 255 | 210 |
+| **Ungu** | Normal | 148 | 220 | 165 |
+| | Terang | 145 | 165 | 238 |
+| | Bayangan | 150 | 218 | 92 |
+
+#### Perbandingan δ maksimum antar kondisi
+
+| Channel | Oranye | Hijau | Biru | Ungu | Rata-rata |
+|---|---|---|---|---|---|
+| **H** | **2** | **3** | **0** | **5** | **2.5** |
+| S | 62 | 56 | 0 | 55 | 43.3 |
+| V | 150 | 156 | 49 | 146 | 125.3 |
+| B | 39 | 17 | 52 | 65 | 43.3 |
+| G | 117 | 154 | 1 | 44 | 79.0 |
+| R | 132 | 22 | 0 | 115 | 67.3 |
+
+Channel **H memiliki δ rata-rata terendah (2.5)** — jauh di bawah semua channel lain. Channel V dan channel-channel BGR memiliki δ di atas 40.
+
+#### Implikasi pada desain threshold
+
+| Aspek | BGR | HSV |
+|---|---|---|
+| Jumlah channel yang perlu di-threshold | 3 (B, G, R) | 1 utama (H) |
+| Channel referensi stabil | Tidak ada | H |
+| Channel yang berubah saat terang | Semua naik | V naik, S turun |
+| Channel yang berubah saat bayangan | Semua turun | V turun |
+| Threshold yang tetap valid lintas kondisi | Tidak praktis | `H ± 10`, `S ≥ 80`, `V: 40–255` |
+| Ambiguitas warna (misdeteksi) | Tinggi | Rendah |
+
+**Contoh threshold praktis yang dihasilkan dari worksheet:**
+
+| Warna | HSV Lower | HSV Upper | Dasar Penentuan |
+|---|---|---|---|
+| Oranye | `[10, 80, 40]` | `[25, 255, 255]` | H stabil 16–18; S min dari kondisi terang (178); V diperlebar dari 88 ke 238 |
+| Hijau | `[35, 80, 40]` | `[85, 255, 255]` | H stabil 60–63; S min dari kondisi terang (192); V dari 88 ke 244 |
+| Biru | `[100, 200, 150]` | `[130, 255, 255]` | H konstan 120; S konstan 255; V paling sempit karena stabil (200–249) |
+| Ungu | `[130, 80, 40]` | `[170, 255, 255]` | H ±5 dari 148; S min dari kondisi terang (165); V diperlebar lebar |
+
+**Kesimpulan:** Data worksheet mengkonfirmasi secara empiris bahwa ruang warna HSV — khususnya channel H — adalah pilihan yang tepat untuk pipeline deteksi warna pada `drone-seeker`. Threshold berbasis H cukup stabil digunakan di berbagai kondisi pencahayaan tanpa perlu kalibrasi ulang, sementara threshold berbasis BGR memerlukan penyesuaian setiap kali kondisi cahaya berubah.
+
+---
+
 ### 8. Aplikasi CamShift Color Tracking
 
 **Kegiatan:**
@@ -1290,6 +1369,7 @@ UAV konfigurasi delta wing — sayap menyatu tanpa ekor konvensional. Model ini 
 | 6 | Aplikasi Kalibrasi Warna — trackbar interaktif + simpan JSON | ✅ Selesai |
 | 7 | Aplikasi Histogram ROI Interaktif (`app_histogram.py`) | ✅ Selesai |
 | 8 | Worksheet Pengamatan Histogram — 6 warna × 3 kondisi cahaya | ✅ Selesai |
+| 8a | Analisis perbandingan BGR vs HSV berdasarkan data worksheet | ✅ Selesai |
 | 9 | Aplikasi CamShift Color Tracking (`app_camshift.py`) | ✅ Selesai |
 | 10 | Rekaman hasil CamShift tracking (`camshift_color_tracking.mp4`) | ✅ Selesai |
 | 11 | Pemodelan Satria Nano di X-Plane Plane Maker | ✅ Selesai |
