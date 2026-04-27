@@ -1272,7 +1272,21 @@ cv2.destroyAllWindows()
 
 **Rekaman hasil tracking:**
 
-> [`camshift_color_tracking.mp4`](camshift_color_tracking.mp4) — Rekaman sesi CamShift tracking pada objek berwarna. Terlihat kotak rotasi hijau mengikuti target secara adaptif saat target digerakkan, diputar, dan dipindahkan; window Back Projection menampilkan peta probabilitas Hue secara real-time.
+<div style="position:relative; display:inline-block; width:100%; max-width:640px;">
+  <a href="https://youtu.be/N6wPuOdVO5g" target="_blank" style="display:block;">
+    <img src="https://img.youtube.com/vi/N6wPuOdVO5g/maxresdefault.jpg"
+         alt="CamShift Color Tracking — Tonton di YouTube"
+         style="width:100%; border-radius:8px; display:block;"/>
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
+      <svg width="80" height="56" viewBox="0 0 80 56" xmlns="http://www.w3.org/2000/svg">
+        <rect width="80" height="56" rx="14" fill="#FF0000" opacity="0.92"/>
+        <polygon points="32,14 32,42 58,28" fill="white"/>
+      </svg>
+    </div>
+  </a>
+</div>
+
+*Rekaman sesi CamShift tracking pada objek berwarna. Terlihat kotak rotasi hijau mengikuti target secara adaptif saat target digerakkan, diputar, dan dipindahkan; window Back Projection menampilkan peta probabilitas Hue secara real-time. Tonton di YouTube: [youtu.be/N6wPuOdVO5g](https://youtu.be/N6wPuOdVO5g)*
 
 ---
 
