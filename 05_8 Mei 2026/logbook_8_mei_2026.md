@@ -215,7 +215,7 @@ Pengujian siklus operasional penuh drone kamikaze dalam simulasi HITL — mencak
 | Mode bukan AUTO | Kirim SET_MODE → AUTO |
 | AUTO + WP bukan WP terakhir | Pertahankan AUTO, ikuti waypoint misi |
 | AUTO + WP terakhir + jarak ≤ 1000 m + target terkunci | SET_MODE → TRACKING (mode 27) |
-| Tracking hilang ≥ 50 frame berturut-turut | SET_MODE → AUTO (kembali ke misi) |
+| Tracking hilang ≥ 10 frame berturut-turut | SET_MODE → AUTO (kembali ke misi) |
 
 ![Siklus Otonom Drone Kamikaze](siklus_otonom.png)
 
@@ -233,7 +233,7 @@ Setelah mencapai ketinggian jelajah, drone terbang mengikuti jalur waypoint yang
 
 **Fase 3 — Terminal (Seeker Aktif)**
 
-Saat kondisi fase terminal terpenuhi dan target terkunci oleh kamera, seeker memerintahkan Pixhawk (Flight Controller) beralih ke mode **TRACKING (custom mode 27)**. Pada fase ini kendali penuh diserahkan ke sistem seeker. PID roll mengarahkan pesawat secara lateral mengikuti errorx, sementara PID pitch menukikkan hidung pesawat ke bawah mengikuti errory. Drone menukik tajam menuju target — pada pengujian ini puncak kecepatan vertikal mencapai **-38.60 m/s**. Apabila lock target hilang lebih dari 50 frame berturut-turut, sistem kembali ke mode AUTO untuk mencegah drone kehilangan arah dan kembali melakukan pelacakan saat objek terdeteksi kembali.
+Saat kondisi fase terminal terpenuhi dan target terkunci oleh kamera, seeker memerintahkan Pixhawk (Flight Controller) beralih ke mode **TRACKING (custom mode 27)**. Pada fase ini kendali penuh diserahkan ke sistem seeker. PID roll mengarahkan pesawat secara lateral mengikuti errorx, sementara PID pitch menukikkan hidung pesawat ke bawah mengikuti errory. Drone menukik tajam menuju target — pada pengujian ini puncak kecepatan vertikal mencapai **-38.60 m/s**. Apabila lock target hilang lebih dari 10 frame berturut-turut, sistem kembali ke mode AUTO untuk mencegah drone kehilangan arah dan kembali melakukan pelacakan saat objek terdeteksi kembali.
 
 **Transisi yang berhasil diverifikasi:**
 1. Seeker memerintahkan mode AUTO → Pixhawk mengeksekusi misi takeoff dari WP 0
@@ -314,38 +314,45 @@ Analisis CSV hasil logging menggunakan script `terminal_analyse.py` untuk mengev
 
 **Perintah:**
 ```bash
-python3 terminal_analyse.py tracking.csv
+python3 terminal_analyse.py tracking_kiri.csv
 ```
 
-**Output ringkasan (`hit_success_tracking.csv`):**
+**Output ringkasan (`tracking_kiri.csv`):**
 
 ```
 ───────────────────────────────────────────────────────
-  File duration   : 18.9 s  (433 rows)
-  Target locked   : 414 rows  (95.6%)
-  Track lost      : 19 rows  (4.4%)
+  File duration   : 26.0 s  (765 rows)
+  Target locked   : 718 rows  (93.9%)
+  Track lost      : 47 rows  (6.1%)
 
   ── First track acquisition ──
   Time            : t+0.1 s
-  Alt above target: 59.8 m
-  Speed           : 111.0 km/h
-  Distance        : 724.9 m
+  Alt above target: 58.2 m
+  Speed           : 106.2 km/h
+  Distance        : 844.7 m
 
   ── Nearest point (hit) ──
-  Time            : t+18.6 s
-  Speed at hit    : 122.4 km/h  (34.0 m/s)
-  Alt at hit      : 2.1 m
+  Time            : t+26.0 s
+  Distance        : 4.5 m
+  Speed at hit    : 102.2 km/h  (28.4 m/s)
+  Alt at hit      : 1.8 m
 
   ── Descent ──
-  Mean descent    : 3.10 m/s
-  Peak descent    : 38.60 m/s
-  Total alt drop  : 57.6 m
+  Mean descent    : 2.16 m/s
+  Peak descent    : 33.44 m/s
+  Total alt drop  : 56.4 m
 
   ── Pitch (locked rows only) ──
-  Mean pitch      : -5.2 deg
-  Mean nav_pitch  : -4.2 deg
+  Mean pitch      : 2.6 deg
+
+  ── Frame rate ──
+  Mean FPS        : 29.4
 ───────────────────────────────────────────────────────
 ```
+
+**Screenshot sesaat sebelum menabrak target:**
+
+![Sesaat sebelum menabrak target](sesaat_sebelum_nabrak_target.png)
 
 **Video hasil tracking:**
 
@@ -371,19 +378,39 @@ python3 terminal_analyse.py tracking.csv
 **Penanda pada grafik:**
 - Garis cyan (`:`) — titik jarak terdekat ke target
 
-**Deskripsi manuver:**
+**Deskripsi manuver (tracking_kiri.csv):**
 
-Seeker pertama kali mengunci target saat drone berada di ketinggian **59.8 m** di atas target dengan jarak horizontal **724.9 m** dan kecepatan **111.0 km/h**. Begitu lock diperoleh, mode TRACKING aktif dan sistem PID mulai mengarahkan drone menukik ke arah target. Drone menjalani descent rata-rata **3.10 m/s** dengan puncak descent mencapai **38.60 m/s** saat fase terminal — menunjukkan manuver menukik tajam mendekati target. 
+Seeker pertama kali mengunci target saat drone berada di ketinggian **58.2 m** di atas target dengan jarak horizontal **844.7 m** dan kecepatan **106.2 km/h**. Begitu lock diperoleh pada t+0.1 s, mode TRACKING aktif dan sistem PID mulai mengarahkan drone menukik ke arah target. Drone menjalani descent rata-rata **2.16 m/s** dengan puncak descent mencapai **33.44 m/s** saat fase terminal — menunjukkan manuver menukik tajam mendekati target. Total penurunan ketinggian selama fase tracking adalah **56.4 m**.
 
-Dari pertama mendeteksi hingga titik terdekat (hit), waktu yang dibutuhkan adalah **18.5 detik** (t+0.1 s → t+18.6 s). Saat menabrak target drone memiliki kecepatan **122 km/h**. Rata-rata pitch pesawat selama tracking adalah **-5.2°** (pitch down).
+Dari pertama mendeteksi hingga titik terdekat (hit), waktu yang dibutuhkan adalah **26.0 detik** (t+0.1 s → t+26.0 s). Saat menabrak target drone memiliki kecepatan **102.2 km/h** (28.4 m/s) pada ketinggian **1.8 m** di atas target. Rata-rata pitch pesawat selama tracking adalah **+2.6°**.
 
-Seeker mempertahankan lock dengan akurasi **95.6%** da(**414 dari 433 frame**) dengan throughput rata-rata **±22.9 FPS**.
+Seeker mempertahankan lock dengan akurasi **93.9%** (718 dari 765 frame) dengan throughput rata-rata **29.4 FPS**.
 
-**Hasil:** Drone menabrak target pada kecepatan **122.4 km/h**. Akurasi pelacakan objek warna **95.6%** sepanjang fase terminal.
+**Hasil:** Drone menabrak target pada kecepatan **102.2 km/h**. Akurasi pelacakan objek warna **93.9%** sepanjang fase terminal.
 
 ---
 
-## 9. Kendala dan Solusi
+## 9. Perbandingan Hasil Pengujian: Arah Kiri vs Arah Kanan
+
+Dua sesi tracking dianalisis menggunakan `terminal_analyse.py` terhadap `tracking_kiri.csv` dan `tracking_kanan.csv`. Kedua sesi berhasil menabrak target dalam simulasi HITL.
+
+| Metrik | Arah Kiri | Arah Kanan |
+|---|---|---|
+| Jarak lock on | 844.7 m | 610.0 m |
+| Akurasi deteksi dan tracking (%) | 93.3% (725/777 frame) | 90.7% (527/581 frame) |
+| Kecepatan nabrak | 102.3 km/h | 106.6 km/h |
+| Menabrak target? | Ya | Ya |
+| Respon servo | Sesuai | Sesuai |
+| Frame rate | 28.8 FPS | 28.1 FPS |
+
+**Catatan:**
+- Kecepatan nabrak diambil dari 3 frame sebelum titik jarak minimum karena pada frame minimum terdapat glitch telemetri GPS (groundspeed turun tiba-tiba menjadi tidak realistis). Kecepatan stabil terakhir sebelum impact: KIRI 102.3 km/h, KANAN 106.6 km/h.
+- Akurasi tracking sedikit lebih tinggi pada arah kiri (91.8% vs 89.8%), kemungkinan karena pencahayaan dan kontras objek pink lebih konsisten dari sudut tersebut.
+- Jarak lock on arah kiri lebih jauh (844.7 m vs 610.0 m) menunjukkan deteksi berhasil dilakukan dari jarak yang lebih jauh pada pendekatan kiri.
+
+---
+
+## 10. Kendala dan Solusi
 
 | No | Kendala | Solusi |
 |---|---|---|
@@ -395,7 +422,7 @@ Seeker mempertahankan lock dengan akurasi **95.6%** da(**414 dari 433 frame**) d
 
 ---
 
-## 10. Rencana Tindak Lanjut
+## 11. Rencana Tindak Lanjut
 
 | Prioritas | Kegiatan |
 |---|---|
