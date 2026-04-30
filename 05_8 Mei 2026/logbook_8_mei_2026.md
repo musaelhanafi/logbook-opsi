@@ -429,33 +429,34 @@ Seeker mempertahankan lock dengan akurasi **97.7%** (603 dari 617 frame) dengan 
 
 ---
 
-## 9. Perbandingan Hasil Pengujian: Arah Kiri vs Arah Kanan
+## 9. Perbandingan Hasil Pengujian: Empat Run (Kiri & Kanan, 60m & 80m)
 
-Dua sesi tracking dianalisis menggunakan `terminal_analyse.py` terhadap `tracking_kiri.csv` dan `tracking_kanan.csv`. Kedua sesi berhasil menabrak target dalam simulasi HITL.
+Empat sesi tracking dianalisis menggunakan `terminal_analyse.py`. Semua sesi berhasil menabrak target dalam simulasi HITL.
 
-| Metrik | Arah Kiri | Arah Kanan |
-|---|---|---|
-| Durasi fase terminal | 36.2 s (617 rows) | 34.6 s (701 rows) |
-| Jarak lock on | 970.8 m | 919.3 m |
-| Akurasi deteksi dan tracking (%) | 97.7% (603/617 frame) | 97.7% (685/701 frame) |
-| Kecepatan nabrak | 101.9 km/h (28.3 m/s) | 102.2 km/h (28.4 m/s) |
-| Jarak terdekat (hit) | 5.0 m | 9.4 m |
-| Ketinggian saat hit | 2.4 m | 2.7 m |
-| Mean descent | 1.65 m/s | 1.66 m/s |
-| Peak descent | 26.22 m/s | 31.22 m/s |
-| Total alt drop | 57.0 m | 55.7 m |
-| Mean pitch (locked) | -3.9° | -4.1° |
-| Mean nav_pitch (locked) | -4.2° | -4.2° |
-| Menabrak target? | Ya | Ya |
-| Respon servo | Sesuai | Sesuai |
-| Frame rate | 16.8 FPS | 20.2 FPS |
+| Metrik | Kiri (60m) | Kanan (60m) | Kiri (80m) | Kanan (80m) |
+|---|---|---|---|---|
+| Durasi fase terminal | 36.2 s (617 rows) | 34.6 s (701 rows) | 23.0 s (678 rows) | 21.4 s (637 rows) |
+| Alt di atas target saat lock on | 59.5 m | 58.3 m | 76.8 m | 77.8 m |
+| Jarak lock on | 970.8 m | 919.3 m | 774.5 m | 705.5 m |
+| Akurasi deteksi dan tracking (%) | 97.7% (603/617) | 97.7% (685/701) | 97.8% (663/678) | 96.5% (615/637) |
+| Kecepatan nabrak | 101.9 km/h (28.3 m/s) | 102.2 km/h (28.4 m/s) | 108.6 km/h (30.2 m/s) | 110.5 km/h (30.7 m/s) |
+| Jarak terdekat (hit) | 5.0 m | 9.4 m | 6.9 m | 9.1 m |
+| Ketinggian saat hit | 2.4 m | 2.7 m | 1.4 m | 1.7 m |
+| Mean descent | 1.65 m/s | 1.66 m/s | 3.19 m/s | 3.47 m/s |
+| Peak descent | 26.22 m/s | 31.22 m/s | 60.00 m/s | 65.00 m/s |
+| Total alt drop | 57.0 m | 55.7 m | 75.4 m | 76.1 m |
+| Mean pitch (locked) | -3.9° | -4.1° | 0.6° | -0.1° |
+| Mean nav_pitch (locked) | -4.2° | -4.2° | 0.3° | -0.4° |
+| Menabrak target? | Ya | Ya | Ya | Ya |
+| Respon servo | Sesuai | Sesuai | Sesuai | Sesuai |
+| Frame rate | 16.8 FPS | 20.2 FPS | 29.5 FPS | 29.8 FPS |
 
 **Catatan:**
-- Akurasi tracking identik antara kiri dan kanan (97.7%), menunjukkan konsistensi sistem deteksi dari kedua sudut pendekatan.
-- Kecepatan nabrak hampir sama: kiri 101.9 km/h vs kanan 102.2 km/h — selisih <1%.
-- Jarak lock on kiri lebih jauh (970.8 m vs 919.3 m), menunjukkan deteksi pink berhasil dari jarak yang sedikit lebih jauh pada pendekatan kiri.
-- Peak descent kanan lebih tinggi (31.22 m/s vs 26.22 m/s), kemungkinan karena sudut dive yang lebih curam.
-- Frame rate kanan lebih tinggi (20.2 FPS vs 16.8 FPS), menunjukkan beban komputasi lebih ringan pada sesi tersebut.
+- Akurasi tracking konsisten di semua run (96.5–97.8%), menunjukkan sistem deteksi stabil dari berbagai sudut dan ketinggian.
+- Kecepatan nabrak meningkat dari ~102 km/h (60m) ke ~109–110 km/h (80m) karena sudut dive lebih curam.
+- Durasi fase terminal 80m (~22 s) jauh lebih pendek dari 60m (~35 s) — sudut depresi lebih besar menghasilkan ey_raw lebih besar sejak awal lock sehingga PID pitch lebih agresif.
+- Peak descent 80m (60–65 m/s) jauh lebih tinggi dari 60m (26–31 m/s), menunjukkan manuver menukik yang jauh lebih tajam.
+- Mean pitch 60m sekitar -4° (bias dive aktif), sedangkan 80m mendekati 0° — ey_raw besar dari ketinggian tinggi menghasilkan koreksi PID yang mengimbangi bias offset sehingga rata-rata pitch mendekati nol meski drone tetap menukik.
 
 ---
 
@@ -524,36 +525,6 @@ Pengujian ulang dilakukan dari ketinggian cruise yang lebih tinggi (~80m di atas
   Mean nav_pitch  : -0.4 deg
 ───────────────────────────────────────────────────────
 ```
-
-### Perbandingan Kiri vs Kanan (80m)
-
-| Metrik | Arah Kiri (80m) | Arah Kanan (80m) |
-|---|---|---|
-| Durasi fase terminal | 23.0 s (678 rows) | 21.4 s (637 rows) |
-| Jarak lock on | 774.5 m | 705.5 m |
-| Akurasi deteksi dan tracking (%) | 97.8% (663/678 frame) | 96.5% (615/637 frame) |
-| Kecepatan nabrak | 108.6 km/h (30.2 m/s) | 110.5 km/h (30.7 m/s) |
-| Jarak terdekat (hit) | 6.9 m | 9.1 m |
-| Ketinggian saat hit | 1.4 m | 1.7 m |
-| Mean descent | 3.19 m/s | 3.47 m/s |
-| Peak descent | 60.00 m/s | 65.00 m/s |
-| Total alt drop | 75.4 m | 76.1 m |
-| Mean pitch (locked) | 0.6° | -0.1° |
-| Mean nav_pitch (locked) | 0.3° | -0.4° |
-| Menabrak target? | Ya | Ya |
-
-### Perbandingan 60m vs 80m (Rata-rata dua arah)
-
-| Metrik | 60m (kiri+kanan rata-rata) | 80m (kiri+kanan rata-rata) |
-|---|---|---|
-| Durasi fase terminal | 35.4 s | 22.2 s |
-| Kecepatan nabrak | 102.1 km/h | 109.6 km/h |
-| Jarak terdekat (hit) | 7.2 m | 8.0 m |
-| Ketinggian saat hit | 2.6 m | 1.6 m |
-| Mean descent | 1.66 m/s | 3.33 m/s |
-| Peak descent | 28.72 m/s | 62.50 m/s |
-| Total alt drop | 56.4 m | 75.8 m |
-| Mean pitch (locked) | -4.0° | 0.3° |
 
 **Deskripsi manuver (tracking_kiri_80m.csv):**
 
