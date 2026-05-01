@@ -77,25 +77,34 @@ def mavlink_thread(connection_string: str, baud: int, state: MavState,
               f"(sys={master.target_system} comp={master.target_component})")
 
         # Minta stream ATTITUDE @ 25 Hz dan GLOBAL_POSITION_INT @ 5 Hz
-        for msg_id, hz in ((30, 25), (33, 5)):
-            master.mav.command_long_send(
-                master.target_system, master.target_component,
-                mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL,
-                0, msg_id, int(1e6 / hz), 0, 0, 0, 0, 0,
-            )
+        master.mav.request_data_stream_send(
+            master.target_system, master.target_component,
+            mavutil.mavlink.MAV_DATA_STREAM_EXTRA1, 25, 1,
+        )
+        master.mav.request_data_stream_send(
+            master.target_system, master.target_component,
+            mavutil.mavlink.MAV_DATA_STREAM_POSITION, 5, 1,
+        )
+
+        _counts: dict[str, int] = {}
+        _last_print = time.time()
 
         while not stop_event.is_set():
-            msg = master.recv_match(
-                type=("ATTITUDE", "GLOBAL_POSITION_INT"),
-                blocking=True, timeout=0.5,
-            )
+            msg = master.recv_match(blocking=True, timeout=0.5)
             if msg is None:
                 continue
             t = msg.get_type()
+            _counts[t] = _counts.get(t, 0) + 1
+
             if t == "ATTITUDE":
                 state.update_attitude(msg)
             elif t == "GLOBAL_POSITION_INT":
                 state.update_position(msg)
+
+            if time.time() - _last_print >= 3.0:
+                _last_print = time.time()
+                top = sorted(_counts.items(), key=lambda x: -x[1])[:6]
+                print("[MAV] msgs: " + "  ".join(f"{k}={v}" for k, v in top))
 
     except Exception as e:
         print(f"[MAV] Error: {e}")
