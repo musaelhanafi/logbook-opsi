@@ -215,7 +215,7 @@ Pengujian siklus operasional penuh drone kamikaze dalam simulasi HITL — mencak
 | Mode bukan AUTO | Kirim SET_MODE → AUTO |
 | AUTO + WP bukan WP terakhir | Pertahankan AUTO, ikuti waypoint misi |
 | AUTO + WP terakhir + jarak ≤ 1000 m + target terkunci | SET_MODE → TRACKING (mode 27) |
-| Tracking hilang ≥ 50 frame berturut-turut | SET_MODE → AUTO (kembali ke misi) |
+| Tracking hilang ≥ 10 frame berturut-turut | SET_MODE → AUTO (kembali ke misi) |
 
 ![Siklus Otonom Drone Kamikaze](siklus_otonom.png)
 
@@ -225,6 +225,22 @@ Misi drone kamikaze dibagi menjadi tiga fase utama yang berjalan secara beruruta
 
 **Fase 1 — Takeoff**
 
+<a href="https://www.youtube.com/watch?v=kMWYlDaOB6g" target="_blank">
+  <div style="position:relative; display:inline-block;">
+    <img src="https://img.youtube.com/vi/kMWYlDaOB6g/maxresdefault.jpg"
+         alt="Drone Kamikaze Satria — Auto Takeoff HITL Simulasi X-Plane" width="640"/>
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+                width:68px; height:48px; background:rgba(255,0,0,0.85); border-radius:12px;
+                display:flex; align-items:center; justify-content:center; pointer-events:none;">
+      <div style="width:0; height:0; border-top:14px solid transparent;
+                  border-bottom:14px solid transparent; border-left:24px solid white;
+                  margin-left:5px;"></div>
+    </div>
+  </div>
+</a>
+
+*Drone Kamikaze Satria lepas landas secara otonom dari WP 0, mengikuti waypoint misi hingga ketinggian cruise. Direkam dari sudut FPV kamera seeker pada sesi HITL 8 Mei 2026.*
+
 Setelah seeker aktif, sistem memerintahkan Pixhawk masuk ke mode AUTO. Pixhawk mengeksekusi misi waypoint mulai dari WP 0 (takeoff). Pada fase ini ArduPlane mengontrol throttle, pitch, dan roll untuk mencapai ketinggian misi secara mandiri. Di simulasi HITL, X-Plane mensimulasikan fisika pesawat dan ArduPlane merespons seolah-olah pesawat sungguhan. Rekaman video takeoff dimulai otomatis saat drone melewati WP 1.
 
 **Fase 2 — Cruise (Mengikuti Waypoint)**
@@ -233,7 +249,7 @@ Setelah mencapai ketinggian jelajah, drone terbang mengikuti jalur waypoint yang
 
 **Fase 3 — Terminal (Seeker Aktif)**
 
-Saat kondisi fase terminal terpenuhi dan target terkunci oleh kamera, seeker memerintahkan Pixhawk (Flight Controller) beralih ke mode **TRACKING (custom mode 27)**. Pada fase ini kendali penuh diserahkan ke sistem seeker. PID roll mengarahkan pesawat secara lateral mengikuti errorx, sementara PID pitch menukikkan hidung pesawat ke bawah mengikuti errory. Drone menukik tajam menuju target — pada pengujian ini puncak kecepatan vertikal mencapai **-38.60 m/s**. Apabila lock target hilang lebih dari 50 frame berturut-turut, sistem kembali ke mode AUTO untuk mencegah drone kehilangan arah dan kembali melakukan pelacakan saat objek terdeteksi kembali.
+Saat kondisi fase terminal terpenuhi dan target terkunci oleh kamera, seeker memerintahkan Pixhawk (Flight Controller) beralih ke mode **TRACKING (custom mode 27)**. Pada fase ini kendali penuh diserahkan ke sistem seeker. PID roll mengarahkan pesawat secara lateral mengikuti errorx, sementara PID pitch menukikkan hidung pesawat ke bawah mengikuti errory. Drone menukik tajam menuju target — pada pengujian ini puncak kecepatan vertikal mencapai **-38.60 m/s**. Apabila lock target hilang lebih dari 10 frame berturut-turut, sistem kembali ke mode AUTO untuk mencegah drone kehilangan arah dan kembali melakukan pelacakan saat objek terdeteksi kembali.
 
 **Transisi yang berhasil diverifikasi:**
 1. Seeker memerintahkan mode AUTO → Pixhawk mengeksekusi misi takeoff dari WP 0
@@ -314,48 +330,78 @@ Analisis CSV hasil logging menggunakan script `terminal_analyse.py` untuk mengev
 
 **Perintah:**
 ```bash
-python3 terminal_analyse.py tracking.csv
+python3 terminal_analyse.py tracking_kiri.csv
 ```
 
-**Output ringkasan (`hit_success_tracking.csv`):**
+**Output ringkasan (`tracking_kiri.csv`):**
 
 ```
 ───────────────────────────────────────────────────────
-  File duration   : 18.9 s  (433 rows)
-  Target locked   : 414 rows  (95.6%)
-  Track lost      : 19 rows  (4.4%)
+  File duration   : 36.2 s  (617 rows)
+  Target locked   : 603 rows  (97.7%)
+  Track lost      : 14 rows  (2.3%)
 
   ── First track acquisition ──
   Time            : t+0.1 s
-  Alt above target: 59.8 m
-  Speed           : 111.0 km/h
-  Distance        : 724.9 m
+  Alt above target: 59.5 m
+  Speed           : 88.3 km/h
+  Distance        : 970.8 m
 
   ── Nearest point (hit) ──
-  Time            : t+18.6 s
-  Speed at hit    : 122.4 km/h  (34.0 m/s)
-  Alt at hit      : 2.1 m
+  Time            : t+35.9 s
+  Distance        : 5.0 m
+  Speed at hit    : 101.9 km/h  (28.3 m/s)
+  Alt at hit      : 2.4 m
 
   ── Descent ──
-  Mean descent    : 3.10 m/s
-  Peak descent    : 38.60 m/s
-  Total alt drop  : 57.6 m
+  Mean descent    : 1.65 m/s
+  Peak descent    : 26.22 m/s
+  Total alt drop  : 57.0 m
 
   ── Pitch (locked rows only) ──
-  Mean pitch      : -5.2 deg
+  Mean pitch      : -3.9 deg
   Mean nav_pitch  : -4.2 deg
 ───────────────────────────────────────────────────────
 ```
 
-**Video hasil tracking:**
+**Screenshot sesaat sebelum menabrak target:**
 
-[![Hasil Video Tracking — HITL 8 Mei 2026](video_tracking_hitl.png)](https://www.youtube.com/watch?v=py4JlvPBbeo)
+![Sesaat sebelum menabrak target](sesaat_sebelum_nabrak_target.png)
+
+**Video Drone Kamikaze Satria — Fase Terminal: Deteksi, Tracking, dan Hit Target (HITL Simulasi X-Plane)**
+
+*Seeker mendeteksi dan mengunci objek target berwarna pink, mode TRACKING aktif, drone menukik dan menabrak target pada kecepatan 102 km/h. Akurasi tracking 93.9% — HITL 8 Mei 2026.*
+
+<a href="https://youtu.be/oXJA1Vcrbvw" target="_blank">
+  <div style="position:relative; display:inline-block;">
+    <img src="https://img.youtube.com/vi/oXJA1Vcrbvw/maxresdefault.jpg"
+         alt="Drone Kamikaze Satria — Fase Terminal HITL Simulasi X-Plane" width="640"/>
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+                width:68px; height:48px; background:rgba(255,0,0,0.85); border-radius:12px;
+                display:flex; align-items:center; justify-content:center; pointer-events:none;">
+      <div style="width:0; height:0; border-top:14px solid transparent;
+                  border-bottom:14px solid transparent; border-left:24px solid white;
+                  margin-left:5px;"></div>
+    </div>
+  </div>
+</a>
 
 **Video analisis terminal (`terminal_analyse.py`):**
 
-<a href="https://www.youtube.com/watch?v=Bv60UfUvKkA" target="_blank">
-  <img src="https://img.youtube.com/vi/Bv60UfUvKkA/maxresdefault.jpg"
-       alt="▶ Video Analisis Terminal — HITL 8 Mei 2026" width="640"/>
+*Visualisasi 4 panel sinyal kendali fase terminal: altitude, camera error (ex/ey), attitude pesawat, dan control surfaces selama 26 detik tracking aktif. Akurasi 93.9%, mean FPS 29.4.*
+
+<a href="https://www.youtube.com/watch?v=wGvmdkjbiSc" target="_blank">
+  <div style="position:relative; display:inline-block;">
+    <img src="https://img.youtube.com/vi/wGvmdkjbiSc/maxresdefault.jpg"
+         alt="Drone Kamikaze Satria — Analisis Fase Terminal terminal_analyse.py" width="640"/>
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+                width:68px; height:48px; background:rgba(255,0,0,0.85); border-radius:12px;
+                display:flex; align-items:center; justify-content:center; pointer-events:none;">
+      <div style="width:0; height:0; border-top:14px solid transparent;
+                  border-bottom:14px solid transparent; border-left:24px solid white;
+                  margin-left:5px;"></div>
+    </div>
+  </div>
 </a>
 
 **Grafik analisis fase terminal:**
@@ -371,19 +417,130 @@ python3 terminal_analyse.py tracking.csv
 **Penanda pada grafik:**
 - Garis cyan (`:`) — titik jarak terdekat ke target
 
-**Deskripsi manuver:**
+**Deskripsi manuver (tracking_kiri.csv):**
 
-Seeker pertama kali mengunci target saat drone berada di ketinggian **59.8 m** di atas target dengan jarak horizontal **724.9 m** dan kecepatan **111.0 km/h**. Begitu lock diperoleh, mode TRACKING aktif dan sistem PID mulai mengarahkan drone menukik ke arah target. Drone menjalani descent rata-rata **3.10 m/s** dengan puncak descent mencapai **38.60 m/s** saat fase terminal — menunjukkan manuver menukik tajam mendekati target. 
+Seeker pertama kali mengunci target saat drone berada di ketinggian **59.5 m** di atas target dengan jarak horizontal **970.8 m** dan kecepatan **88.3 km/h**. Begitu lock diperoleh pada t+0.1 s, mode TRACKING aktif dan sistem PID mulai mengarahkan drone menukik ke arah target. Drone menjalani descent rata-rata **1.65 m/s** dengan puncak descent mencapai **26.22 m/s** saat fase terminal — menunjukkan manuver menukik tajam mendekati target. Total penurunan ketinggian selama fase tracking adalah **57.0 m**.
 
-Dari pertama mendeteksi hingga titik terdekat (hit), waktu yang dibutuhkan adalah **18.5 detik** (t+0.1 s → t+18.6 s). Saat menabrak target drone memiliki kecepatan **122 km/h**. Rata-rata pitch pesawat selama tracking adalah **-5.2°** (pitch down).
+Dari pertama mendeteksi hingga titik terdekat (hit), waktu yang dibutuhkan adalah **35.9 detik** (t+0.1 s → t+35.9 s). Saat menabrak target drone memiliki kecepatan **101.9 km/h** (28.3 m/s) pada ketinggian **2.4 m** di atas target. Rata-rata pitch pesawat selama tracking adalah **-3.9°** (nav_pitch: -4.2°).
 
-Seeker mempertahankan lock dengan akurasi **95.6%** da(**414 dari 433 frame**) dengan throughput rata-rata **±22.9 FPS**.
+Seeker mempertahankan lock dengan akurasi **97.7%** (603 dari 617 frame) dengan throughput rata-rata **16.8 FPS**.
 
-**Hasil:** Drone menabrak target pada kecepatan **122.4 km/h**. Akurasi pelacakan objek warna **95.6%** sepanjang fase terminal.
+**Hasil:** Drone menabrak target pada kecepatan **101.9 km/h**. Akurasi pelacakan objek warna **97.7%** sepanjang fase terminal.
 
 ---
 
-## 9. Kendala dan Solusi
+## 9. Perbandingan Hasil Pengujian: Empat Run (Kiri & Kanan, 60m & 80m)
+
+Empat sesi tracking dianalisis menggunakan `terminal_analyse.py`. Semua sesi berhasil menabrak target dalam simulasi HITL.
+
+| Metrik | Kiri (60m) | Kanan (60m) | Kiri (80m) | Kanan (80m) |
+|---|---|---|---|---|
+| Durasi fase terminal | 36.2 s (617 rows) | 34.6 s (701 rows) | 23.0 s (678 rows) | 21.4 s (637 rows) |
+| Alt di atas target saat lock on | 59.5 m | 58.3 m | 76.8 m | 77.8 m |
+| Jarak lock on | 970.8 m | 919.3 m | 774.5 m | 705.5 m |
+| Akurasi deteksi dan tracking (%) | 97.7% (603/617) | 97.7% (685/701) | 97.8% (663/678) | 96.5% (615/637) |
+| Kecepatan nabrak | 101.9 km/h (28.3 m/s) | 102.2 km/h (28.4 m/s) | 108.6 km/h (30.2 m/s) | 110.5 km/h (30.7 m/s) |
+| Jarak terdekat (hit) | 5.0 m | 9.4 m | 6.9 m | 9.1 m |
+| Ketinggian saat hit | 2.4 m | 2.7 m | 1.4 m | 1.7 m |
+| Mean descent | 1.65 m/s | 1.66 m/s | 3.19 m/s | 3.47 m/s |
+| Peak descent | 26.22 m/s | 31.22 m/s | 60.00 m/s | 65.00 m/s |
+| Total alt drop | 57.0 m | 55.7 m | 75.4 m | 76.1 m |
+| Mean pitch (locked) | -3.9° | -4.1° | 0.6° | -0.1° |
+| Mean nav_pitch (locked) | -4.2° | -4.2° | 0.3° | -0.4° |
+| Menabrak target? | Ya | Ya | Ya | Ya |
+| Respon servo | Sesuai | Sesuai | Sesuai | Sesuai |
+| Frame rate | 16.8 FPS | 20.2 FPS | 29.5 FPS | 29.8 FPS |
+
+**Catatan:**
+- Akurasi tracking konsisten di semua run (96.5–97.8%), menunjukkan sistem deteksi stabil dari berbagai sudut dan ketinggian.
+- Kecepatan nabrak meningkat dari ~102 km/h (60m) ke ~109–110 km/h (80m) karena sudut dive lebih curam.
+- Durasi fase terminal 80m (~22 s) jauh lebih pendek dari 60m (~35 s) — sudut depresi lebih besar menghasilkan ey_raw lebih besar sejak awal lock sehingga PID pitch lebih agresif.
+- Peak descent 80m (60–65 m/s) jauh lebih tinggi dari 60m (26–31 m/s), menunjukkan manuver menukik yang jauh lebih tajam.
+- Mean pitch 60m sekitar -4° (bias dive aktif), sedangkan 80m mendekati 0° — ey_raw besar dari ketinggian tinggi menghasilkan koreksi PID yang mengimbangi bias offset sehingga rata-rata pitch mendekati nol meski drone tetap menukik.
+
+---
+
+## 10. Analisis Fase Terminal dari Ketinggian 80m
+
+Pengujian ulang dilakukan dari ketinggian cruise yang lebih tinggi (~80m di atas target) untuk mengevaluasi perbedaan karakteristik pendekatan dibanding sesi sebelumnya (~60m). Dua run dianalisis: `tracking_kiri_80m.csv` dan `tracking_kanan_80m.csv`.
+
+**Output ringkasan (`tracking_kiri_80m.csv`):**
+
+```
+───────────────────────────────────────────────────────
+  File duration   : 23.0 s  (678 rows)
+  Target locked   : 663 rows  (97.8%)
+  Track lost      : 15 rows  (2.2%)
+
+  ── First track acquisition ──
+  Time            : t+0.0 s
+  Alt above target: 76.8 m
+  Speed           : 105.7 km/h
+  Distance        : 774.5 m
+
+  ── Nearest point (hit) ──
+  Time            : t+22.8 s
+  Distance        : 6.9 m
+  Speed at hit    : 108.6 km/h  (30.2 m/s)
+  Alt at hit      : 1.4 m
+
+  ── Descent ──
+  Mean descent    : 3.19 m/s
+  Peak descent    : 60.00 m/s
+  Total alt drop  : 75.4 m
+
+  ── Pitch (locked rows only) ──
+  Mean pitch      : 0.6 deg
+  Mean nav_pitch  : 0.3 deg
+───────────────────────────────────────────────────────
+```
+
+**Output ringkasan (`tracking_kanan_80m.csv`):**
+
+```
+───────────────────────────────────────────────────────
+  File duration   : 21.4 s  (637 rows)
+  Target locked   : 615 rows  (96.5%)
+  Track lost      : 22 rows  (3.5%)
+
+  ── First track acquisition ──
+  Time            : t+0.0 s
+  Alt above target: 77.8 m
+  Speed           : 104.6 km/h
+  Distance        : 705.5 m
+
+  ── Nearest point (hit) ──
+  Time            : t+21.1 s
+  Distance        : 9.1 m
+  Speed at hit    : 110.5 km/h  (30.7 m/s)
+  Alt at hit      : 1.7 m
+
+  ── Descent ──
+  Mean descent    : 3.47 m/s
+  Peak descent    : 65.00 m/s
+  Total alt drop  : 76.1 m
+
+  ── Pitch (locked rows only) ──
+  Mean pitch      : -0.1 deg
+  Mean nav_pitch  : -0.4 deg
+───────────────────────────────────────────────────────
+```
+
+**Deskripsi manuver (tracking_kiri_80m.csv):**
+
+Seeker langsung mengunci target pada t+0.0 s dari ketinggian **76.8 m** di atas target, jarak horizontal **774.5 m**, kecepatan **105.7 km/h**. Dengan sudut depresi yang lebih besar dari 80m dibanding 60m, ey_raw lebih besar sejak awal sehingga PID pitch mendapat sinyal koreksi lebih kuat. Drone menjalani descent rata-rata **3.19 m/s** — hampir dua kali lipat dibanding sesi 60m — dengan puncak descent **60.00 m/s** saat fase terminal. Total penurunan ketinggian **75.4 m** dalam **22.8 detik**. Kecepatan saat menabrak **108.6 km/h** pada ketinggian **1.4 m** di atas target.
+
+**Catatan:**
+- Dari 80m, durasi fase terminal jauh lebih pendek (~22 s vs ~35 s) karena sudut depresi lebih besar mendorong PID pitch lebih agresif sejak awal lock.
+- Peak descent 60–65 m/s menunjukkan dive tajam mendekati terminal; nilai ini jauh lebih tinggi dari sesi 60m (26–31 m/s).
+- Mean pitch mendekati 0° pada sesi 80m (vs -4° pada 60m) — pada ketinggian lebih tinggi, ey_raw besar menghasilkan koreksi positif yang mengimbangi bias offset, menghasilkan pitch rata-rata mendekati 0° meski drone aktif menukik.
+- Kecepatan nabrak lebih tinggi (~109 km/h vs ~102 km/h) karena dive lebih tajam.
+
+**Hasil:** Kedua sesi 80m berhasil menabrak target. Akurasi tracking 97.8% (kiri) dan 96.5% (kanan).
+
+---
+
+## 11. Kendala dan Solusi
 
 | No | Kendala | Solusi |
 |---|---|---|
@@ -395,7 +552,7 @@ Seeker mempertahankan lock dengan akurasi **95.6%** da(**414 dari 433 frame**) d
 
 ---
 
-## 10. Rencana Tindak Lanjut
+## 12. Rencana Tindak Lanjut
 
 | Prioritas | Kegiatan |
 |---|---|
@@ -418,20 +575,8 @@ Seeker mempertahankan lock dengan akurasi **95.6%** da(**414 dari 433 frame**) d
 | 6 | Pengujian manajemen mode otomatis: AUTO → TRACKING (mode 27) | ✅ Selesai |
 | 7 | Verifikasi pengiriman `TRACKING_MESSAGE` (ID 11045) ke firmware ArduPlane | ✅ Selesai |
 | 8 | Logging CSV telemetri 13 kolom selama fase TRACKING aktif | ✅ Selesai |
-| 9 | Analisis fase terminal dengan `terminal_analyse.py` | ✅ Selesai |
-| 10 | Simulasi HITL end-to-end: takeoff → cruise → terminal — drone menabrak target | ✅ **Berhasil** |
-
-**Capaian utama sesi ini:**
-
-| Metrik | Nilai |
-|---|---|
-| Durasi fase terminal | 18.9 detik |
-| Akurasi lock kamera | **95.6%** (414/433 frame) |
-| Throughput tracker | ~22.9 FPS |
-| Kecepatan saat hit | **122.4 km/h** |
-| Peak descent | **38.60 m/s** |
-| Altitude saat hit | 2.1 m AGL |
-
----
+| 9 | Analisis fase terminal dengan `terminal_analyse.py` (60m) — kiri & kanan | ✅ Selesai |
+| 10 | Analisis fase terminal dari ketinggian 80m — kiri & kanan | ✅ Selesai |
+| 11 | Simulasi HITL end-to-end: takeoff → cruise → terminal — drone menabrak target | ✅ **Berhasil** |
 
 *Logbook ditulis oleh: Muhammad Ihsan Fahriansyah & Musa El Hanafi*
