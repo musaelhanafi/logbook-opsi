@@ -149,6 +149,8 @@ if msg:
 
 HUD berhasil tampil pada jendela imshow secara real-time tanpa mengganggu pipeline deteksi dan tracking objek.
 
+![Setup HUD Display](setup_hud_display.jpeg)
+
 ---
 
 ## 2. Test Respon Servo
