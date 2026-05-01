@@ -470,7 +470,7 @@ Ini setara dengan area persegi **10% × 10%** dari setengah lebar/tinggi frame d
 
 Sebelum dikirim ke Pixhawk, `errory` dikurangi pitch offset ternormalisasi untuk mengkompensasi arah mounting kamera:
 
-$$e_{y,\text{adj}} = e_y - \frac{\text{TRK\_PITCH\_OFFSET}}{\text{TRK\_MAX\_DEG}}$$
+$$e_{y,\text{adj}} = e_y - \frac{\text{TRK PITCH OFFSET}}{\text{TRK MAX DEG}}$$
 
 Dengan nilai default `TRK_PITCH_OFFSET = 3.0°` dan `TRK_MAX_DEG = 30.0°`:
 
