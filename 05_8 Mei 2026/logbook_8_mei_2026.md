@@ -225,10 +225,11 @@ Misi drone kamikaze dibagi menjadi tiga fase utama yang berjalan secara beruruta
 
 **Fase 1 — Takeoff**
 
-<a href="https://www.youtube.com/watch?v=kMWYlDaOB6g" target="_blank">
+<div><a href="https://www.youtube.com/watch?v=kMWYlDaOB6g" target="_blank" style="display:inline-block; text-decoration:none;">
   <div style="position:relative; display:inline-block;">
     <img src="https://img.youtube.com/vi/kMWYlDaOB6g/maxresdefault.jpg"
-         alt="Drone Kamikaze Satria — Auto Takeoff HITL Simulasi X-Plane" width="640"/>
+         alt="Drone Kamikaze Satria — Auto Takeoff HITL Simulasi X-Plane" width="640"
+         style="display:block; border-radius:4px;"/>
     <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
                 width:68px; height:48px; background:rgba(255,0,0,0.85); border-radius:12px;
                 display:flex; align-items:center; justify-content:center; pointer-events:none;">
@@ -237,7 +238,7 @@ Misi drone kamikaze dibagi menjadi tiga fase utama yang berjalan secara beruruta
                   margin-left:5px;"></div>
     </div>
   </div>
-</a>
+</a></div>
 
 *Drone Kamikaze Satria lepas landas secara otonom dari WP 0, mengikuti waypoint misi hingga ketinggian cruise. Direkam dari sudut FPV kamera seeker pada sesi HITL 8 Mei 2026.*
 
@@ -372,10 +373,11 @@ python3 terminal_analyse.py tracking_kiri_60m.csv
 
 *Seeker mendeteksi dan mengunci objek target berwarna pink, mode TRACKING aktif, drone menukik dan menabrak target pada kecepatan 109 km/h. Akurasi tracking 90.7% — HITL 8 Mei 2026.*
 
-<a href="https://youtu.be/oXJA1Vcrbvw" target="_blank">
+<div><a href="https://youtu.be/oXJA1Vcrbvw" target="_blank" style="display:inline-block; text-decoration:none;">
   <div style="position:relative; display:inline-block;">
     <img src="https://img.youtube.com/vi/oXJA1Vcrbvw/maxresdefault.jpg"
-         alt="Drone Kamikaze Satria — Fase Terminal HITL Simulasi X-Plane" width="640"/>
+         alt="Drone Kamikaze Satria — Fase Terminal HITL Simulasi X-Plane" width="640"
+         style="display:block; border-radius:4px;"/>
     <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
                 width:68px; height:48px; background:rgba(255,0,0,0.85); border-radius:12px;
                 display:flex; align-items:center; justify-content:center; pointer-events:none;">
@@ -384,16 +386,17 @@ python3 terminal_analyse.py tracking_kiri_60m.csv
                   margin-left:5px;"></div>
     </div>
   </div>
-</a>
+</a></div>
 
 **Video analisis terminal (`terminal_analyse.py`):**
 
 *Visualisasi 4 panel sinyal kendali fase terminal: altitude, camera error (ex/ey), attitude pesawat, dan control surfaces selama 31.5 s tracking aktif. Akurasi 90.7%, mean FPS 21.3.*
 
-<a href="https://www.youtube.com/watch?v=wGvmdkjbiSc" target="_blank">
+<div><a href="https://www.youtube.com/watch?v=wGvmdkjbiSc" target="_blank" style="display:inline-block; text-decoration:none;">
   <div style="position:relative; display:inline-block;">
     <img src="https://img.youtube.com/vi/wGvmdkjbiSc/maxresdefault.jpg"
-         alt="Drone Kamikaze Satria — Analisis Fase Terminal terminal_analyse.py" width="640"/>
+         alt="Drone Kamikaze Satria — Analisis Fase Terminal terminal_analyse.py" width="640"
+         style="display:block; border-radius:4px;"/>
     <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
                 width:68px; height:48px; background:rgba(255,0,0,0.85); border-radius:12px;
                 display:flex; align-items:center; justify-content:center; pointer-events:none;">
@@ -402,7 +405,7 @@ python3 terminal_analyse.py tracking_kiri_60m.csv
                   margin-left:5px;"></div>
     </div>
   </div>
-</a>
+</a></div>
 
 **Grafik analisis fase terminal:**
 
