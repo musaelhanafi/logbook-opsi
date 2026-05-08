@@ -9,6 +9,12 @@
 
 ---
 
+![Foto Setup Seeker Unit](Foto Setup Seeker Unit.jpeg)
+
+![Pengujian Seeker](Pengujian Seeker.jpeg)
+
+---
+
 Kegiatan hari ini berfokus pada **integrasi sistem seeker dengan simulasi HITL**. Seeker dijalankan di laptop yang sama, mengambil input dari kamera webcam yang mengarah ke layar X-Plane. Komunikasi antara seeker dan Pixhawk menggunakan MAVLink melalui UDP loopback. Pengujian mencakup deteksi objek berwarna merah muda (pink), pengiriman error tracking, manajemen mode terbang otomatis, dan rekaman video saat fase terminal.
 
 ---
