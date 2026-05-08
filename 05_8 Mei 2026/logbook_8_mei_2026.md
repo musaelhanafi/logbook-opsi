@@ -9,9 +9,9 @@
 
 ---
 
-![Foto Setup Seeker Unit](Foto Setup Seeker Unit.jpeg)
+![Foto Setup Seeker Unit](foto_setup_seeker_unit.jpeg)
 
-![Pengujian Seeker](Pengujian Seeker.jpeg)
+![Pengujian Seeker](pengujian_seeker.jpeg)
 
 ---
 
