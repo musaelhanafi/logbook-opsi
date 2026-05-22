@@ -9,6 +9,14 @@
 
 ---
 
+![Foto Setup Running Seeker di Raspberry Pi](FotoSetupRunningSeekerDiRassPI.jpeg)
+
+![Raspberry Pi 5 Onboard](RassPi.jpeg)
+
+![Kegiatan Testing Seeker di Raspberry Pi](Kegiatan_Testing_Seeker_di_Raspi.jpeg)
+
+---
+
 Kegiatan hari ini berfokus pada **integrasi dan pengujian aplikasi seeker langsung di Raspberry Pi 5** sebagai platform onboard. Seeker sebelumnya dijalankan di laptop; sesi ini memindahkan eksekusi seeker ke Raspberry Pi yang terpasang di drone. Kegiatan mencakup konfigurasi access point Wi-Fi satria, aktivasi kamera ArduCam UC-698 (IMX477) via libcamera/picamera2, aktivasi OpenCV dengan dukungan GStreamer, perbaikan pipeline GStreamer UDP, serta penyesuaian kode seeker untuk integrasi penuh di RPi 5.
 
 ---
