@@ -19,6 +19,8 @@
 
 [Video Dokumentasi Uji Terbang Nano Talon](nano_talon_music.mp4)
 
+[![Nano Talon — Uji Auto Takeoff di Lapangan](thumbnail_yt_autotakeoff.jpg)](https://www.youtube.com/shorts/m8uYEztG4ig)
+
 ---
 
 Kegiatan hari ini mencakup dua sesi di Landing Area Santiong Paralayang, Subang: **uji terbang wahana Nano Talon** untuk memverifikasi kelayakan airframe secara fisik, dan **perekaman target oleh drone FPV** sebagai uji awal algoritma seeker di lingkungan luar ruangan. Kedua kegiatan ini bersifat di luar lingkup simulasi HITL — validasi fisik sebelum seluruh siklus pengembangan berfokus kembali pada simulasi HITL di lab.
