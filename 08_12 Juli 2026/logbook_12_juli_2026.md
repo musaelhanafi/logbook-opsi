@@ -9,7 +9,7 @@
 
 ---
 
-![Sesi Zoom Meeting Penyusunan Bab Pendahuluan](Meeting_Bab_Pendahuluan.png)
+![Sesi Zoom Meeting Penyusunan Bab Pendahuluan](Meeting_Bab_Pendahuluan.jpg)
 
 ---
 
