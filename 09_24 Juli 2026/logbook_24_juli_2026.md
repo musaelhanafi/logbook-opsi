@@ -9,6 +9,12 @@
 
 ---
 
+![Kegiatan Pengujian HITL Seeker](Kegiatan%20Pengujian%20HITL%20Seeker.jpeg)
+
+![Pengujian HITL Seeker](Pengujian%20HITL%20Seeker.jpeg)
+
+---
+
 Kegiatan hari ini berfokus pada **pengujian dua iterasi algoritma CamShift** — **Run 1** (implementasi baseline dengan back-projection pada seluruh frame) dan **Run 2** (implementasi yang dioptimalkan dengan back-projection pada crop di sekitar jendela pencarian) — pada fase terminal dalam simulasi HITL. Pengujian dilakukan dari **dua arah pendekatan (kiri dan kanan)** pada **tiga ketinggian cruise (50 m, 80 m, dan 100 m)**, menghasilkan total **12 run tracking** (6 per iterasi). Setiap run dianalisis menggunakan `terminal_analyse.py` dan profil komputasi pipeline diambil dari log profiling per frame.
 
 Perubahan implementasi CamShift antara Run 1 dan Run 2 dijelaskan di §7 — perbaikan tersebut memberikan **peningkatan FPS ~90%** tanpa mengubah karakter sinyal kendali.
