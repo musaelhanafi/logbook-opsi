@@ -56,6 +56,12 @@ drone-seeker/dataset/
 
 `app_calibrate.py` normalnya interaktif: pengguna menggambar ROI di satu frame, histogram hue di dalam ROI (dengan gate S/V) menjadi `color_histogram.txt`. Untuk sesi ini seed disiapkan dengan cara setara (script `scratchpad/emulate_app_calibrate.py`) yang menggunakan **satu kotak GT di frame tengah training** sebagai ROI — piksel diambil dengan S ≥ 40 dan V ≥ 40, kemudian histogram 180-bin dinormalisasi ke max = 255.
 
+**Contoh visual satu shot `app_calibrate.py`** — frame + ROI + histogram batang seed:
+
+![Contoh ROI app_calibrate + histogram batang seed](plot_calibrate_roi_example.png)
+
+Panel kiri-atas: frame 299 dari klip training dengan kotak GT hijau (26×15 px) di ujung runway. Panel kanan-atas: ROI diperbesar 15× — terlihat sebaran hue pink pekat di tengah, dengan 307/390 piksel lolos S/V gate (S ≥ 40, V ≥ 40). Panel bawah: histogram batang hue dari 307 piksel yang lolos, dinormalisasi max = 255 dan disimpan langsung sebagai `color_histogram.txt` (12 bin aktif, μ = 166.4, σ = 9.71, peak bin 165). Cakupan sempit karena satu ROI di satu frame — cukup menangkap warna target di frame tersebut, tetapi belum menampung variasi hue sepanjang misi (masalah yang diselesaikan `app_finetune.py` di §4).
+
 **Statistik seed (`color_histogram.txt`):**
 - Frame ROI: 299 (tengah 85 positive training)
 - 307 piksel disampling (dari 390 total dalam ROI 26×15)
@@ -107,7 +113,31 @@ Seed menyebar lebar (σ=9.71, 12 bins aktif) dengan ekor sampai bin 175 — hue 
 
 ![Skor seed vs refit — training dan holdout](plot_finetune_scores.png)
 
-### 5.3 Matriks Konfusi Lengkap
+### 5.3 Rumus Metrik Evaluasi
+
+Dari TP/FP/FN diturunkan tiga metrik ringkas yang dipakai di tabel §5.4, mengikuti formulasi baku Van Rijsbergen [[35]](../../drone-seeker/docs/05-BIBLIOGRAPHY.md), Bab 7:
+
+$$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}} \qquad \text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
+
+F1 bukan rumus yang berdiri sendiri, melainkan kasus khusus **F_β-measure** — bentuk umum yang dirumuskan Van Rijsbergen:
+
+$$F_\beta = \frac{(1 + \beta^2) \cdot \text{Precision} \cdot \text{Recall}}{\beta^2 \cdot \text{Precision} + \text{Recall}}$$
+
+Bentuk aslinya adalah **E-measure** (*effectiveness*), dengan bobot α ∈ (0, 1) yang kemudian disubstitusi menjadi β agar lebih intuitif:
+
+$$E = 1 - \frac{1}{\alpha \dfrac{1}{\text{Precision}} + (1 - \alpha) \dfrac{1}{\text{Recall}}} \qquad \beta^2 = \frac{1 - \alpha}{\alpha} \qquad F_\beta = 1 - E$$
+
+**β = seberapa kali lipat recall dianggap lebih penting daripada precision.** Substitusi β = 1 (α = 0.5) memberi bobot setimbang dan menghasilkan F1 yang biasa dipakai:
+
+$$F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$$
+
+Contoh dengan angka holdout × refit (TP = 85, FP = 7, FN = 7):
+
+$$P = \frac{85}{85 + 7} = 0.924 \qquad R = \frac{85}{85 + 7} = 0.924 \qquad F_1 = \frac{2 \cdot 0.924 \cdot 0.924}{0.924 + 0.924} = 0.924$$
+
+Catatan: misi kamikaze secara profil biaya sebenarnya cocok dengan β > 1 (misal β = 2, artinya kehilangan target 2× lebih mahal dari false alarm). Sesi ini tetap melaporkan F1 (β = 1) sebagai ringkasan, tetapi keputusan accept/reject memakai objektif **J** — lihat §5.5, karena J juga bisa menghukum kasus *combined FP+FN* terpisah, sesuatu yang tidak bisa diekspresikan F_β pada nilai β mana pun.
+
+### 5.4 Matriks Konfusi Lengkap
 
 | Klip × Histogram | TP | FN | FP | TN | FP+FN comb | Precision | Recall | F1 | **J** |
 |---|---:|---:|---:|---:|:---:|:---:|:---:|:---:|:---:|
@@ -116,7 +146,7 @@ Seed menyebar lebar (σ=9.71, 12 bins aktif) dengan ekor sampai bin 175 — hue 
 | Holdout × Seed | 63 | 29 | 30 | 6 | 28 | 0.677 | 0.685 | 0.681 | **+0.043** |
 | **Holdout × Refit** | **85** | **7** | **7** | **6** | **5** | **0.924** | **0.924** | **0.924** | **+0.772** |
 
-### 5.4 Interpretasi
+### 5.5 Interpretasi
 
 **Holdout (data yang menentukan) — refit menang telak:**
 - **TP naik 22** (63 → 85) — recall dari 0.685 → 0.924
@@ -141,7 +171,7 @@ Seed menyebar lebar (σ=9.71, 12 bins aktif) dengan ekor sampai bin 175 — hue 
 | **F1** | Ringkasan (bukan decision) | Naik 0.681 → 0.924, konfirmasi keseimbangan P+R |
 | **J** | ⭐⭐ Metrik formal accept/reject | Skript memilih refit karena ΔJ holdout **+0.729** |
 
-**Cara membaca:** Recall dulu (harus ≥ 0.85 di holdout) → cek precision (juga ≥ 0.85 untuk safety) → J sebagai *tie-breaker* dan kriteria formal. F1 tidak dijadikan kriteria acceptance karena F1 selalu bobot P+R setimbang, sementara misi kamikaze menyaratkan bobot yang asimetris (kehilangan target > false alarm). Detail lengkap di [`docs/06-COLOR HISTOGRAM FINETUNING.md`](../../drone-seeker/docs/06-COLOR HISTOGRAM FINETUNING.md) §2.4a.
+**Cara membaca:** Recall dulu (harus ≥ 0.85 di holdout) → cek precision (juga ≥ 0.85 untuk safety) → J sebagai *tie-breaker* dan kriteria formal. F1 tidak dijadikan kriteria acceptance karena F1 = F_β dengan β = 1 (§5.3) — bobot P+R selalu setimbang, sementara misi kamikaze menyaratkan bobot yang asimetris (kehilangan target > false alarm). Detail lengkap di [`docs/06-COLOR HISTOGRAM FINETUNING.md`](../../drone-seeker/docs/06-COLOR HISTOGRAM FINETUNING.md) §2.4a.
 
 ---
 
