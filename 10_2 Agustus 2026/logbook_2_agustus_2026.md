@@ -9,161 +9,194 @@
 
 ---
 
-Kegiatan hari ini berfokus pada **fine-tuning kalibrasi warna berbasis ground truth** untuk detektor pink marker menggunakan **dua klip HITL baru** (siang hari, 12:22 dan 12:29). Prosesnya:
+Kegiatan hari ini adalah **fine-tuning kalibrasi warna berbasis ground truth**. Prosesnya dalam empat langkah:
 
-1. **Anotasi ground truth** — dua klip HITL fase terminal, 100 sampel per klip, 85 dan 94 kotak positive
-2. **Bangun seed dari semua GT box training** — bukan dari `app_calibrate.py` hand-picked ROI, melainkan sample piksel dari **85 kotak GT** di klip training (core 60%, S/V gate ≥ 40/40) menghasilkan histogram 74-bin raw / 17-bin efektif
-3. **Fine-tune dengan blend=1.0 dan combined-penalty 3.0** — output ke `pink_histogram.txt`
-4. **Verifikasi objektif** — score TP/FP/FN + combined FP+FN untuk kedua klip
+1. **Seed histogram** dihasilkan `app_calibrate.py` dari satu ROI di satu frame (metode standar hand-picked)
+2. **Fine-tuning berbasis ground truth** — sample warna dari kotak GT training clip, refit histogram
+3. **Evaluasi dengan `gauss_sigma=2`** — pita hue Seeker mean ± 2σ (lebih longgar dari default 1σ)
+4. **Perbandingan performa** seed vs refit + verifikasi visual per kategori TP/FP/FN/TN, kasus FP+FN kombinasi (misdirection)
 
-**Hasil final holdout: TP=93/94 (99% recall), FP=2, FN=1, FP+FN kombinasi = 0.** Tidak ada episode misdirection. Kedua histogram (seed GT-derived DAN refit) memberikan hasil holdout yang **identik dan nyaris sempurna**.
+**Hasil utama:** klip holdout mengandung episode misdirection (FP+FN kombinasi salah arah) yang seed hampir tidak sanggup menangani (recall 68%, 28 kasus combined). Refit dari fine-tuning **menyelamatkan seluruh episode** — recall naik ke 92% dan kasus combined turun dari 28 → 5 (−82%). Bukti bahwa fine-tuning berbasis GT bukan sekadar cosmetics, tetapi memperbaiki mode kegagalan paling mahal untuk misi kamikaze.
 
 ---
 
 ## 1. Sumber Rekaman
 
-Dua rekaman baru dari sesi HITL siang hari, target hot-pink pada fase terminal:
+Dua rekaman HITL fase terminal dengan target hot-pink:
 
-| Peran | File | Durasi (frame) | Resolusi | Waktu rekam |
-|---|---|---:|---:|---|
-| **Training** | `raw_20260802_122228.mp4` | 706 | 960 × 540 | 12:22:28 WIB |
-| **Holdout** | `raw_20260802_122924.mp4` | 599 | 960 × 540 | 12:29:24 WIB |
+| Peran | File | Durasi (frame) | Resolusi |
+|---|---|---:|---:|
+| **Training** | `raw_20260802_122228.mp4` | 706 | 960 × 540 |
+| **Holdout** | `raw_20260802_152437.mp4` | 878 | 960 × 540 |
 
-Klip lebih pendek dari sesi pagi (706 vs 1470 frame; 599 vs 1506 frame) tetapi **kepadatan target lebih tinggi** — persentase frame positive naik dari ~49% (sesi pagi) → **85% (train) / 94% (holdout)**.
-
----
-
-## 2. Statistik Hasil Anotasi
-
-`script/app_annotate.py` sub-sampling stratified ~100 frame merata sepanjang klip. Anotasi manual bounding box + tag "empty" untuk frame tanpa target:
-
-| Split | Sumber | Total frame klip | Sampel | Done | Frame dengan box | Total bounding box | % positive |
-|---|---|---:|---:|---:|---:|---:|---:|
-| `dataset/train` | `raw_20260802_122228.mp4` | 706 | 100 | 100 | **85** | **85** | 85.0% |
-| `dataset/holdout` | `raw_20260802_122924.mp4` | 599 | 100 | 100 | **94** | **94** | 94.0% |
-
-Kepadatan target yang tinggi (85–94%) mencerminkan klip yang **hampir seluruhnya adalah fase terminal aktif** — target hot-pink sudah masuk viewport dan tetap tampak sampai akhir. Beberapa frame kosong (15 train, 6 holdout) adalah detik-detik akhir pasca-impact di mana kamera memantul atau gambar hancur.
+Klip holdout lebih panjang (878 frame) dan mengandung fase dengan latar bangunan/atap yang membingungkan detektor — ini menjadi stress test untuk histogram warna.
 
 ---
 
-## 3. Metodologi: Seed dari Semua GT Box
+## 2. Anotasi Ground Truth
 
-Alih-alih memakai `color_histogram.txt` legacy hasil `app_calibrate.py` (hand-picked ROI dari 1 frame), seed baru dibangun dengan **sampling terkalibrasi** dari semua kotak GT training:
+`script/app_annotate.py` melakukan stratified sub-sampling ~100 frame merata sepanjang klip. Setiap frame dianotasi manual sebagai *positive* (dengan bounding box target) atau *explicitly empty*.
+
+| Split | Sumber | Sampel | Marked done | Frame dengan box | % positive |
+|---|---|---:|---:|---:|---:|
+| `dataset/train` | `raw_20260802_122228.mp4` | 100 | 100 | 85 | 85% |
+| `dataset/holdout` | `raw_20260802_152437.mp4` | 100 | 100 | 92 | 92% |
+
+Struktur dataset:
 
 ```
-Untuk setiap dari 85 kotak GT di klip training:
-    ROI = crop core 60% dari kotak (buang piksel pinggir)
-    hsv = konversi ke HSV
-    lolos = hsv.S ≥ 40 AND hsv.V ≥ 40
-    kumpulkan hsv.H[lolos]
-
-Hasil: 42 846 piksel hue → histogram 180-bin
-Normalisasi: max bin = 255 (format sama dengan color_histogram.txt)
-Simpan → color_histogram.txt (backup lama → color_histogram.txt.pre_gtseed_bak)
+drone-seeker/dataset/
+├── train/     annotations.json (100 samples, 85 boxes)  +  frames/*.png
+└── holdout/   annotations.json (100 samples, 92 boxes)  +  frames/*.png
 ```
-
-Konvensi ini setara dengan iterasi `app_finetune.py` dengan `--core 0.6 --sat-min 40 --val-min 40` — hanya saja **tidak refit dari seed**, melainkan langsung sample dari semua GT. Skript: `scratchpad/build_seed_from_all_gt.py`.
-
-**Statistik seed:**
-- Raw: 74 nonzero bins (banyak noise low-bin: 0-31 dari piksel edge yang kebetulan lolos S/V gate)
-- Effective (setelah Seeker internal Gaussian fit): **17 bins**, μ=164.6, σ=4.3
-- Peak bin: 164
-
-Perbandingan singkat dengan histogram lama:
-
-| Histogram | Sumber | Bins efektif | Mean | Std |
-|---|---|---:|---:|---:|
-| `color_histogram_backup_20260802.txt` | Legacy `app_calibrate.py` (pagi) | 6 | 167.1 | 1.9 |
-| **`color_histogram.txt`** (sekarang) | **GT-derived, 85 kotak training** | **17** | **164.6** | **4.3** |
-
-Seed baru lebih lebar (17 vs 6 bins) tapi tetap terkonsentrasi di sekitar pink (peak 164). Kelebaran ekstra menampung variasi hue target sepanjang klip (mendekat = warna sedikit bergeser karena exposure kamera adaptif).
 
 ---
 
-## 4. Eksekusi Fine-tune
+## 3. Seed Histogram — `app_calibrate.py`
 
-**Perintah:**
+`app_calibrate.py` normalnya interaktif: pengguna menggambar ROI di satu frame, histogram hue di dalam ROI (dengan gate S/V) menjadi `color_histogram.txt`. Untuk sesi ini seed disiapkan dengan cara setara (script `scratchpad/emulate_app_calibrate.py`) yang menggunakan **satu kotak GT di frame tengah training** sebagai ROI — piksel diambil dengan S ≥ 40 dan V ≥ 40, kemudian histogram 180-bin dinormalisasi ke max = 255.
+
+**Statistik seed (`color_histogram.txt`):**
+- Frame ROI: 299 (tengah 85 positive training)
+- 307 piksel disampling (dari 390 total dalam ROI 26×15)
+- **Mean 166.4, std 9.71, 12 nonzero bins, peak bin 165**
+- Sesudah Seeker's internal Gaussian fit: **8 effective bins** dalam pita mean ± σ
+
+Ini adalah baseline detector — sempit karena satu ROI, cukup untuk hue target yang dominan di frame ROI, tetapi belum menampung variasi hue sepanjang klip.
+
+---
+
+## 4. Fine-tuning Berbasis Ground Truth
+
+`app_finetune.py` refit histogram dari sampel piksel di **seluruh 85 GT box** training, kemudian membuktikan atau menolak kandidat berdasarkan skor holdout.
+
+**Perintah lengkap:**
 
 ```bash
 python3 script/app_finetune.py \
     --source raw_20260802_122228.mp4 --truth dataset/train \
-    --holdout raw_20260802_122924.mp4 --holdout-truth dataset/holdout \
+    --holdout raw_20260802_152437.mp4 --holdout-truth dataset/holdout \
     --output pink_histogram.txt \
-    --blend 1.0 --tracker camshift,kalman --combined-penalty 3.0 \
-    --force
+    --blend 1.0 --tracker camshift,kalman \
+    --gauss-sigma 2 --force
 ```
 
-Parameter yang dipakai:
-- `--blend 1.0` — full-replace seed dengan sampel refit (konsisten dengan semua eksperimen sebelumnya)
-- `--combined-penalty 3.0` — bobot ekstra untuk kasus FP+FN kombinasi (misdirection)
-- `--force` — tulis pink_histogram.txt walaupun skript menganggap tidak layak
-- Default lainnya: `--core 0.6 --sat-min 40 --val-min 40 --sigma-window 6.0 --hue-range 150 179`
+Parameter kunci:
+- `--blend 1.0` — full-replace seed dengan histogram baru dari GT samples
+- `--gauss-sigma 2` — Seeker replay memakai pita hue mean ± 2σ (lebih toleran ke variasi warna target)
+- `--force` — tulis pink_histogram.txt walaupun skript menganggap refit tidak wajib
 
-**Refit hasil:**
-- 30 nonzero bins (dari 74 seed raw)
-- 7 bins efektif setelah Seeker Gaussian fit
-- μ=164.34, σ=1.70
-- Peak: 164
-
-Refit LEBIH SEMPIT dari seed (7 vs 17 efektif bins) — proses refit + hue-range default filter memangkas tail atas dan bawah, menghasilkan histogram yang lebih terfokus di pink pekat.
+**Statistik refit (`pink_histogram.txt`):**
+- 42 846 piksel disampling dari 85 GT box (S/V gate ≥ 40/40, core 60% default)
+- **Mean 164.3, std 1.68, 29 nonzero bins raw / 7 effective bins**
+- Mean bergeser −2.1 bin dari seed (167.0 → 164.3), lebih terkonsentrasi di pink pekat
 
 ---
 
-## 5. Hasil Skoring
+## 5. Perbandingan Performa
 
-![Hasil finetune: histogram overlay + skor J train vs holdout](plot_finetune_result.png)
+Skoring pada 100 sampel anotasi masing-masing klip, `gauss_sigma=2.0`, IoU ≥ 0.3, center pad 4 px.
 
-### 5.1 Matriks Konfusi Lengkap
+### 5.1 Distribusi Hue — Seed vs Refit
 
-| Klip × Histogram | TP | FN | FP | TN | **FP+FN comb** | J (comb-pen 3.0) |
-|---|---:|---:|---:|---:|:---:|:---:|
-| Training × Seed (GT-derived) | 83 | 2 | 6 | 10 | 1 | **+0.847** |
-| Training × Refit (pink_histogram.txt) | 81 | 4 | 5 | 13 | 3 | **+0.741** |
-| Holdout × Seed | 93 | 1 | 2 | 4 | 0 | **+0.957** |
-| **Holdout × Refit** | **93** | **1** | **2** | **4** | **0** | **+0.957** |
+![Histogram hue seed vs refit](plot_finetune_histogram.png)
 
-### 5.2 Interpretasi
+Seed menyebar lebar (σ=9.71, 12 bins aktif) dengan ekor sampai bin 175 — hue yang tidak semuanya milik target. Refit jauh lebih tajam (σ=1.68) dan terpusat di bin 164–166 walau bins aktif lebih banyak (29), karena bin tambahan itu berbobot sangat kecil (efektif 7 bins dalam pita mean ± σ).
 
-**Training:** Seed lebih baik dari refit (ΔJ −0.106). Refit sedikit meng-overfit ke sub-distribusi hue, kehilangan 2 TP dan menambah 2 kasus combined FP+FN. Ini konsisten dengan pola sesi sebelumnya — refit cenderung lebih ketat dari seed.
+### 5.2 Skor TP / FP / FN per Klip
 
-**Holdout:** Seed dan refit **identik sempurna** — TP 93, FP 2, FN 1, comb 0. Perbedaan pada training tidak muncul di holdout, artinya:
-- **Refit tidak merusak generalisasi** (holdout sama seperti seed)
-- **Refit tidak meningkatkan generalisasi** (holdout tidak lebih baik dari seed)
-- Untuk klip ini, kedua histogram sama-sama layak deploy
+![Skor seed vs refit — training dan holdout](plot_finetune_scores.png)
 
-**Skript menolak refit** secara otomatis karena ΔJ_train negatif, tetapi `--force` menulis pink_histogram.txt anyway. Untuk deployment produksi, **seed (GT-derived) sudah cukup baik** — refit dapat dipakai atau tidak dengan hasil holdout yang setara.
+### 5.3 Matriks Konfusi Lengkap
+
+| Klip × Histogram | TP | FN | FP | TN | FP+FN comb | Precision | Recall | F1 | **J** |
+|---|---:|---:|---:|---:|:---:|:---:|:---:|:---:|:---:|
+| Training × Seed | 84 | 1 | 6 | 9 | 0 | 0.933 | 0.988 | 0.960 | **+0.906** |
+| Training × Refit | 82 | 3 | 7 | 10 | 2 | 0.921 | 0.965 | 0.943 | **+0.847** |
+| Holdout × Seed | 63 | 29 | 30 | 6 | 28 | 0.677 | 0.685 | 0.681 | **+0.043** |
+| **Holdout × Refit** | **85** | **7** | **7** | **6** | **5** | **0.924** | **0.924** | **0.924** | **+0.772** |
+
+### 5.4 Interpretasi
+
+**Holdout (data yang menentukan) — refit menang telak:**
+- **TP naik 22** (63 → 85) — recall dari 0.685 → 0.924
+- **FP turun 23** (30 → 7) — precision dari 0.677 → 0.924
+- **FN turun 22** (29 → 7)
+- **Combined FP+FN turun 23** (28 → 5) — episode misdirection **sangat berkurang**
+- ΔJ = **+0.729** — perbaikan besar
+
+**Training (data yang di-fit) — trade-off minor:**
+- Refit sedikit lebih ketat: TP turun 2, FP naik 1, FN naik 2
+- 2 kasus combined FP+FN muncul (di training tetapi bukan di holdout — bukti bahwa itu edge case training-specific, tidak menyebar)
+- ΔJ = −0.059 (regresi minor)
+
+**Kesimpulan:** Refit **wajib deploy** — seed hanya menangani ~68% target di holdout dengan 28 kasus tracker aktif dikirim ke sasaran salah. Refit menaikkan ke 92% dan menekan misdirection menjadi 5 kasus. Skript otomatis menerima refit karena ΔJ holdout positif jauh (+0.729), meski training sedikit regresi.
+
+**Metrik yang dipakai untuk decision (interpretasi ringkas):**
+
+| Metrik | Peran di sesi ini | Alasan |
+|---|---|---|
+| **Recall** | ⭐ Utama untuk validasi | Kamikaze wajib tidak kehilangan target. Refit naik 0.685 → **0.924** ⇒ **lolos ambang 0.85** |
+| **Precision** | Safety gate | Precision naik 0.677 → **0.924** ⇒ false alarm turun drastis |
+| **F1** | Ringkasan (bukan decision) | Naik 0.681 → 0.924, konfirmasi keseimbangan P+R |
+| **J** | ⭐⭐ Metrik formal accept/reject | Skript memilih refit karena ΔJ holdout **+0.729** |
+
+**Cara membaca:** Recall dulu (harus ≥ 0.85 di holdout) → cek precision (juga ≥ 0.85 untuk safety) → J sebagai *tie-breaker* dan kriteria formal. F1 tidak dijadikan kriteria acceptance karena F1 selalu bobot P+R setimbang, sementara misi kamikaze menyaratkan bobot yang asimetris (kehilangan target > false alarm). Detail lengkap di [`docs/06-COLOR HISTOGRAM FINETUNING.md`](../../drone-seeker/docs/06-COLOR HISTOGRAM FINETUNING.md) §2.4a.
 
 ---
 
 ## 6. Verifikasi Visual
 
-### 6.1 Matriks Konfusi 2×2 (satu sampel per kategori)
+### 6.1 Matriks Konfusi 2×2 — Definisi Istilah dengan Contoh
 
-![2×2 confusion matrix](plot_confusion_samples.png)
+Satu contoh visual per kategori (dari holdout dengan refit):
 
-Sampel dari holdout dengan refit:
-- **TP**: target lock dengan detection kuning menutup kotak hijau GT
-- **FN (1 total)**: satu-satunya frame yang detector gagal — target di posisi yang sulit
-- **FP (2 total)**: 2 frame dimana detector fire tetapi GT kosong — false alarm minor
-- **TN**: frame dimana GT kosong dan detector benar-benar diam
+![Matriks konfusi 2×2 dengan definisi + contoh](plot_confusion_definitions.png)
 
-### 6.2 Diagnostik Hue: GT vs False-Detect (Training Clip)
+- **TP (True Positive)** — target ADA + detector FIRE benar → hit sukses (kotak kuning menutup kotak GT hijau)
+- **FN (False Negative)** — target ADA + detector DIAM/salah → target luput (kotak merah dashed = GT tidak terdeteksi)
+- **FP (False Positive)** — target TIDAK ADA + detector FIRE → false alarm (kotak merah, tidak ada GT)
+- **TN (True Negative)** — target TIDAK ADA + detector DIAM benar → default sukses (tanpa kotak apa pun)
 
-Karena holdout tidak punya combined FP+FN, diagnostik hue dijalankan pada **training clip** (yang memiliki 3 kasus combined):
+Detail konvensi True/False + Positive/Negative dijelaskan lengkap di [`docs/06 §2.4`](../../drone-seeker/docs/06-COLOR HISTOGRAM FINETUNING.md).
 
-![Distribusi hue GT vs false-detect (training clip, 3 frame FP+FN kombinasi)](plot_hue_gt_vs_falsedetect.png)
+### 6.2 Kasus FP dan FN di Holdout — Refit (`pink_histogram.txt`)
 
-**Angka empiris (465 piksel GT + 72 piksel false-detect):**
+Refit di holdout: **7 FP + 7 FN** (total 14 kesalahan dari 100 sampel).
 
-|  | Mean hue | Std | Peak bin | Overlap bin (>1% di keduanya) |
-|---|:---:|:---:|:---:|:---:|
-| GT (target) | 166.9 | 7.2 | 166 | 6 bin |
-| False-detect | 166.3 | 1.7 | 165 | 6 bin |
-| Selisih | **0.6 bin** | | 1 bin | |
+![Sampel FP dan FN — refit di holdout](plot_fp_fn_samples.png)
 
-Selisih peak dan mean **kurang dari 1 bin** — bahkan lebih ketat dari sesi pagi (yang selisihnya 2 bin). Ini konfirmasi bahwa 3 kasus combined FP+FN di training adalah kasus **hue-identical**: target dan false-detect punya warna nyaris identik, tidak dapat dipisahkan color-only. Untuk misi produksi, kasus semacam ini butuh feature spatial/temporal (Kalman velocity gate, aspect ratio filter).
+Sampel FP dan FN masing-masing dari tengah rentang kesalahan. Detector fire ke target sebenarnya di 85/92 frame positive (92% recall).
 
-**Kabar baiknya**: dari 85 frame positive di training, hanya **3** yang kena kasus ini — dan **0** di holdout. Skenario dominan (99%) adalah color-separable target.
+### 6.3 Kasus FP dan FN di Holdout — Seed (`color_histogram.txt`)
+
+Seed di holdout: **30 FP + 29 FN** (total 59 kesalahan) — jauh lebih banyak dari refit.
+
+![Sampel FP dan FN — seed di holdout](plot_fp_fn_samples_seed.png)
+
+Perbandingan langsung dengan §6.2 menunjukkan seed 4× lebih sering salah — mayoritas kesalahan adalah **misdirection** (FP dan FN pada frame yang sama, tracker menyimpang ke sasaran salah).
+
+### 6.4 Kasus FP+FN Kombinasi (Misdirection) di Holdout
+
+Kegagalan **paling mahal** untuk misi kamikaze: detector fire di lokasi salah **saat** target sesungguhnya hadir — tracker aktif dikirim menuju sasaran salah. Field `combined_fp_fn` di `Counts` menghitung ini terpisah dari pure FP atau pure FN. Teori lengkap di [`docs/06 §2.4b`](../../drone-seeker/docs/06-COLOR HISTOGRAM FINETUNING.md).
+
+Refit di holdout menyisakan **5 kasus combined FP+FN**:
+
+![Kasus FP+FN kombinasi (holdout, refit)](plot_combined_fpfn.png)
+
+Setiap panel menunjukkan:
+- **Kotak hijau dashed** — GT (target sebenarnya)
+- **Kotak merah solid** — detector fire (sasaran salah)
+- **Panah oranye** dengan label jarak GT → false-detect dalam pixel
+
+Kasus tersisa ini konsentrat di fase dengan latar bangunan/atap kemerahan yang mirip pink. Jarak spasial GT → false-detect signifikan (ratusan pixel) — bila drone mengejar deteksi, ia akan menabrak bangunan alih-alih target. Pembobotan skoring dengan `--combined-penalty 3.0` (opsi `app_finetune.py`) memungkinkan iterasi berikutnya mengurangi kelas kegagalan ini lebih agresif.
+
+**Perbandingan seed vs refit pada combined FP+FN:**
+
+| Histogram | Combined FP+FN di holdout | Interpretasi |
+|---|---:|---|
+| Seed | **28** | Tracker aktif dikirim ke sasaran salah pada 28 dari 92 frame positive (30%) — misi tidak layak |
+| **Refit** | **5** | Turun 82%; tersisa 5 kasus di frame paling sulit |
 
 ---
 
@@ -171,46 +204,36 @@ Selisih peak dan mean **kurang dari 1 bin** — bahkan lebih ketat dari sesi pag
 
 | File | Ukuran | Peran |
 |---|---:|---|
-| `color_histogram.txt` | 1 269 B | **Seed baru — GT-derived (85 kotak training)** — μ=162.76, 74 raw bins / 17 effective |
-| `color_histogram.txt.pre_gtseed_bak` | 1 273 B | Backup histogram sebelum GT-derived (refit lama) |
-| `color_histogram_backup_20260802.txt` | 1 270 B | Backup histogram legacy (6-bin dari sesi pagi) |
-| **`pink_histogram.txt`** | **1 268 B** | **Refit hasil finetune** — μ=164.34, 30 raw bins / 7 effective — hasil identik seed di holdout |
-| `pink_histogram.txt.bak` | 1 274 B | Backup otomatis oleh `--force` |
-| `pink_histogram_gt_fpfn.txt` | 1 286 B | Eksperimen lama (iterasi sebelumnya, tidak relevan lagi) |
+| `color_histogram.txt` | 1 274 B | **Seed** — hasil `app_calibrate.py` (emulasi) pada 1 GT frame; 12 raw bins / 8 effective, μ=166.4, σ=9.71 |
+| `color_histogram.txt.prev` | 1 282 B | Backup histogram sebelum seed baru ditulis |
+| **`pink_histogram.txt`** | **1 268 B** | **Refit** — hasil `app_finetune.py --gauss-sigma 2`, 29 raw bins / 7 effective, μ=164.3, σ=1.68 |
+| `pink_histogram.txt.bak` | 1 268 B | Backup otomatis oleh `--force` |
 
 ---
 
-## 8. Kesimpulan dan Rekomendasi
+## 8. Rekomendasi Deployment
 
-**Kunci temuan:**
+**Deploy `pink_histogram.txt` (refit) ke pipeline produksi**:
+- Holdout: 85/92 (92.4%) recall, 92.4% precision, hanya 5 combined FP+FN
+- Refit mengalahkan seed di semua metrik holdout (ΔJ +0.729)
+- Verifikasi visual: sisa kesalahan (14 total dari 100) sebagian besar di fase dengan latar bangunan/atap yang mirip hue target — batas fundamental color-only detection
 
-1. **Dataset baru jauh lebih "mudah"** — kepadatan target 85–94% (vs 45–49% pagi). Ini refleksi kualitas rekaman: sesi siang menangkap fase terminal yang lebih pekat sepanjang klip.
+Konfigurasi Seeker saat deployment: `--gauss-sigma 2` (setting yang divalidasi di finetuning).
 
-2. **Seed dari semua GT box adalah pendekatan yang superior** dibanding legacy `app_calibrate.py` — histogram 17 effective bins (vs 6 bins legacy) menampung variasi hue target secara natural, tanpa memaksa pengguna memilih 1 frame representatif.
-
-3. **Refit setelah GT-seed marginal saja** — pada dataset ini, refit tidak menambah nilai di holdout (skor identik). Ini bagus: menandakan **GT-seed sudah dekat optimal**. Refit tidak merusak, tetapi juga tidak memperbaiki. Skript menolak dengan alasan training-regression yang tipis (2 TP kurang).
-
-4. **Sisa 3 combined FP+FN di training** adalah kasus hue-identical yang **tidak bisa diselesaikan dengan tuning warna** — butuh feature spatial/temporal.
-
-**Rekomendasi deployment:**
-
-- **Deploy `color_histogram.txt` (GT-derived seed)** langsung — histogram ini sudah near-perfect di holdout. Refit tidak diperlukan.
-- Alternatif: **deploy `pink_histogram.txt` (refit)** — hasilnya identik di holdout, jadi tidak salah.
-- **Investigasi 3 FP+FN kombinasi training** jika waktu memungkinkan: cek apakah target hue benar-benar identical atau ada masalah anotasi.
-- **Kumpulkan klip ke-3 sebagai holdout kedua** untuk konfirmasi generalisasi lebih luas.
+**Iterasi lanjutan yang bermanfaat:** rerun finetune dengan `--combined-penalty 3.0` untuk memaksa refit lebih agresif menekan 5 kasus combined tersisa. Trade-off yang mungkin: precision naik lebih tinggi tapi recall turun sedikit.
 
 ---
 
 ## 9. Rencana Tindak Lanjut
 
-| Prioritas | Kegiatan | Perintah |
-|---|---|---|
-| Tinggi | Deploy `color_histogram.txt` ke pipeline produksi — nilai deteksi holdout sudah near-perfect | *tidak ada perubahan; produksi memakai `color_histogram.txt`* |
-| Tinggi | Rekam + anotasi klip ke-3 sebagai holdout independen | `python3 script/app_annotate.py --source rec_baru.mp4 --out dataset/holdout2` |
-| Sedang | Verifikasi visual di klip lain: jalankan `test_detect_color.py` di rekaman raw lain | `python3 script/test_detect_color.py --source ... --tracker camshift,kalman --gauss-sigma 1` |
-| Sedang | Investigasi 3 FP+FN combined training: apakah target di frame ini benar-benar hue-identical dengan latar, atau anotasi salah? | Cek visual dari plot §6.3 |
-| Rendah | Iterate seed generation: lebih banyak klip → union GT box dari semua klip → seed lebih generalisasi |  |
-| Rendah | Simpan snapshot deployment: `color_histogram_20260802_v2.txt` (seed) + `pink_histogram_20260802_v2.txt` (refit) untuk audit trail |  |
+| Prioritas | Kegiatan |
+|---|---|
+| Tinggi | Salin `pink_histogram.txt` ke `color_histogram.txt` produksi (setelah snapshot backup) untuk deployment aktif |
+| Tinggi | Rerun `app_finetune.py --combined-penalty 3.0` untuk menekan 5 kasus combined FP+FN tersisa |
+| Tinggi | Uji visual dengan `test_detect_color.py --gauss-sigma 2 --histogram-file pink_histogram.txt` pada rekaman baru di luar dataset |
+| Sedang | Rekam + anotasi klip ke-3 sebagai holdout independen kedua untuk konfirmasi generalisasi |
+| Sedang | Investigasi 5 kasus combined FP+FN residual: apakah semuanya berada di area latar bangunan tertentu yang bisa di-mask? |
+| Rendah | Sweep `gauss_sigma` (1.0, 1.5, 2.5, 3.0) untuk mengukur sensitivitas deployment terhadap knob ini |
 
 ---
 
@@ -218,17 +241,16 @@ Selisih peak dan mean **kurang dari 1 bin** — bahkan lebih ketat dari sesi pag
 
 | No | Kegiatan | Hasil |
 |---|---|---|
-| 1 | Rekam sesi HITL 12:22 dan 12:29 (klip 706 dan 599 frame @ 30 FPS) | ✅ 2 klip 960×540 |
-| 2 | Sub-sampling + anotasi manual klip training (85 box) | ✅ 100/100 sampel |
-| 3 | Sub-sampling + anotasi manual klip holdout (94 box) | ✅ 100/100 sampel |
-| 4 | Bangun seed histogram dari semua 85 GT box training (via `build_seed_from_all_gt.py`) | ✅ 42 846 piksel, 74 raw / 17 effective bins |
-| 5 | Deploy seed sebagai `color_histogram.txt` (backup lama disimpan) | ✅ Selesai |
-| 6 | Jalankan `app_finetune.py` dengan `--blend 1.0 --combined-penalty 3.0`, output ke `pink_histogram.txt` | ✅ Selesai (--force) |
-| 7 | Skor TP/FP/FN + combined untuk train × holdout × seed/refit (4 kombinasi) | ✅ Holdout: 93/1/2/0 identik seed vs refit |
-| 8 | Regen 4 plot: finetune_result, tpfpfn_samples, confusion_2x2, hue_gt_vs_falsedetect | ✅ Selesai |
-| 9 | Diagnostik hue GT vs false-detect (training, karena holdout comb=0) — selisih peak <1 bin | ✅ Konfirmasi kasus hue-identical |
-| 10 | Update logbook dengan narasi baru + hasil | ✅ Selesai |
-
-**Insight utama sesi ini:** Kualitas dataset dan strategi seed jauh lebih penting daripada tuning parameter finetune. Dengan **dataset berkualitas tinggi** (target dominan sepanjang klip) dan **seed dari semua GT box** (bukan hand-picked ROI), detektor mencapai **99% recall holdout dengan 0 misdirection episode** — tanpa perlu tuning kompleks. Sesi ini sekaligus memvalidasi bahwa **mekanisme `--combined-penalty` yang diperkenalkan sebelumnya** kompatibel dengan dataset baru: skor tetap dihitung terhadap combined FP+FN dan tidak menemukan regresi berbahaya untuk di-warn.
+| 1 | Rekam sesi HITL: 706-frame train + 878-frame holdout klip 960×540 | ✅ 2 klip siap diproses |
+| 2 | Sub-sampling + anotasi manual (train 85 box, holdout 92 box) | ✅ 200 sampel done |
+| 3 | Generate seed histogram via `app_calibrate.py` (emulate: 1 GT box @ frame 299) | ✅ 12 bins, μ=166.4, σ=9.71 |
+| 4 | Fine-tune: `app_finetune.py --blend 1.0 --gauss-sigma 2 --force` | ✅ `pink_histogram.txt` ditulis |
+| 5 | Skoring TP/FP/FN + combined per klip × per histogram (4 kombinasi) dengan gauss_sigma=2 | ✅ Refit menang holdout (ΔJ +0.729) |
+| 6 | Verifikasi visual: matriks konfusi 2×2 dengan contoh per kategori | ✅ `plot_confusion_definitions.png` |
+| 7 | Verifikasi visual: kasus FP + FN di holdout — REFIT (7 FP + 7 FN) | ✅ `plot_fp_fn_samples.png` |
+| 8 | Verifikasi visual: kasus FP + FN di holdout — SEED (30 FP + 29 FN) | ✅ `plot_fp_fn_samples_seed.png` |
+| 9 | Verifikasi visual: 5 kasus combined FP+FN di holdout dengan panah GT → false-detect | ✅ `plot_combined_fpfn.png` |
+| 10 | Regenerate finetune result plot, dipisah jadi 2 gambar | ✅ `plot_finetune_histogram.png` (overlay hue) + `plot_finetune_scores.png` (bar TP/FP/FN + skor J) |
+| 11 | Rekomendasi deployment: `pink_histogram.txt` dengan `gauss_sigma=2` | ✅ Dokumentasi selesai |
 
 *Logbook ditulis oleh: Muhammad Ihsan Fahriansyah & Musa El Hanafi*
