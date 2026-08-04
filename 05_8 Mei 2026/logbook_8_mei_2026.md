@@ -409,7 +409,7 @@ Enam sesi tracking dianalisis menggunakan `terminal_analyse.py`. Semua sesi berh
 | Alt di atas target saat lock on | 59.3 m | 58.0 m | 80.5 m | 77.7 m | 99.3 m | 98.1 m | **78.8 m** |
 | Jarak lock on | 872.8 m | 963.0 m | 951.8 m | 955.9 m | 954.6 m | 954.8 m | **942.2 m** |
 | Akurasi deteksi dan tracking (%) | 90.7% (587/647) | 100.0% (874/874) | 96.7% (845/874) | 100.0% (843/843) | 94.7% (702/741) | 100.0% (788/788) | **97.3% (4639/4767)** |
-| Kecepatan nabrak | 109.3 km/h (30.4 m/s) | 16.7 km/h (4.6 m/s) | 113.4 km/h (31.5 m/s) | 110.0 km/h (30.6 m/s) | 116.2 km/h (32.3 m/s) | 113.6 km/h (31.6 m/s) | **96.5 km/h (26.8 m/s)** |
+| Kecepatan nabrak | 109.3 km/h (30.4 m/s) | 104.1 km/h (28.9 m/s) | 113.4 km/h (31.5 m/s) | 110.0 km/h (30.6 m/s) | 116.2 km/h (32.3 m/s) | 113.6 km/h (31.6 m/s) | **111.1 km/h (30.9 m/s)** |
 | Jarak terdekat (hit) | 7.5 m | 5.3 m | 3.6 m | 4.5 m | 8.4 m | 5.5 m | **5.8 m** |
 | Ketinggian saat hit | 4.0 m | 1.8 m | 3.4 m | 1.6 m | 3.6 m | 1.2 m | **2.6 m** |
 | Mean descent | 1.82 m/s | 1.64 m/s | 2.35 m/s | 2.33 m/s | 3.00 m/s | 3.12 m/s | **2.38 m/s** |
@@ -422,12 +422,12 @@ Enam sesi tracking dianalisis menggunakan `terminal_analyse.py`. Semua sesi berh
 | Frame rate | 21.3 FPS | 25.8 FPS | 26.4 FPS | 25.9 FPS | 23.3 FPS | 25.4 FPS | **24.7 FPS** |
 
 **Catatan:**
-- Akurasi tracking bervariasi antara 90.7%–100.0%. Run kanan cenderung lebih stabil (100% di 60m dan 80m, 99.7% di 100m); run kiri lebih bervariasi (90.7%–96.7%).
+- Akurasi tracking bervariasi antara 90.7%–100.0%. Run kanan konsisten 100.0% di ketiga ketinggian (60m, 80m, dan 100m); run kiri lebih bervariasi (90.7%–96.7%).
 - Kecepatan nabrak meningkat seiring ketinggian lock (run kiri): 109.3 km/h (60m) → 113.4 km/h (80m) → 116.2 km/h (100m), konsisten dengan dive lebih curam dari ketinggian lebih tinggi.
-- Run kanan 60m (16.7 km/h) menunjukkan kecepatan hit lebih rendah — disebabkan algoritma cut stage-2 menemukan titik alt_rel_m minimum saat drone sudah hampir menyentuh ground dan hampir berhenti secara vertikal; hit tetap berhasil berdasarkan dist_m ≤ 10 m.
+- Kecepatan nabrak dibaca dari sampel telemetri valid terakhir sebelum tumbukan (`find_pre_impact_idx` pada `terminal_analyse.py`), bukan dari baris jarak terdekat. Pada baris jarak terdekat simulator sudah menghentikan wahana sehingga groundspeed anjlok dan tidak lagi mewakili kecepatan pendekatan. Koreksi ini hanya aktif pada run kanan 60m: groundspeed jatuh 104.0 → 16.7 km/h dalam satu update telemetri pada t+33.9 s, disusul alt_rel_m melompat ke 6.99 m lalu −0.24 m dan dist_m justru membesar ke 14.4 m — semuanya penanda frame pasca-tumbukan.
 - Mean pitch (locked) semakin negatif seiring ketinggian: ~-4° hingga -5° (60m) → ~-5° (80m) → ~-7° (100m), mencerminkan sudut dive yang semakin curam.
 - Total alt drop mendekati ketinggian lock awal: ~55–56 m (60m), ~76–77 m (80m), ~96–98 m (100m) — drone berhasil menukik ke hampir ground level di ketiga kondisi.
-- Peak descent bervariasi per run dan tidak monoton terhadap ketinggian; puncak tertinggi pada kiri 80m (59.19 m/s), diikuti kanan 100m (47.30 m/s).
+- Peak descent bervariasi per run dan tidak monoton terhadap ketinggian; puncak tertinggi pada kiri 80m (59.19 m/s), diikuti kanan 100m (53.51 m/s).
 
 ---
 
@@ -505,7 +505,7 @@ Seeker mengunci target pada t+0.1 s dari ketinggian **80.5 m** di atas target, j
 - Durasi fase terminal dari 80m (~33 s) serupa dengan 60m (~31–34 s); perbedaan terbesar terlihat pada mean descent dan total alt drop, bukan pada durasi.
 - Peak descent kiri 80m (59.19 m/s) jauh lebih tinggi dari kanan 80m (33.95 m/s) — variasi ini mencerminkan perbedaan trajektori dive per run.
 - Mean pitch -5.3°/-5.1° (80m) lebih negatif dari -4.6°/-3.9° (60m), konsisten dengan sudut depresi yang sedikit lebih besar dari ketinggian lebih tinggi.
-- Kecepatan nabrak 80m (~110–113 km/h) lebih tinggi dari 60m (~109 km/h kiri; kanan 60m anomali).
+- Kecepatan nabrak 80m (~110–113 km/h) sedikit lebih tinggi dari 60m (109.3 km/h kiri; 104.1 km/h kanan).
 
 **Hasil:** Kedua sesi 80m berhasil menabrak target. Akurasi tracking 96.7% (kiri) dan 100.0% (kanan).
 
