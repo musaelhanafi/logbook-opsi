@@ -1,0 +1,1308 @@
+{
+ "version": 1,
+ "source": "/home/seeker/Workspace/drone/logbook-opsi/11_4 Agustus 2026/tracking_raw_50m.mp4",
+ "source_name": "tracking_raw_50m.mp4",
+ "frame_size": [
+  960,
+  540
+ ],
+ "outres": null,
+ "crop": null,
+ "flip": false,
+ "total_frames": 569,
+ "samples": [
+  {
+   "frame": 0,
+   "file": "frames/000000.png",
+   "boxes": [
+    [
+     772,
+     236,
+     12,
+     9
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 6,
+   "file": "frames/000006.png",
+   "boxes": [
+    [
+     776,
+     246,
+     15,
+     10
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 11,
+   "file": "frames/000011.png",
+   "boxes": [
+    [
+     782,
+     255,
+     11,
+     8
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 17,
+   "file": "frames/000017.png",
+   "boxes": [
+    [
+     774,
+     250,
+     14,
+     8
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 23,
+   "file": "frames/000023.png",
+   "boxes": [
+    [
+     783,
+     240,
+     12,
+     9
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 29,
+   "file": "frames/000029.png",
+   "boxes": [
+    [
+     776,
+     222,
+     12,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 34,
+   "file": "frames/000034.png",
+   "boxes": [
+    [
+     777,
+     210,
+     13,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 40,
+   "file": "frames/000040.png",
+   "boxes": [
+    [
+     766,
+     194,
+     15,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 46,
+   "file": "frames/000046.png",
+   "boxes": [
+    [
+     756,
+     177,
+     15,
+     13
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 52,
+   "file": "frames/000052.png",
+   "boxes": [
+    [
+     738,
+     169,
+     16,
+     9
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 57,
+   "file": "frames/000057.png",
+   "boxes": [
+    [
+     723,
+     178,
+     17,
+     10
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 63,
+   "file": "frames/000063.png",
+   "boxes": [
+    [
+     702,
+     191,
+     18,
+     11
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 69,
+   "file": "frames/000069.png",
+   "boxes": [
+    [
+     684,
+     202,
+     16,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 75,
+   "file": "frames/000075.png",
+   "boxes": [
+    [
+     660,
+     204,
+     16,
+     10
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 80,
+   "file": "frames/000080.png",
+   "boxes": [
+    [
+     645,
+     206,
+     16,
+     9
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 86,
+   "file": "frames/000086.png",
+   "boxes": [
+    [
+     627,
+     207,
+     16,
+     11
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 92,
+   "file": "frames/000092.png",
+   "boxes": [
+    [
+     612,
+     208,
+     15,
+     11
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 98,
+   "file": "frames/000098.png",
+   "boxes": [
+    [
+     600,
+     211,
+     12,
+     10
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 103,
+   "file": "frames/000103.png",
+   "boxes": [
+    [
+     586,
+     213,
+     18,
+     10
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 109,
+   "file": "frames/000109.png",
+   "boxes": [
+    [
+     576,
+     216,
+     16,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 115,
+   "file": "frames/000115.png",
+   "boxes": [
+    [
+     564,
+     216,
+     15,
+     11
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 120,
+   "file": "frames/000120.png",
+   "boxes": [
+    [
+     553,
+     213,
+     17,
+     11
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 126,
+   "file": "frames/000126.png",
+   "boxes": [
+    [
+     546,
+     213,
+     18,
+     11
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 132,
+   "file": "frames/000132.png",
+   "boxes": [
+    [
+     537,
+     212,
+     18,
+     13
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 138,
+   "file": "frames/000138.png",
+   "boxes": [
+    [
+     528,
+     211,
+     15,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 143,
+   "file": "frames/000143.png",
+   "boxes": [
+    [
+     523,
+     212,
+     18,
+     11
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 149,
+   "file": "frames/000149.png",
+   "boxes": [
+    [
+     515,
+     211,
+     17,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 155,
+   "file": "frames/000155.png",
+   "boxes": [
+    [
+     510,
+     210,
+     16,
+     14
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 161,
+   "file": "frames/000161.png",
+   "boxes": [
+    [
+     504,
+     210,
+     17,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 166,
+   "file": "frames/000166.png",
+   "boxes": [
+    [
+     498,
+     208,
+     20,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 172,
+   "file": "frames/000172.png",
+   "boxes": [
+    [
+     495,
+     207,
+     18,
+     11
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 178,
+   "file": "frames/000178.png",
+   "boxes": [
+    [
+     489,
+     207,
+     15,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 184,
+   "file": "frames/000184.png",
+   "boxes": [
+    [
+     481,
+     208,
+     19,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 189,
+   "file": "frames/000189.png",
+   "boxes": [
+    [
+     480,
+     206,
+     16,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 195,
+   "file": "frames/000195.png",
+   "boxes": [
+    [
+     482,
+     203,
+     15,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 201,
+   "file": "frames/000201.png",
+   "boxes": [
+    [
+     480,
+     202,
+     16,
+     14
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 207,
+   "file": "frames/000207.png",
+   "boxes": [
+    [
+     480,
+     195,
+     17,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 212,
+   "file": "frames/000212.png",
+   "boxes": [
+    [
+     483,
+     195,
+     17,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 218,
+   "file": "frames/000218.png",
+   "boxes": [
+    [
+     488,
+     199,
+     16,
+     15
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 224,
+   "file": "frames/000224.png",
+   "boxes": [
+    [
+     492,
+     201,
+     16,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 229,
+   "file": "frames/000229.png",
+   "boxes": [
+    [
+     496,
+     202,
+     21,
+     15
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 235,
+   "file": "frames/000235.png",
+   "boxes": [
+    [
+     500,
+     197,
+     23,
+     15
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 241,
+   "file": "frames/000241.png",
+   "boxes": [
+    [
+     505,
+     196,
+     17,
+     11
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 247,
+   "file": "frames/000247.png",
+   "boxes": [
+    [
+     507,
+     192,
+     21,
+     15
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 252,
+   "file": "frames/000252.png",
+   "boxes": [
+    [
+     510,
+     192,
+     21,
+     14
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 258,
+   "file": "frames/000258.png",
+   "boxes": [
+    [
+     512,
+     186,
+     22,
+     18
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 264,
+   "file": "frames/000264.png",
+   "boxes": [
+    [
+     510,
+     178,
+     24,
+     17
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 270,
+   "file": "frames/000270.png",
+   "boxes": [
+    [
+     513,
+     176,
+     22,
+     14
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 275,
+   "file": "frames/000275.png",
+   "boxes": [
+    [
+     516,
+     180,
+     21,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 281,
+   "file": "frames/000281.png",
+   "boxes": [
+    [
+     512,
+     183,
+     24,
+     13
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 287,
+   "file": "frames/000287.png",
+   "boxes": [
+    [
+     516,
+     184,
+     22,
+     20
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 293,
+   "file": "frames/000293.png",
+   "boxes": [
+    [
+     509,
+     183,
+     21,
+     14
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 298,
+   "file": "frames/000298.png",
+   "boxes": [
+    [
+     510,
+     183,
+     20,
+     16
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 304,
+   "file": "frames/000304.png",
+   "boxes": [
+    [
+     504,
+     183,
+     22,
+     14
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 310,
+   "file": "frames/000310.png",
+   "boxes": [
+    [
+     502,
+     183,
+     21,
+     13
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 316,
+   "file": "frames/000316.png",
+   "boxes": [
+    [
+     499,
+     184,
+     25,
+     15
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 321,
+   "file": "frames/000321.png",
+   "boxes": [
+    [
+     498,
+     187,
+     24,
+     15
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 327,
+   "file": "frames/000327.png",
+   "boxes": [
+    [
+     490,
+     180,
+     24,
+     12
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 333,
+   "file": "frames/000333.png",
+   "boxes": [
+    [
+     489,
+     178,
+     24,
+     15
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 339,
+   "file": "frames/000339.png",
+   "boxes": [
+    [
+     483,
+     178,
+     27,
+     18
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 344,
+   "file": "frames/000344.png",
+   "boxes": [
+    [
+     480,
+     179,
+     28,
+     18
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 350,
+   "file": "frames/000350.png",
+   "boxes": [
+    [
+     474,
+     181,
+     28,
+     15
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 356,
+   "file": "frames/000356.png",
+   "boxes": [
+    [
+     475,
+     186,
+     24,
+     18
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 361,
+   "file": "frames/000361.png",
+   "boxes": [
+    [
+     470,
+     184,
+     28,
+     20
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 367,
+   "file": "frames/000367.png",
+   "boxes": [
+    [
+     471,
+     180,
+     27,
+     18
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 373,
+   "file": "frames/000373.png",
+   "boxes": [
+    [
+     470,
+     181,
+     30,
+     17
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 379,
+   "file": "frames/000379.png",
+   "boxes": [
+    [
+     474,
+     185,
+     26,
+     18
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 384,
+   "file": "frames/000384.png",
+   "boxes": [
+    [
+     479,
+     188,
+     26,
+     17
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 390,
+   "file": "frames/000390.png",
+   "boxes": [
+    [
+     483,
+     179,
+     28,
+     19
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 396,
+   "file": "frames/000396.png",
+   "boxes": [
+    [
+     487,
+     174,
+     30,
+     19
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 402,
+   "file": "frames/000402.png",
+   "boxes": [
+    [
+     491,
+     167,
+     30,
+     18
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 407,
+   "file": "frames/000407.png",
+   "boxes": [
+    [
+     494,
+     173,
+     27,
+     18
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 413,
+   "file": "frames/000413.png",
+   "boxes": [
+    [
+     499,
+     180,
+     31,
+     20
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 419,
+   "file": "frames/000419.png",
+   "boxes": [
+    [
+     501,
+     184,
+     30,
+     19
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 425,
+   "file": "frames/000425.png",
+   "boxes": [
+    [
+     507,
+     186,
+     34,
+     20
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 430,
+   "file": "frames/000430.png",
+   "boxes": [
+    [
+     507,
+     171,
+     27,
+     20
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 436,
+   "file": "frames/000436.png",
+   "boxes": [
+    [
+     510,
+     169,
+     33,
+     24
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 442,
+   "file": "frames/000442.png",
+   "boxes": [
+    [
+     507,
+     173,
+     36,
+     23
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 448,
+   "file": "frames/000448.png",
+   "boxes": [
+    [
+     511,
+     181,
+     36,
+     26
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 453,
+   "file": "frames/000453.png",
+   "boxes": [
+    [
+     510,
+     177,
+     33,
+     23
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 459,
+   "file": "frames/000459.png",
+   "boxes": [
+    [
+     505,
+     169,
+     43,
+     27
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 465,
+   "file": "frames/000465.png",
+   "boxes": [
+    [
+     509,
+     174,
+     41,
+     25
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 470,
+   "file": "frames/000470.png",
+   "boxes": [
+    [
+     506,
+     179,
+     40,
+     22
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 476,
+   "file": "frames/000476.png",
+   "boxes": [
+    [
+     507,
+     184,
+     39,
+     27
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 482,
+   "file": "frames/000482.png",
+   "boxes": [
+    [
+     499,
+     182,
+     48,
+     26
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 488,
+   "file": "frames/000488.png",
+   "boxes": [
+    [
+     497,
+     174,
+     49,
+     29
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 493,
+   "file": "frames/000493.png",
+   "boxes": [
+    [
+     492,
+     165,
+     51,
+     29
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 499,
+   "file": "frames/000499.png",
+   "boxes": [
+    [
+     492,
+     163,
+     51,
+     29
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 505,
+   "file": "frames/000505.png",
+   "boxes": [
+    [
+     482,
+     171,
+     55,
+     29
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 511,
+   "file": "frames/000511.png",
+   "boxes": [
+    [
+     476,
+     176,
+     60,
+     37
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 516,
+   "file": "frames/000516.png",
+   "boxes": [
+    [
+     475,
+     177,
+     59,
+     38
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 522,
+   "file": "frames/000522.png",
+   "boxes": [
+    [
+     468,
+     171,
+     67,
+     39
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 528,
+   "file": "frames/000528.png",
+   "boxes": [
+    [
+     458,
+     171,
+     80,
+     42
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 534,
+   "file": "frames/000534.png",
+   "boxes": [
+    [
+     455,
+     168,
+     75,
+     49
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 539,
+   "file": "frames/000539.png",
+   "boxes": [
+    [
+     448,
+     171,
+     87,
+     57
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 545,
+   "file": "frames/000545.png",
+   "boxes": [
+    [
+     443,
+     173,
+     95,
+     57
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 551,
+   "file": "frames/000551.png",
+   "boxes": [
+    [
+     435,
+     164,
+     112,
+     70
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 557,
+   "file": "frames/000557.png",
+   "boxes": [
+    [
+     429,
+     156,
+     141,
+     91
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 562,
+   "file": "frames/000562.png",
+   "boxes": [
+    [
+     405,
+     144,
+     213,
+     147
+    ]
+   ],
+   "done": true
+  },
+  {
+   "frame": 568,
+   "file": "frames/000568.png",
+   "boxes": [],
+   "done": true
+  }
+ ]
+}

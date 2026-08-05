@@ -1,0 +1,665 @@
+# pipeline profile — started 2026-07-27 12:15:09
+[PROF 12:15:09]  17 frames   39.95 ms/frame  ->  25.0 FPS
+   capture           4.73 ms   11.8%
+   track            22.58 ms   56.5%
+   ctrl+mav          0.69 ms    1.7%
+   hud               4.49 ms   11.2%
+   display           7.46 ms   18.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:11]  43 frames   44.19 ms/frame  ->  22.6 FPS
+   capture           5.14 ms   11.6%
+   track            26.04 ms   58.9%
+   ctrl+mav          0.69 ms    1.6%
+   hud               5.47 ms   12.4%
+   display           6.84 ms   15.5%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:13]  44 frames   42.45 ms/frame  ->  23.6 FPS
+   capture           5.74 ms   13.5%
+   track            24.35 ms   57.4%
+   ctrl+mav          0.70 ms    1.6%
+   hud               5.12 ms   12.1%
+   display           6.54 ms   15.4%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:15]  42 frames   43.36 ms/frame  ->  23.1 FPS
+   capture           5.45 ms   12.6%
+   track            25.05 ms   57.8%
+   ctrl+mav          0.78 ms    1.8%
+   hud               5.42 ms   12.5%
+   display           6.66 ms   15.4%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:17]  46 frames   42.78 ms/frame  ->  23.4 FPS
+   capture           5.47 ms   12.8%
+   track            24.41 ms   57.1%
+   ctrl+mav          0.75 ms    1.8%
+   hud               5.52 ms   12.9%
+   display           6.63 ms   15.5%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:19]  39 frames   47.01 ms/frame  ->  21.3 FPS
+   capture           5.41 ms   11.5%
+   track            25.83 ms   54.9%
+   ctrl+mav          3.40 ms    7.2%
+   hud               5.64 ms   12.0%
+   display           6.73 ms   14.3%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:21]  41 frames   44.91 ms/frame  ->  22.3 FPS
+   capture           5.51 ms   12.3%
+   track            26.49 ms   59.0%
+   ctrl+mav          0.75 ms    1.7%
+   hud               5.49 ms   12.2%
+   display           6.67 ms   14.8%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:23]  47 frames   41.79 ms/frame  ->  23.9 FPS
+   capture           5.10 ms   12.2%
+   track            24.50 ms   58.6%
+   ctrl+mav          0.73 ms    1.7%
+   hud               5.02 ms   12.0%
+   display           6.45 ms   15.4%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:25]  44 frames   43.99 ms/frame  ->  22.7 FPS
+   capture           5.50 ms   12.5%
+   track            25.89 ms   58.9%
+   ctrl+mav          0.74 ms    1.7%
+   hud               5.24 ms   11.9%
+   display           6.61 ms   15.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:27]  45 frames   43.38 ms/frame  ->  23.1 FPS
+   capture           5.32 ms   12.3%
+   track            25.14 ms   57.9%
+   ctrl+mav          0.77 ms    1.8%
+   hud               5.76 ms   13.3%
+   display           6.39 ms   14.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:29]  44 frames   44.77 ms/frame  ->  22.3 FPS
+   capture           5.17 ms   11.5%
+   track            26.25 ms   58.6%
+   ctrl+mav          0.99 ms    2.2%
+   hud               5.43 ms   12.1%
+   display           6.93 ms   15.5%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:31]  45 frames   43.92 ms/frame  ->  22.8 FPS
+   capture           5.39 ms   12.3%
+   track            25.28 ms   57.6%
+   ctrl+mav          0.78 ms    1.8%
+   hud               5.57 ms   12.7%
+   display           6.90 ms   15.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:33]  46 frames   43.58 ms/frame  ->  22.9 FPS
+   capture           5.68 ms   13.0%
+   track            25.03 ms   57.4%
+   ctrl+mav          0.75 ms    1.7%
+   hud               5.61 ms   12.9%
+   display           6.52 ms   15.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:35]  42 frames   43.39 ms/frame  ->  23.0 FPS
+   capture           5.61 ms   12.9%
+   track            25.35 ms   58.4%
+   ctrl+mav          0.75 ms    1.7%
+   hud               5.30 ms   12.2%
+   display           6.38 ms   14.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:37]  41 frames   45.46 ms/frame  ->  22.0 FPS
+   capture           6.11 ms   13.4%
+   track            26.44 ms   58.2%
+   ctrl+mav          0.84 ms    1.8%
+   hud               5.46 ms   12.0%
+   display           6.60 ms   14.5%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:39]  39 frames   44.50 ms/frame  ->  22.5 FPS
+   capture           5.45 ms   12.2%
+   track            26.41 ms   59.4%
+   ctrl+mav          0.90 ms    2.0%
+   hud               5.38 ms   12.1%
+   display           6.35 ms   14.3%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:41]  40 frames   46.48 ms/frame  ->  21.5 FPS
+   capture           5.15 ms   11.1%
+   track            27.92 ms   60.1%
+   ctrl+mav          0.91 ms    2.0%
+   hud               5.77 ms   12.4%
+   display           6.71 ms   14.4%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:43]  41 frames   45.98 ms/frame  ->  21.7 FPS
+   capture           5.78 ms   12.6%
+   track            26.94 ms   58.6%
+   ctrl+mav          0.90 ms    2.0%
+   hud               5.65 ms   12.3%
+   display           6.72 ms   14.6%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:45]  42 frames   43.68 ms/frame  ->  22.9 FPS
+   capture           5.87 ms   13.4%
+   track            24.95 ms   57.1%
+   ctrl+mav          0.78 ms    1.8%
+   hud               5.41 ms   12.4%
+   display           6.67 ms   15.3%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:48]  44 frames   42.39 ms/frame  ->  23.6 FPS
+   capture           5.36 ms   12.7%
+   track            24.45 ms   57.7%
+   ctrl+mav          0.82 ms    1.9%
+   hud               5.53 ms   13.0%
+   display           6.22 ms   14.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:50]  41 frames   44.90 ms/frame  ->  22.3 FPS
+   capture           5.64 ms   12.6%
+   track            26.06 ms   58.0%
+   ctrl+mav          0.92 ms    2.1%
+   hud               5.61 ms   12.5%
+   display           6.67 ms   14.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:52]  40 frames   43.60 ms/frame  ->  22.9 FPS
+   capture           5.31 ms   12.2%
+   track            25.07 ms   57.5%
+   ctrl+mav          0.81 ms    1.9%
+   hud               5.61 ms   12.9%
+   display           6.80 ms   15.6%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:54]  41 frames   43.60 ms/frame  ->  22.9 FPS
+   capture           5.36 ms   12.3%
+   track            25.29 ms   58.0%
+   ctrl+mav          0.76 ms    1.7%
+   hud               5.77 ms   13.2%
+   display           6.42 ms   14.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:56]  43 frames   43.72 ms/frame  ->  22.9 FPS
+   capture           5.85 ms   13.4%
+   track            24.91 ms   57.0%
+   ctrl+mav          0.76 ms    1.7%
+   hud               5.22 ms   11.9%
+   display           6.97 ms   16.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:15:58]  43 frames   43.21 ms/frame  ->  23.1 FPS
+   capture           5.57 ms   12.9%
+   track            24.45 ms   56.6%
+   ctrl+mav          0.85 ms    2.0%
+   hud               5.53 ms   12.8%
+   display           6.80 ms   15.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:00]  40 frames   43.26 ms/frame  ->  23.1 FPS
+   capture           5.58 ms   12.9%
+   track            25.33 ms   58.6%
+   ctrl+mav          0.74 ms    1.7%
+   hud               5.07 ms   11.7%
+   display           6.54 ms   15.1%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:02]  43 frames   44.80 ms/frame  ->  22.3 FPS
+   capture           5.78 ms   12.9%
+   track            25.59 ms   57.1%
+   ctrl+mav          0.86 ms    1.9%
+   hud               6.00 ms   13.4%
+   display           6.57 ms   14.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:04]  43 frames   44.00 ms/frame  ->  22.7 FPS
+   capture           5.49 ms   12.5%
+   track            25.25 ms   57.4%
+   ctrl+mav          0.94 ms    2.1%
+   hud               5.74 ms   13.1%
+   display           6.57 ms   14.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:06]  44 frames   44.25 ms/frame  ->  22.6 FPS
+   capture           5.30 ms   12.0%
+   track            25.82 ms   58.4%
+   ctrl+mav          0.84 ms    1.9%
+   hud               5.56 ms   12.6%
+   display           6.73 ms   15.2%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:08]  42 frames   43.49 ms/frame  ->  23.0 FPS
+   capture           5.72 ms   13.2%
+   track            25.14 ms   57.8%
+   ctrl+mav          0.72 ms    1.7%
+   hud               5.39 ms   12.4%
+   display           6.51 ms   15.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:10]  42 frames   43.31 ms/frame  ->  23.1 FPS
+   capture           5.30 ms   12.2%
+   track            25.64 ms   59.2%
+   ctrl+mav          0.76 ms    1.8%
+   hud               5.15 ms   11.9%
+   display           6.46 ms   14.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:12]  45 frames   43.24 ms/frame  ->  23.1 FPS
+   capture           5.00 ms   11.6%
+   track            25.34 ms   58.6%
+   ctrl+mav          0.85 ms    2.0%
+   hud               5.49 ms   12.7%
+   display           6.56 ms   15.2%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:14]  43 frames   42.57 ms/frame  ->  23.5 FPS
+   capture           5.38 ms   12.6%
+   track            24.30 ms   57.1%
+   ctrl+mav          0.77 ms    1.8%
+   hud               5.57 ms   13.1%
+   display           6.54 ms   15.4%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:16]  42 frames   44.98 ms/frame  ->  22.2 FPS
+   capture           6.12 ms   13.6%
+   track            25.96 ms   57.7%
+   ctrl+mav          0.76 ms    1.7%
+   hud               5.42 ms   12.1%
+   display           6.71 ms   14.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:18]  44 frames   43.47 ms/frame  ->  23.0 FPS
+   capture           5.52 ms   12.7%
+   track            25.25 ms   58.1%
+   ctrl+mav          0.76 ms    1.8%
+   hud               5.44 ms   12.5%
+   display           6.50 ms   15.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:20]  43 frames   43.37 ms/frame  ->  23.1 FPS
+   capture           5.24 ms   12.1%
+   track            25.81 ms   59.5%
+   ctrl+mav          0.74 ms    1.7%
+   hud               5.15 ms   11.9%
+   display           6.43 ms   14.8%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:22]  45 frames   43.06 ms/frame  ->  23.2 FPS
+   capture           5.20 ms   12.1%
+   track            25.28 ms   58.7%
+   ctrl+mav          0.79 ms    1.8%
+   hud               5.19 ms   12.1%
+   display           6.60 ms   15.3%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:24]  43 frames   44.32 ms/frame  ->  22.6 FPS
+   capture           5.34 ms   12.0%
+   track            26.06 ms   58.8%
+   ctrl+mav          0.83 ms    1.9%
+   hud               5.47 ms   12.3%
+   display           6.63 ms   15.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:26]  43 frames   43.51 ms/frame  ->  23.0 FPS
+   capture           5.33 ms   12.3%
+   track            24.96 ms   57.4%
+   ctrl+mav          0.85 ms    1.9%
+   hud               5.80 ms   13.3%
+   display           6.57 ms   15.1%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:28]  44 frames   43.40 ms/frame  ->  23.0 FPS
+   capture           5.64 ms   13.0%
+   track            25.23 ms   58.1%
+   ctrl+mav          0.79 ms    1.8%
+   hud               5.11 ms   11.8%
+   display           6.63 ms   15.3%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:30]  41 frames   44.51 ms/frame  ->  22.5 FPS
+   capture           5.72 ms   12.9%
+   track            26.02 ms   58.5%
+   ctrl+mav          0.87 ms    2.0%
+   hud               5.35 ms   12.0%
+   display           6.55 ms   14.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:32]  39 frames   43.84 ms/frame  ->  22.8 FPS
+   capture           5.70 ms   13.0%
+   track            25.35 ms   57.8%
+   ctrl+mav          0.92 ms    2.1%
+   hud               5.33 ms   12.2%
+   display           6.54 ms   14.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:34]  40 frames   45.61 ms/frame  ->  21.9 FPS
+   capture           5.18 ms   11.4%
+   track            27.14 ms   59.5%
+   ctrl+mav          0.83 ms    1.8%
+   hud               5.69 ms   12.5%
+   display           6.76 ms   14.8%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:36]  39 frames   45.57 ms/frame  ->  21.9 FPS
+   capture           6.18 ms   13.6%
+   track            26.08 ms   57.2%
+   ctrl+mav          0.89 ms    2.0%
+   hud               5.76 ms   12.6%
+   display           6.66 ms   14.6%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:38]  39 frames   45.88 ms/frame  ->  21.8 FPS
+   capture           5.72 ms   12.5%
+   track            26.39 ms   57.5%
+   ctrl+mav          0.80 ms    1.8%
+   hud               6.07 ms   13.2%
+   display           6.88 ms   15.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:40]  40 frames   46.38 ms/frame  ->  21.6 FPS
+   capture           5.54 ms   11.9%
+   track            27.22 ms   58.7%
+   ctrl+mav          0.85 ms    1.8%
+   hud               5.68 ms   12.2%
+   display           7.09 ms   15.3%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:42]  40 frames   45.88 ms/frame  ->  21.8 FPS
+   capture           5.46 ms   11.9%
+   track            27.20 ms   59.3%
+   ctrl+mav          0.97 ms    2.1%
+   hud               5.69 ms   12.4%
+   display           6.56 ms   14.3%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:44]  40 frames   44.40 ms/frame  ->  22.5 FPS
+   capture           6.12 ms   13.8%
+   track            24.74 ms   55.7%
+   ctrl+mav          0.77 ms    1.7%
+   hud               5.77 ms   13.0%
+   display           7.00 ms   15.8%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:46]  42 frames   44.14 ms/frame  ->  22.7 FPS
+   capture           5.80 ms   13.1%
+   track            25.20 ms   57.1%
+   ctrl+mav          0.78 ms    1.8%
+   hud               5.64 ms   12.8%
+   display           6.73 ms   15.2%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:48]  43 frames   41.91 ms/frame  ->  23.9 FPS
+   capture           5.18 ms   12.4%
+   track            23.11 ms   55.1%
+   ctrl+mav          0.76 ms    1.8%
+   hud               6.20 ms   14.8%
+   display           6.66 ms   15.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:51]  44 frames   47.56 ms/frame  ->  21.0 FPS
+   capture           5.44 ms   11.4%
+   track            21.33 ms   44.8%
+   ctrl+mav          4.21 ms    8.9%
+   hud               5.77 ms   12.1%
+   display          10.81 ms   22.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:53]  42 frames   40.99 ms/frame  ->  24.4 FPS
+   capture           8.33 ms   20.3%
+   track             3.69 ms    9.0%
+   ctrl+mav          1.13 ms    2.8%
+   hud               7.07 ms   17.2%
+   display          20.77 ms   50.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:55]  44 frames   43.25 ms/frame  ->  23.1 FPS
+   capture           9.58 ms   22.1%
+   track             3.79 ms    8.8%
+   ctrl+mav          1.04 ms    2.4%
+   hud               7.93 ms   18.3%
+   display          20.93 ms   48.4%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:57]  45 frames   41.21 ms/frame  ->  24.3 FPS
+   capture           9.06 ms   22.0%
+   track             3.79 ms    9.2%
+   ctrl+mav          1.13 ms    2.7%
+   hud               7.10 ms   17.2%
+   display          20.13 ms   48.8%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:16:59]  44 frames   40.80 ms/frame  ->  24.5 FPS
+   capture           8.40 ms   20.6%
+   track             3.72 ms    9.1%
+   ctrl+mav          1.08 ms    2.7%
+   hud               7.14 ms   17.5%
+   display          20.46 ms   50.2%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:01]  44 frames   42.73 ms/frame  ->  23.4 FPS
+   capture           8.76 ms   20.5%
+   track             4.04 ms    9.4%
+   ctrl+mav          1.08 ms    2.5%
+   hud               7.09 ms   16.6%
+   display          21.77 ms   50.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:03]  43 frames   42.55 ms/frame  ->  23.5 FPS
+   capture           8.52 ms   20.0%
+   track             3.90 ms    9.2%
+   ctrl+mav          0.98 ms    2.3%
+   hud               6.92 ms   16.3%
+   display          22.24 ms   52.3%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:05]  45 frames   40.96 ms/frame  ->  24.4 FPS
+   capture           8.62 ms   21.0%
+   track             4.25 ms   10.4%
+   ctrl+mav          1.07 ms    2.6%
+   hud               6.67 ms   16.3%
+   display          20.35 ms   49.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:07]  45 frames   40.92 ms/frame  ->  24.4 FPS
+   capture           8.28 ms   20.2%
+   track             4.21 ms   10.3%
+   ctrl+mav          1.01 ms    2.5%
+   hud               6.90 ms   16.9%
+   display          20.51 ms   50.1%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:09]  41 frames   44.07 ms/frame  ->  22.7 FPS
+   capture           8.98 ms   20.4%
+   track             6.03 ms   13.7%
+   ctrl+mav          0.97 ms    2.2%
+   hud               6.82 ms   15.5%
+   display          21.27 ms   48.3%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:11]  35 frames   50.10 ms/frame  ->  20.0 FPS
+   capture           7.56 ms   15.1%
+   track            14.60 ms   29.1%
+   ctrl+mav          1.05 ms    2.1%
+   hud               6.63 ms   13.2%
+   display          20.26 ms   40.4%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:15]   9 frames  460.80 ms/frame  ->   2.2 FPS
+   capture           6.94 ms    1.5%
+   track           424.14 ms   92.0%
+   ctrl+mav          3.94 ms    0.9%
+   hud               5.06 ms    1.1%
+   display          20.73 ms    4.5%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:17]  33 frames   56.63 ms/frame  ->  17.7 FPS
+   capture           7.81 ms   13.8%
+   track            19.99 ms   35.3%
+   ctrl+mav          0.95 ms    1.7%
+   hud               5.43 ms    9.6%
+   display          22.45 ms   39.6%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:19]  30 frames   64.94 ms/frame  ->  15.4 FPS
+   capture           7.31 ms   11.3%
+   track            27.63 ms   42.5%
+   ctrl+mav          6.03 ms    9.3%
+   hud               5.93 ms    9.1%
+   display          18.04 ms   27.8%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:21]  39 frames   44.77 ms/frame  ->  22.3 FPS
+   capture           5.58 ms   12.5%
+   track            25.78 ms   57.6%
+   ctrl+mav          0.87 ms    1.9%
+   hud               5.88 ms   13.1%
+   display           6.66 ms   14.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:23]  37 frames   45.47 ms/frame  ->  22.0 FPS
+   capture           6.02 ms   13.2%
+   track            26.77 ms   58.9%
+   ctrl+mav          0.75 ms    1.6%
+   hud               5.18 ms   11.4%
+   display           6.75 ms   14.8%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:25]  39 frames   44.32 ms/frame  ->  22.6 FPS
+   capture           5.70 ms   12.9%
+   track            25.63 ms   57.8%
+   ctrl+mav          0.75 ms    1.7%
+   hud               5.65 ms   12.8%
+   display           6.59 ms   14.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:27]  39 frames   44.32 ms/frame  ->  22.6 FPS
+   capture           5.92 ms   13.4%
+   track            25.67 ms   57.9%
+   ctrl+mav          0.77 ms    1.7%
+   hud               5.33 ms   12.0%
+   display           6.64 ms   15.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:29]  39 frames   45.30 ms/frame  ->  22.1 FPS
+   capture           5.93 ms   13.1%
+   track            26.07 ms   57.6%
+   ctrl+mav          0.78 ms    1.7%
+   hud               5.71 ms   12.6%
+   display           6.82 ms   15.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:31]  39 frames   44.70 ms/frame  ->  22.4 FPS
+   capture           5.34 ms   12.0%
+   track            25.99 ms   58.1%
+   ctrl+mav          0.80 ms    1.8%
+   hud               5.84 ms   13.1%
+   display           6.73 ms   15.1%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:33]  37 frames   46.78 ms/frame  ->  21.4 FPS
+   capture           5.83 ms   12.5%
+   track            28.04 ms   59.9%
+   ctrl+mav          0.74 ms    1.6%
+   hud               5.34 ms   11.4%
+   display           6.84 ms   14.6%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:35]  42 frames   42.32 ms/frame  ->  23.6 FPS
+   capture           5.08 ms   12.0%
+   track            24.74 ms   58.5%
+   ctrl+mav          0.73 ms    1.7%
+   hud               5.15 ms   12.2%
+   display           6.63 ms   15.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:37]  39 frames   44.81 ms/frame  ->  22.3 FPS
+   capture           5.31 ms   11.8%
+   track            26.00 ms   58.0%
+   ctrl+mav          0.79 ms    1.8%
+   hud               6.01 ms   13.4%
+   display           6.72 ms   15.0%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:39]  41 frames   44.42 ms/frame  ->  22.5 FPS
+   capture           5.55 ms   12.5%
+   track            25.68 ms   57.8%
+   ctrl+mav          0.78 ms    1.8%
+   hud               5.80 ms   13.1%
+   display           6.62 ms   14.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:41]  41 frames   46.43 ms/frame  ->  21.5 FPS
+   capture           6.20 ms   13.3%
+   track            26.36 ms   56.8%
+   ctrl+mav          0.82 ms    1.8%
+   hud               6.12 ms   13.2%
+   display           6.94 ms   14.9%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:43]  40 frames   46.84 ms/frame  ->  21.4 FPS
+   capture           5.95 ms   12.7%
+   track            27.32 ms   58.3%
+   ctrl+mav          0.84 ms    1.8%
+   hud               6.05 ms   12.9%
+   display           6.67 ms   14.2%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:45]  42 frames   45.01 ms/frame  ->  22.2 FPS
+   capture           5.35 ms   11.9%
+   track            26.41 ms   58.7%
+   ctrl+mav          0.81 ms    1.8%
+   hud               5.35 ms   11.9%
+   display           7.09 ms   15.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:47]  41 frames   44.88 ms/frame  ->  22.3 FPS
+   capture           5.29 ms   11.8%
+   track            26.70 ms   59.5%
+   ctrl+mav          0.77 ms    1.7%
+   hud               5.53 ms   12.3%
+   display           6.58 ms   14.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:50]  39 frames   45.51 ms/frame  ->  22.0 FPS
+   capture           5.91 ms   13.0%
+   track            26.81 ms   58.9%
+   ctrl+mav          0.83 ms    1.8%
+   hud               5.31 ms   11.7%
+   display           6.65 ms   14.6%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:52]  43 frames   44.17 ms/frame  ->  22.6 FPS
+   capture           5.71 ms   12.9%
+   track            25.67 ms   58.1%
+   ctrl+mav          0.80 ms    1.8%
+   hud               5.31 ms   12.0%
+   display           6.68 ms   15.1%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:54]  42 frames   44.01 ms/frame  ->  22.7 FPS
+   capture           6.03 ms   13.7%
+   track            25.60 ms   58.2%
+   ctrl+mav          0.69 ms    1.6%
+   hud               5.37 ms   12.2%
+   display           6.32 ms   14.4%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:56]  40 frames   45.62 ms/frame  ->  21.9 FPS
+   capture           6.05 ms   13.3%
+   track            26.55 ms   58.2%
+   ctrl+mav          0.97 ms    2.1%
+   hud               5.62 ms   12.3%
+   display           6.43 ms   14.1%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
+[PROF 12:17:58]  42 frames   44.09 ms/frame  ->  22.7 FPS
+   capture           5.80 ms   13.1%
+   track            25.33 ms   57.5%
+   ctrl+mav          0.76 ms    1.7%
+   hud               5.27 ms   11.9%
+   display           6.94 ms   15.7%
+     detect          0.00 ms  (sub)
+     tracker         0.00 ms  (sub)
