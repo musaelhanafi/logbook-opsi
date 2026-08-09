@@ -105,7 +105,7 @@ Skoring pada 100 sampel anotasi masing-masing klip, `gauss_sigma=2.0`, IoU ≥ 0
 
 ### 5.1 Distribusi Hue — Seed vs Refit
 
-![Histogram hue seed vs refit](plot_finetune_histogram.png)
+![Histogram hue seed vs refit](plot_finetune_histogram.jpg)
 
 Seed menyebar lebar (σ=9.71, 12 bins aktif) dengan ekor sampai bin 175 — hue yang tidak semuanya milik target. Refit jauh lebih tajam (σ=1.68) dan terpusat di bin 164–166 walau bins aktif lebih banyak (29), karena bin tambahan itu berbobot sangat kecil (efektif 7 bins dalam pita mean ± σ).
 
@@ -280,7 +280,7 @@ Konfigurasi Seeker saat deployment: `--gauss-sigma 2` (setting yang divalidasi d
 | 7 | Verifikasi visual: kasus FP + FN di holdout — REFIT (7 FP + 7 FN) | ✅ `plot_fp_fn_samples.png` |
 | 8 | Verifikasi visual: kasus FP + FN di holdout — SEED (30 FP + 29 FN) | ✅ `plot_fp_fn_samples_seed.png` |
 | 9 | Verifikasi visual: 5 kasus combined FP+FN di holdout dengan panah GT → false-detect | ✅ `plot_combined_fpfn.png` |
-| 10 | Regenerate finetune result plot, dipisah jadi 2 gambar | ✅ `plot_finetune_histogram.png` (overlay hue) + `plot_finetune_scores.png` (bar TP/FP/FN + skor J) |
+| 10 | Regenerate finetune result plot, dipisah jadi 2 gambar | ✅ `plot_finetune_histogram.jpg` (overlay hue) + `plot_finetune_scores.png` (bar TP/FP/FN + skor J) |
 | 11 | Rekomendasi deployment: `pink_histogram.txt` dengan `gauss_sigma=2` | ✅ Dokumentasi selesai |
 
 *Logbook ditulis oleh: Muhammad Ihsan Fahriansyah & Musa El Hanafi*

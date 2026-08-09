@@ -124,7 +124,7 @@ python3 script/terminal_analyse.py tracking_kanan_100m.csv
 
 **Grafik analisis fase terminal — Kanan 100 m:**
 
-![Terminal Analysis Kanan 100m](terminal_analysis_kanan_100m.png)
+![Terminal Analysis Kanan 100m](terminal_analysis_kanan_100m.jpg)
 
 **Keterangan grafik (4 panel):**
 1. Altitude / Groundspeed / Throttle vs waktu
@@ -321,6 +321,6 @@ Metrik dinamika terbang berasal dari telemetri, bukan dari penilaian deteksi, se
 | 8 | Buat `script/app_scoring.py` — skoring Precision/Recall/F1 terhadap ground truth | ✅ Selesai |
 | 9 | Ganti metrik `%lock` dengan Precision/Recall/F1 + *combined FP+FN* | ✅ Agregat F1 **0,906** |
 | 10 | Perbandingan terhadap sesi 8 Mei 2026 | ⚠️ Dinamika terbang sebanding; kualitas deteksi **belum** — 8 Mei tanpa ground truth |
-| 8 | Validasi rekomendasi deployment dari sesi 2 Agustus pada penerbangan HITL | ✅ **Terkonfirmasi** |
+| 11 | Validasi rekomendasi deployment dari sesi 2 Agustus pada penerbangan HITL | ✅ **Terkonfirmasi** |
 
 *Logbook ditulis oleh: Muhammad Ihsan Fahriansyah & Musa El Hanafi*
