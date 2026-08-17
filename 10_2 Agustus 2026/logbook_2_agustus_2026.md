@@ -188,6 +188,10 @@ Satu contoh visual per kategori (dari holdout dengan refit):
 - **FP (False Positive)** — target TIDAK ADA + detector FIRE → false alarm (kotak merah, tidak ada GT)
 - **TN (True Negative)** — target TIDAK ADA + detector DIAM benar → default sukses (tanpa kotak apa pun)
 
+Contoh yang sama dari klip training:
+
+![Matriks konfusi 2×2 — contoh murni dari klip training](plot_confusion_definitions_train.png)
+
 Detail konvensi True/False + Positive/Negative dijelaskan lengkap di [`docs/06 §2.4`](../../drone-seeker/docs/06-COLOR HISTOGRAM FINETUNING.md).
 
 ### 6.2 Kasus FP dan FN di Holdout — Refit (`pink_histogram.txt`)
@@ -195,6 +199,8 @@ Detail konvensi True/False + Positive/Negative dijelaskan lengkap di [`docs/06 �
 Refit di holdout: **7 FP + 7 FN** (total 14 kesalahan dari 100 sampel).
 
 ![Sampel FP dan FN — refit di holdout](plot_fp_fn_samples.png)
+
+![Sampel FP murni dan FN murni — refit di training](plot_fp_fn_murni_train.png)
 
 Sampel FP dan FN masing-masing dari tengah rentang kesalahan. Detector fire ke target sebenarnya di 85/92 frame positive (92% recall).
 
